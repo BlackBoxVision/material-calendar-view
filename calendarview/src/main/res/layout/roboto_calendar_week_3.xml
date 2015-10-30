@@ -123,14 +123,15 @@
         android:layout_weight="1"
         android:tag="dayOfMonthContainer21">
 
-        <com.imanoweb.calendarview.DayView
+        <com.samsistemas.calendarview.widget.DayView
             style="@style/CalendarView.DayOfTheMonth"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
             android:tag="dayOfMonthText21"
-            android:text="21" />
+            tools:text="21" />
+
     </RelativeLayout>
 
 </LinearLayout>

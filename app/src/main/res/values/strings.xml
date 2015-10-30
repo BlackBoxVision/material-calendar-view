@@ -1,4 +1,8 @@
 <resources>
-    <string name="app_name">Material Calendar</string>
+    <string name="app_name">Custom CalendarView</string>
     <string name="action_settings">Settings</string>
+    <string name="large_text">This is a test app</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>
