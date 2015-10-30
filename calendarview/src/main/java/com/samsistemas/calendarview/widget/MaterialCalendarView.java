@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,15 +23,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-/**
- *
- */
 public class MaterialCalendarView extends LinearLayout {
     private Context mContext;
 
-    private View view;
-    private ImageView previousMonthButton;
-    private ImageView nextMonthButton;
+    private View mView;
+    private ImageView mPreviousMonthButton;
+    private ImageView mNextMonthButton;
 
     private CalendarListener calendarListener;
     private Calendar currentCalendar;
@@ -98,11 +96,11 @@ public class MaterialCalendarView extends LinearLayout {
 
     private void initializeCalendar() {
         final LayoutInflater inflate = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        view = inflate.inflate(R.layout.custom_calendar_layout, this, true);
-        previousMonthButton = (ImageView) view.findViewById(R.id.left_button);
-        nextMonthButton = (ImageView) view.findViewById(R.id.rightButton);
+        mView = inflate.inflate(R.layout.custom_calendar_layout, this, true);
+        mPreviousMonthButton = (ImageView) mView.findViewById(R.id.left_button);
+        mNextMonthButton = (ImageView) mView.findViewById(R.id.rightButton);
 
-        previousMonthButton.setOnClickListener(new OnClickListener() {
+        mPreviousMonthButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 currentMonthIndex--;
@@ -116,7 +114,7 @@ public class MaterialCalendarView extends LinearLayout {
             }
         });
 
-        nextMonthButton.setOnClickListener(new OnClickListener() {
+        mNextMonthButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 currentMonthIndex++;
@@ -143,13 +141,13 @@ public class MaterialCalendarView extends LinearLayout {
      * Display calendar title with next previous month button
      */
     private void initializeTitleLayout() {
-        View titleLayout = view.findViewById(R.id.title_layout);
+        View titleLayout = mView.findViewById(R.id.title_layout);
         titleLayout.setBackgroundColor(calendarTitleBackgroundColor);
 
         String dateText = new DateFormatSymbols(locale).getShortMonths()[currentCalendar.get(Calendar.MONTH)].toString();
         dateText = dateText.substring(0, 1).toUpperCase() + dateText.subSequence(1, dateText.length());
 
-        TextView dateTitle = (TextView) view.findViewById(R.id.dateTitle);
+        TextView dateTitle = (TextView) mView.findViewById(R.id.dateTitle);
         dateTitle.setTextColor(calendarTitleTextColor);
         dateTitle.setText(dateText + " " + currentCalendar.get(Calendar.YEAR));
         dateTitle.setTextColor(calendarTitleTextColor);
@@ -168,14 +166,14 @@ public class MaterialCalendarView extends LinearLayout {
         String dayOfTheWeekString;
 
         //Setting background color white
-        View titleLayout = view.findViewById(R.id.week_layout);
+        View titleLayout = mView.findViewById(R.id.week_layout);
         titleLayout.setBackgroundColor(weekLayoutBackgroundColor);
 
         final String[] weekDaysArray = new DateFormatSymbols(locale).getShortWeekdays();
         for (int i = 1; i < weekDaysArray.length; i++) {
             dayOfTheWeekString = weekDaysArray[i];
             dayOfTheWeekString = dayOfTheWeekString.substring(0, 3).toUpperCase();
-            dayOfWeek = (TextView) view.findViewWithTag(DAY_OF_WEEK + getWeekIndex(i, currentCalendar));
+            dayOfWeek = (TextView) mView.findViewWithTag(DAY_OF_WEEK + getWeekIndex(i, currentCalendar));
             dayOfWeek.setText(dayOfTheWeekString);
             dayOfWeek.setTextColor(dayOfWeekTextColor);
 
@@ -204,8 +202,8 @@ public class MaterialCalendarView extends LinearLayout {
         DayView dayView;
         ViewGroup dayOfMonthContainer;
         for (int i = 1; i < 43; i++) {
-            dayOfMonthContainer = (ViewGroup) view.findViewWithTag(DAY_OF_MONTH_CONTAINER + i);
-            dayView = (DayView) view.findViewWithTag(DAY_OF_MONTH_TEXT + i);
+            dayOfMonthContainer = (ViewGroup) mView.findViewWithTag(DAY_OF_MONTH_CONTAINER + i);
+            dayView = (DayView) mView.findViewWithTag(DAY_OF_MONTH_TEXT + i);
             if (dayView == null)
                 continue;
 
@@ -242,8 +240,8 @@ public class MaterialCalendarView extends LinearLayout {
         }
 
         // If the last week row has no visible days, hide it or show it in case
-        ViewGroup weekRow = (ViewGroup) view.findViewWithTag("weekRow6");
-        dayView = (DayView) view.findViewWithTag("dayOfMonthText36");
+        ViewGroup weekRow = (ViewGroup) mView.findViewWithTag("weekRow6");
+        dayView = (DayView) mView.findViewWithTag("dayOfMonthText36");
         if (dayView.getVisibility() != VISIBLE) {
             weekRow.setVisibility(GONE);
         } else {
@@ -339,7 +337,7 @@ public class MaterialCalendarView extends LinearLayout {
 
     private View getView(String key, Calendar currentCalendar) {
         int index = getDayIndexByDate(currentCalendar);
-        View childView = view.findViewWithTag(key + index);
+        View childView = mView.findViewWithTag(key + index);
         return childView;
     }
 
@@ -461,5 +459,15 @@ public class MaterialCalendarView extends LinearLayout {
         void onDateSelected(Date date);
 
         void onMonthChanged(Date time);
+    }
+
+    public interface OnDateSelectedListener {
+
+        void onDateSelected(@NonNull Date selectedDate);
+    }
+
+    public interface OnMonthChangedListener {
+
+        void onMonthChanged(@NonNull Date monthDate);
     }
 }
