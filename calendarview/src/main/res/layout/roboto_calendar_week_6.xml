@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:baselineAligned="false"
     android:orientation="horizontal"
     android:tag="weekRow6"
@@ -14,14 +15,15 @@
         android:layout_weight="1"
         android:tag="dayOfMonthContainer36">
 
-        <com.imanoweb.calendarview.DayView
+        <com.samsistemas.calendarview.widget.DayView
             style="@style/CalendarView.DayOfTheMonth"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
             android:tag="dayOfMonthText36"
-            android:text="36" />
+            tools:text="36" />
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -31,14 +33,15 @@
         android:layout_weight="1"
         android:tag="dayOfMonthContainer37">
 
-        <com.imanoweb.calendarview.DayView
+        <com.samsistemas.calendarview.widget.DayView
             style="@style/CalendarView.DayOfTheMonth"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
             android:tag="dayOfMonthText37"
-            android:text="37" />
+            tools:text="37" />
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -48,14 +51,15 @@
         android:layout_weight="1"
         android:tag="dayOfMonthContainer38">
 
-        <com.imanoweb.calendarview.DayView
+        <com.samsistemas.calendarview.widget.DayView
             style="@style/CalendarView.DayOfTheMonth"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
             android:tag="dayOfMonthText38"
-            android:text="38" />
+            tools:text="38" />
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -65,14 +69,15 @@
         android:layout_weight="1"
         android:tag="dayOfMonthContainer39">
 
-        <com.imanoweb.calendarview.DayView
+        <com.samsistemas.calendarview.widget.DayView
             style="@style/CalendarView.DayOfTheMonth"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
             android:tag="dayOfMonthText39"
-            android:text="39" />
+            tools:text="39" />
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -82,14 +87,15 @@
         android:layout_weight="1"
         android:tag="dayOfMonthContainer40">
 
-        <com.imanoweb.calendarview.DayView
+        <com.samsistemas.calendarview.widget.DayView
             style="@style/CalendarView.DayOfTheMonth"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
             android:tag="dayOfMonthText40"
-            android:text="40" />
+            tools:text="40" />
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -99,14 +105,15 @@
         android:layout_weight="1"
         android:tag="dayOfMonthContainer41">
 
-        <com.imanoweb.calendarview.DayView
+        <com.samsistemas.calendarview.widget.DayView
             style="@style/CalendarView.DayOfTheMonth"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
             android:tag="dayOfMonthText41"
-            android:text="41" />
+            tools:text="41" />
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -116,13 +123,14 @@
         android:layout_weight="1"
         android:tag="dayOfMonthContainer42">
 
-        <com.imanoweb.calendarview.DayView
+        <com.samsistemas.calendarview.widget.DayView
             style="@style/CalendarView.DayOfTheMonth"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:gravity="center"
             android:tag="dayOfMonthText42"
-            android:text="42" />
+            tools:text="42" />
+
     </RelativeLayout>
 </LinearLayout>

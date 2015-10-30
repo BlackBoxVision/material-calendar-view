@@ -4,31 +4,24 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include
-        android:id="@+id/titleLayout"
+    <include android:id="@+id/title_layout"
         layout="@layout/custom_calendar_title_layout" />
 
-    <include
-        android:id="@+id/weekLayout"
+    <include android:id="@+id/week_layout"
         layout="@layout/custom_calendar_weeks_layout" />
 
-    <LinearLayout
-        android:id="@+id/daysContainer"
+    <LinearLayout android:id="@+id/days_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="vertical">
 
         <include layout="@layout/roboto_calendar_week_1" />
-
         <include layout="@layout/roboto_calendar_week_2" />
-
         <include layout="@layout/roboto_calendar_week_3" />
-
         <include layout="@layout/roboto_calendar_week_4" />
-
         <include layout="@layout/roboto_calendar_week_5" />
-
         <include layout="@layout/roboto_calendar_week_6" />
+
     </LinearLayout>
 </LinearLayout>

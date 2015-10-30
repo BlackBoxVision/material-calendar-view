@@ -10,10 +10,11 @@ import com.samsistemas.calendarview.decor.DayDecorator;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class DayView extends TextView {
-    private Date date;
-    private List<DayDecorator> decorators;
+    private List<DayDecorator> mDayDecoratorList;
+    private Date mDate;
 
     public DayView(Context context) {
         this(context, null, 0);
@@ -32,24 +33,24 @@ public class DayView extends TextView {
     }
 
     public void bind(Date date, List<DayDecorator> decorators) {
-        this.date = date;
-        this.decorators = decorators;
+        this.mDayDecoratorList = decorators;
+        this.mDate = date;
 
-        final SimpleDateFormat df = new SimpleDateFormat("d");
+        final SimpleDateFormat df = new SimpleDateFormat("d", Locale.getDefault());
         int day = Integer.parseInt(df.format(date));
         setText(String.valueOf(day));
     }
 
     public void decorate() {
-        //Set custom decorators
-        if (null != decorators) {
-            for (DayDecorator decorator : decorators) {
+        //Set custom mDayDecoratorList
+        if (null != mDayDecoratorList) {
+            for (DayDecorator decorator : mDayDecoratorList) {
                 decorator.decorate(this);
             }
         }
     }
 
     public Date getDate() {
-        return date;
+        return mDate;
     }
 }

@@ -99,7 +99,7 @@ public class MaterialCalendarView extends LinearLayout {
     private void initializeCalendar() {
         final LayoutInflater inflate = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         view = inflate.inflate(R.layout.custom_calendar_layout, this, true);
-        previousMonthButton = (ImageView) view.findViewById(R.id.leftButton);
+        previousMonthButton = (ImageView) view.findViewById(R.id.left_button);
         nextMonthButton = (ImageView) view.findViewById(R.id.rightButton);
 
         previousMonthButton.setOnClickListener(new OnClickListener() {
@@ -143,7 +143,7 @@ public class MaterialCalendarView extends LinearLayout {
      * Display calendar title with next previous month button
      */
     private void initializeTitleLayout() {
-        View titleLayout = view.findViewById(R.id.titleLayout);
+        View titleLayout = view.findViewById(R.id.title_layout);
         titleLayout.setBackgroundColor(calendarTitleBackgroundColor);
 
         String dateText = new DateFormatSymbols(locale).getShortMonths()[currentCalendar.get(Calendar.MONTH)].toString();
@@ -168,7 +168,7 @@ public class MaterialCalendarView extends LinearLayout {
         String dayOfTheWeekString;
 
         //Setting background color white
-        View titleLayout = view.findViewById(R.id.weekLayout);
+        View titleLayout = view.findViewById(R.id.week_layout);
         titleLayout.setBackgroundColor(weekLayoutBackgroundColor);
 
         final String[] weekDaysArray = new DateFormatSymbols(locale).getShortWeekdays();
