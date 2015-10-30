@@ -24,10 +24,6 @@ import java.util.List;
 import java.util.Locale;
 
 public class MaterialCalendarView extends LinearLayout {
-    private static final String DAY_OF_WEEK = "dayOfWeek";
-    private static final String DAY_OF_MONTH_TEXT = "dayOfMonthText";
-    private static final String DAY_OF_MONTH_CONTAINER = "dayOfMonthContainer";
-
     private Context mContext;
 
     private View mView;
@@ -168,7 +164,7 @@ public class MaterialCalendarView extends LinearLayout {
         for (int i = 1; i < weekDaysArray.length; i++) {
             dayOfTheWeekString = weekDaysArray[i];
             dayOfTheWeekString = dayOfTheWeekString.substring(0, 3).toUpperCase();
-            dayOfWeek = (TextView) mView.findViewWithTag(DAY_OF_WEEK + getWeekIndex(i, mCalendar));
+            dayOfWeek = (TextView) mView.findViewWithTag(mContext.getString(R.string.day_of_week) + getWeekIndex(i, mCalendar));
             dayOfWeek.setText(dayOfTheWeekString);
             dayOfWeek.setTextColor(mDayOfWeekTextColor);
 
@@ -197,8 +193,8 @@ public class MaterialCalendarView extends LinearLayout {
         DayView dayView;
         ViewGroup dayOfMonthContainer;
         for (int i = 1; i < 43; i++) {
-            dayOfMonthContainer = (ViewGroup) mView.findViewWithTag(DAY_OF_MONTH_CONTAINER + i);
-            dayView = (DayView) mView.findViewWithTag(DAY_OF_MONTH_TEXT + i);
+            dayOfMonthContainer = (ViewGroup) mView.findViewWithTag(mContext.getString(R.string.day_of_month_container) + i);
+            dayView = (DayView) mView.findViewWithTag(mContext.getString(R.string.day_of_month_text) + i);
             if (dayView == null)
                 continue;
 
@@ -285,7 +281,7 @@ public class MaterialCalendarView extends LinearLayout {
     }
 
     private DayView getDayOfMonthText(Calendar currentCalendar) {
-        return (DayView) getView(DAY_OF_MONTH_TEXT, currentCalendar);
+        return (DayView) getView(mContext.getString(R.string.day_of_month_text), currentCalendar);
     }
 
     private int getDayIndexByDate(Calendar currentCalendar) {
@@ -402,8 +398,8 @@ public class MaterialCalendarView extends LinearLayout {
             // Extract day selected
             ViewGroup dayOfMonthContainer = (ViewGroup) view;
             String tagId = (String) dayOfMonthContainer.getTag();
-            tagId = tagId.substring(DAY_OF_MONTH_CONTAINER.length(), tagId.length());
-            final TextView dayOfMonthText = (TextView) view.findViewWithTag(DAY_OF_MONTH_TEXT + tagId);
+            tagId = tagId.substring(mContext.getString(R.string.day_of_month_container).length(), tagId.length());
+            final TextView dayOfMonthText = (TextView) view.findViewWithTag(mContext.getString(R.string.day_of_month_text) + tagId);
 
             // Fire event
             final Calendar calendar = Calendar.getInstance();

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="day_of_week" translatable="false">dayOfWeek</string>
+    <string name="day_of_month_text" translatable="false">dayOfMonthText</string>
+    <string name="day_of_month_container" translatable="false">dayOfMonthContainer</string>
+</resources>
