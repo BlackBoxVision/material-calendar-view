@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="1dp"
+    android:clickable="true"
+    android:paddingBottom="@dimen/calendarTitlePaddingBottom"
+    android:paddingTop="@dimen/calendarTitlePaddingTop">
+
+    <ImageView
+        android:id="@+id/leftButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="false"
+        android:layout_centerVertical="true"
+        android:paddingLeft="@dimen/padding"
+        android:src="@drawable/button_previous_month_selector" />
+
+    <TextView
+        android:id="@+id/dateTitle"
+        style="@style/CalendarView.MonthTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="false"
+        android:layout_centerInParent="true"
+        android:tag="dateTitle"
+        android:text="MONTH 2014"
+        android:textAllCaps="true" />
+
+    <ImageView
+        android:id="@+id/rightButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="false"
+        android:layout_centerVertical="true"
+        android:paddingRight="@dimen/padding"
+        android:src="@drawable/button_next_month_selector" />
+</RelativeLayout>

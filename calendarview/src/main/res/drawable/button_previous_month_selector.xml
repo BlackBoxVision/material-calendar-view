@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_focused="true" android:state_pressed="false">
+        <rotate android:drawable="@drawable/ic_arrow_up_blue_soft" android:fromDegrees="-90" android:pivotX="50%" android:pivotY="50%" android:toDegrees="-90" />
+    </item>
+
+    <item android:state_focused="false" android:state_pressed="true">
+        <rotate android:drawable="@drawable/ic_arrow_up_blue" android:fromDegrees="-90" android:pivotX="50%" android:pivotY="50%" android:toDegrees="-90" />
+    </item>
+
+    <item android:state_focused="true" android:state_pressed="true">
+        <rotate android:drawable="@drawable/ic_arrow_up_blue" android:fromDegrees="-90" android:pivotX="50%" android:pivotY="50%" android:toDegrees="-90" />
+    </item>
+
+    <item>
+        <rotate android:drawable="@drawable/ic_arrow_up_blue_soft" android:fromDegrees="-90" android:pivotX="50%" android:pivotY="50%" android:toDegrees="-90" />
+    </item>
+
+</selector>

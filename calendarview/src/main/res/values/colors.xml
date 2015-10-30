@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#222222</color>
+    <color name="day_disabled_background_color">#F1F5F8</color>
+    <color name="day_disabled_text_color">#DEDEDE</color>
+    <color name="selected_day_background">#03A7E9</color>
+    <color name="current_day_of_month">#03A7E9</color>
+</resources>
