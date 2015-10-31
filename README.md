@@ -1,4 +1,4 @@
-# MaterialCalendarView
+# MaterialCalendarView ![Build Status](https://travis-ci.org/SAMSistemas/MaterialCalendarView.svg?branch=master)
 
 Custom Calendar view library. The library code is based on this project: https://github.com/npanigrahy/Custom-Calendar-View
 
