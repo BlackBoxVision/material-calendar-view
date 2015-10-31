@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.samsistemas.calendarview.R;
 import com.samsistemas.calendarview.decor.DayDecorator;
 import com.samsistemas.calendarview.util.AttributeUtil;
+import com.samsistemas.calendarview.util.CalendarUtil;
 
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
@@ -23,14 +24,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class MaterialCalendarView extends LinearLayout {
+public class CalendarView extends LinearLayout {
     private Context mContext;
 
     private View mView;
     private ImageView mPreviousMonthButton;
     private ImageView mNextMonthButton;
 
-    private CalendarListener calendarListener;
+    private OnDateSelectedListener mOnDateSelectedListener;
+    private OnMonthChangedListener mOnMonthChangedListener;
     private Calendar mCalendar;
     private Locale mLocale;
     private Date mLastSelectedDay;
@@ -53,11 +55,11 @@ public class MaterialCalendarView extends LinearLayout {
     private int mCurrentDayOfMonth;
     private int mCurrentMonthIndex = 0;
 
-    public MaterialCalendarView(Context context) {
+    public CalendarView(Context context) {
         this(context, null);
     }
 
-    public MaterialCalendarView(Context context, AttributeSet attrs) {
+    public CalendarView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.mContext = context;
 
@@ -67,7 +69,7 @@ public class MaterialCalendarView extends LinearLayout {
         }
 
         getAttributes(attrs);
-        initializeCalendar();
+        init();
     }
 
     private void getAttributes(AttributeSet attrs) {
@@ -86,9 +88,8 @@ public class MaterialCalendarView extends LinearLayout {
         mCurrentDayOfMonth = stylesArray[10];
     }
 
-    private void initializeCalendar() {
-        final LayoutInflater inflate = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mView = inflate.inflate(R.layout.custom_calendar_layout, this, true);
+    private void init() {
+        mView = LayoutInflater.from(mContext).inflate(R.layout.custom_calendar_layout, this, true);
         mPreviousMonthButton = (ImageView) mView.findViewById(R.id.left_button);
         mNextMonthButton = (ImageView) mView.findViewById(R.id.rightButton);
 
@@ -100,8 +101,8 @@ public class MaterialCalendarView extends LinearLayout {
                 mCalendar.add(Calendar.MONTH, mCurrentMonthIndex);
 
                 refreshCalendar(mCalendar);
-                if (calendarListener != null) {
-                    calendarListener.onMonthChanged(mCalendar.getTime());
+                if (mOnMonthChangedListener != null) {
+                    mOnMonthChangedListener.onMonthChanged(mCalendar.getTime());
                 }
             }
         });
@@ -114,29 +115,25 @@ public class MaterialCalendarView extends LinearLayout {
                 mCalendar.add(Calendar.MONTH, mCurrentMonthIndex);
                 refreshCalendar(mCalendar);
 
-                if (calendarListener != null) {
-                    calendarListener.onMonthChanged(mCalendar.getTime());
+                if (mOnMonthChangedListener != null) {
+                    mOnMonthChangedListener.onMonthChanged(mCalendar.getTime());
                 }
             }
         });
 
-        // Initialize calendar for current month
-        Locale locale = mContext.getResources().getConfiguration().locale;
-        Calendar currentCalendar = Calendar.getInstance(locale);
-
         setFirstDayOfWeek(Calendar.SUNDAY);
-        refreshCalendar(currentCalendar);
+        refreshCalendar(Calendar.getInstance(getLocale()));
     }
 
 
     /**
      * Display calendar title with next previous month button
      */
-    private void initializeTitleLayout() {
+    private void initTitleLayout() {
         View titleLayout = mView.findViewById(R.id.title_layout);
         titleLayout.setBackgroundColor(mCalendarTitleBackgroundColor);
 
-        String dateText = new DateFormatSymbols(mLocale).getShortMonths()[mCalendar.get(Calendar.MONTH)].toString();
+        String dateText = new DateFormatSymbols(mLocale).getMonths()[mCalendar.get(Calendar.MONTH)].toString();
         dateText = dateText.substring(0, 1).toUpperCase() + dateText.subSequence(1, dateText.length());
 
         TextView dateTitle = (TextView) mView.findViewById(R.id.dateTitle);
@@ -152,7 +149,7 @@ public class MaterialCalendarView extends LinearLayout {
      * Initialize the calendar week layout, considers start day
      */
     @SuppressLint("DefaultLocale")
-    private void initializeWeekLayout() {
+    private void initWeekLayout() {
         TextView dayOfWeek;
         String dayOfTheWeekString;
 
@@ -164,7 +161,7 @@ public class MaterialCalendarView extends LinearLayout {
         for (int i = 1; i < weekDaysArray.length; i++) {
             dayOfTheWeekString = weekDaysArray[i];
             dayOfTheWeekString = dayOfTheWeekString.substring(0, 3).toUpperCase();
-            dayOfWeek = (TextView) mView.findViewWithTag(mContext.getString(R.string.day_of_week) + getWeekIndex(i, mCalendar));
+            dayOfWeek = (TextView) mView.findViewWithTag(mContext.getString(R.string.day_of_week) + CalendarUtil.getWeekIndex(i, mCalendar));
             dayOfWeek.setText(dayOfTheWeekString);
             dayOfWeek.setTextColor(mDayOfWeekTextColor);
 
@@ -182,7 +179,7 @@ public class MaterialCalendarView extends LinearLayout {
         int firstDayOfMonth = calendar.get(Calendar.DAY_OF_WEEK);
 
         // Calculate dayOfMonthIndex
-        int dayOfMonthIndex = getWeekIndex(firstDayOfMonth, calendar);
+        int dayOfMonthIndex = CalendarUtil.getWeekIndex(firstDayOfMonth, calendar);
         int actualMaximum = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
         final Calendar startCalendar = (Calendar) calendar.clone();
@@ -207,7 +204,7 @@ public class MaterialCalendarView extends LinearLayout {
                 dayView.setTypeface(getCustomTypeface());
             }
 
-            if (isSameMonth(calendar, startCalendar)) {
+            if (CalendarUtil.isSameMonth(calendar, startCalendar)) {
                 dayOfMonthContainer.setOnClickListener(onDayOfMonthClickListener);
                 dayView.setBackgroundColor(mCalendarBackgroundColor);
                 dayView.setTextColor(mDayOfWeekTextColor);
@@ -240,37 +237,9 @@ public class MaterialCalendarView extends LinearLayout {
         }
     }
 
-
-    public boolean isSameMonth(Calendar c1, Calendar c2) {
-        return !(c1 == null || c2 == null) &&
-               (c1.get(Calendar.ERA) == c2.get(Calendar.ERA) &&
-               (c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR)) &&
-               (c1.get(Calendar.MONTH) == c2.get(Calendar.MONTH)));
-    }
-
-    /**
-     * <p>Checks if a calendar is today.</p>
-     *
-     * @param calendar the calendar, not altered, not null.
-     * @return true if the calendar is today.
-     * @throws IllegalArgumentException if the calendar is <code>null</code>
-     */
-    public static boolean isToday(Calendar calendar) {
-        return isSameDay(calendar, Calendar.getInstance());
-    }
-
-    public static boolean isSameDay(Calendar cal1, Calendar cal2) {
-        if (cal1 == null || cal2 == null)
-            throw new IllegalArgumentException("The dates must not be null");
-        return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) &&
-                cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
-                cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR));
-    }
-
-
     private void clearDayOfTheMonthStyle(Date currentDate) {
         if (currentDate != null) {
-            final Calendar calendar = getTodayCalendar();
+            final Calendar calendar = CalendarUtil.getTodayCalendar(mContext, mFirstDayOfWeek);
             calendar.setFirstDayOfWeek(mFirstDayOfWeek);
             calendar.setTime(currentDate);
 
@@ -284,45 +253,11 @@ public class MaterialCalendarView extends LinearLayout {
         return (DayView) getView(mContext.getString(R.string.day_of_month_text), currentCalendar);
     }
 
-    private int getDayIndexByDate(Calendar currentCalendar) {
-        int monthOffset = getMonthOffset(currentCalendar);
-        int currentDay = currentCalendar.get(Calendar.DAY_OF_MONTH);
+    private int getDayIndexByDate(Calendar calendar) {
+        int monthOffset = CalendarUtil.getMonthOffset(calendar, mFirstDayOfWeek);
+        int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
 
         return currentDay + monthOffset;
-    }
-
-    private int getMonthOffset(Calendar currentCalendar) {
-        final Calendar calendar = Calendar.getInstance();
-        calendar.setFirstDayOfWeek(mFirstDayOfWeek);
-        calendar.setTime(currentCalendar.getTime());
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-
-        int firstDayWeekPosition = calendar.getFirstDayOfWeek();
-        int dayPosition = calendar.get(Calendar.DAY_OF_WEEK);
-
-        if (firstDayWeekPosition == 1) {
-            return dayPosition - 1;
-        } else {
-            if (dayPosition == 1) {
-                return 6;
-            } else {
-                return dayPosition - 2;
-            }
-        }
-    }
-
-    private int getWeekIndex(int weekIndex, Calendar currentCalendar) {
-        int firstDayWeekPosition = currentCalendar.getFirstDayOfWeek();
-        if (firstDayWeekPosition == 1) {
-            return weekIndex;
-        } else {
-
-            if (weekIndex == 1) {
-                return 7;
-            } else {
-                return weekIndex - 1;
-            }
-        }
     }
 
     private View getView(String key, Calendar currentCalendar) {
@@ -330,25 +265,14 @@ public class MaterialCalendarView extends LinearLayout {
         return mView.findViewWithTag(key + index);
     }
 
-    private Calendar getTodayCalendar() {
-        Calendar currentCalendar = Calendar.getInstance(mContext.getResources().getConfiguration().locale);
-        currentCalendar.setFirstDayOfWeek(mFirstDayOfWeek);
-        return currentCalendar;
-    }
-
-    @SuppressLint("DefaultLocale")
-    public void refreshCalendar(Calendar currentCalendar) {
-        mCalendar = currentCalendar;
+    public void refreshCalendar(Calendar calendar) {
+        mCalendar = calendar;
         mCalendar.setFirstDayOfWeek(mFirstDayOfWeek);
-        mLocale = mContext.getResources().getConfiguration().locale;
+        mLocale = getLocale();
 
-        // Set date title
-        initializeTitleLayout();
+        initTitleLayout();
+        initWeekLayout();
 
-        // Set weeks days titles
-        initializeWeekLayout();
-
-        // Initialize and set days in calendar
         setDaysInCalendar();
     }
 
@@ -361,14 +285,14 @@ public class MaterialCalendarView extends LinearLayout {
     }
 
     public void markDayAsCurrentDay(Calendar calendar) {
-        if (calendar != null && isToday(calendar)) {
+        if (calendar != null && CalendarUtil.isToday(calendar)) {
             DayView dayOfMonth = getDayOfMonthText(calendar);
             dayOfMonth.setTextColor(mCurrentDayOfMonth);
         }
     }
 
     public void markDayAsSelectedDay(Date currentDate) {
-        final Calendar currentCalendar = getTodayCalendar();
+        final Calendar currentCalendar = CalendarUtil.getTodayCalendar(mContext, mFirstDayOfWeek);
         currentCalendar.setFirstDayOfWeek(mFirstDayOfWeek);
         currentCalendar.setTime(currentDate);
 
@@ -388,8 +312,12 @@ public class MaterialCalendarView extends LinearLayout {
         mLastSelectedDay = currentDate;
     }
 
-    public void setCalendarListener(CalendarListener calendarListener) {
-        this.calendarListener = calendarListener;
+    public void setOnDateSelectedListener(OnDateSelectedListener onDateSelectedListener) {
+        this.mOnDateSelectedListener = onDateSelectedListener;
+    }
+
+    public void setOnMonthChangedListener(OnMonthChangedListener onMonthChangedListener) {
+        this.mOnMonthChangedListener = onMonthChangedListener;
     }
 
     private OnClickListener onDayOfMonthClickListener = new OnClickListener() {
@@ -411,8 +339,8 @@ public class MaterialCalendarView extends LinearLayout {
             //Set the current day color
             markDayAsCurrentDay(mCalendar);
 
-            if (calendarListener != null)
-                calendarListener.onDateSelected(calendar.getTime());
+            if (mOnDateSelectedListener != null)
+                mOnDateSelectedListener.onDateSelected(calendar.getTime());
         }
     };
 
@@ -444,10 +372,8 @@ public class MaterialCalendarView extends LinearLayout {
         return mCalendar;
     }
 
-    public interface CalendarListener {
-        void onDateSelected(Date date);
-
-        void onMonthChanged(Date time);
+    public Locale getLocale() {
+        return mContext.getResources().getConfiguration().locale;
     }
 
     public interface OnDateSelectedListener {

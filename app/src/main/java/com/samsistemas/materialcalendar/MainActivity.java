@@ -2,6 +2,7 @@ package com.samsistemas.materialcalendar;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -19,7 +20,7 @@ import android.widget.Toast;
 
 import com.samsistemas.calendarview.decor.DayDecorator;
 import com.samsistemas.calendarview.widget.DayView;
-import com.samsistemas.calendarview.widget.MaterialCalendarView;
+import com.samsistemas.calendarview.widget.CalendarView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -28,7 +29,7 @@ import java.util.Locale;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    MaterialCalendarView calendarView;
+    CalendarView calendarView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,24 +60,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        calendarView = (MaterialCalendarView) findViewById(R.id.calendar_view);
-        Calendar currentCalendar = Calendar.getInstance(Locale.getDefault());
+        calendarView = (CalendarView) findViewById(R.id.calendar_view);
+
         calendarView.setFirstDayOfWeek(Calendar.MONDAY);
         calendarView.setShowOverflowDate(true);
-        calendarView.refreshCalendar(currentCalendar);
-        calendarView.setCalendarListener(new MaterialCalendarView.CalendarListener() {
+        calendarView.refreshCalendar(Calendar.getInstance(Locale.getDefault()));
+        calendarView.setOnDateSelectedListener(new CalendarView.OnDateSelectedListener() {
             @Override
-            public void onDateSelected(Date date) {
+            public void onDateSelected(@NonNull Date selectedDate) {
                 SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-                Toast.makeText(MainActivity.this, df.format(date), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, df.format(selectedDate), Toast.LENGTH_SHORT).show();
             }
+        });
 
+        calendarView.setOnMonthChangedListener(new CalendarView.OnMonthChangedListener() {
             @Override
-            public void onMonthChanged(Date time) {
+            public void onMonthChanged(@NonNull Date monthDate) {
                 SimpleDateFormat df = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
-                if(null != actionBar)
-                    actionBar.setTitle(df.format(time));
-                Toast.makeText(MainActivity.this, df.format(time), Toast.LENGTH_SHORT).show();
+                if (null != actionBar)
+                    actionBar.setTitle(df.format(monthDate));
+                Toast.makeText(MainActivity.this, df.format(monthDate), Toast.LENGTH_SHORT).show();
             }
         });
     }

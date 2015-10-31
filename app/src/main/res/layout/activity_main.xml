@@ -22,7 +22,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <com.samsistemas.calendarview.widget.MaterialCalendarView
+                    <com.samsistemas.calendarview.widget.CalendarView
                         android:id="@+id/calendar_view"
                         android:layout_marginTop="56dp"
                         android:layout_width="match_parent"
@@ -38,7 +38,7 @@
                         app:selectedDayBackgroundColor="@color/colorAccent"
                         app:titleLayoutBackgroundColor="@color/colorPrimary"
                         app:weekLayoutBackgroundColor="@color/colorPrimary">
-                    </com.samsistemas.calendarview.widget.MaterialCalendarView>
+                    </com.samsistemas.calendarview.widget.CalendarView>
 
                 </FrameLayout>
 
