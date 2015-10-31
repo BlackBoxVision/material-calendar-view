@@ -5,9 +5,14 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v4.view.GestureDetectorCompat;
+import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -28,6 +33,9 @@ import java.util.Locale;
  * @author jonatan.salas
  */
 public class CalendarView extends LinearLayout {
+    private static final int SWIPE_THRESHOLD = 150;
+    private static final int SWIPE_VELOCITY_THRESHOLD = 100;
+    private GestureDetectorCompat mGestureDetector;
     private Context mContext;
     private View mView;
 
@@ -60,6 +68,7 @@ public class CalendarView extends LinearLayout {
      */
     public CalendarView(Context context) {
         this(context, null);
+        mGestureDetector = new GestureDetectorCompat(context, new CalendarGestureDetector());
     }
 
     /**
@@ -68,7 +77,8 @@ public class CalendarView extends LinearLayout {
      */
     public CalendarView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.mContext = context;
+        mContext = context;
+        mGestureDetector = new GestureDetectorCompat(context, new CalendarGestureDetector());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.CUPCAKE) {
             if (isInEditMode())
@@ -140,11 +150,11 @@ public class CalendarView extends LinearLayout {
         View titleLayout = mView.findViewById(R.id.title_layout);
         titleLayout.setBackgroundColor(mCalendarTitleBackgroundColor);
 
-        String dateText = new DateFormatSymbols(mLocale).getMonths()[mCalendar.get(Calendar.MONTH)].toUpperCase();
-
         TextView dateTitle = (TextView) mView.findViewById(R.id.dateTitle);
-        dateTitle.setText(dateText);
+
+        dateTitle.setText(getCurrentMonth());
         dateTitle.setTextColor(mCalendarTitleTextColor);
+
         if (null != getTypeface()) {
             dateTitle.setTypeface(getTypeface(), Typeface.BOLD);
         }
@@ -329,26 +339,101 @@ public class CalendarView extends LinearLayout {
         }
     };
 
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        ViewConfiguration vc = ViewConfiguration.get(mView.getContext());
+        final int action = MotionEventCompat.getActionMasked(ev);
+        int slop = vc.getScaledTouchSlop();
+        float downX = 0;
 
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+                downX = ev.getRawX();
+            case MotionEvent.ACTION_MOVE:
+                float deltaX = ev.getRawX() - downX;
+                if (Math.abs(deltaX) > slop) {
+                    return true;
+                } else if(Math.abs(deltaX) > slop) {
+                    return true;
+                }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return mGestureDetector.onTouchEvent(event);
+    }
 
     /**
-     *
+     * @author jonatan.salas
+     */
+    public class CalendarGestureDetector extends GestureDetector.SimpleOnGestureListener {
+
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return true;
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            boolean result = false;
+            try {
+                float diffY = e2.getY() - e1.getY();
+                float diffX = e2.getX() - e1.getX();
+                if (Math.abs(diffX) > Math.abs(diffY)) {
+                    if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                        if (diffX > 0) {
+                            mCurrentMonthIndex++;
+                            mCalendar = Calendar.getInstance(Locale.getDefault());
+                            mCalendar.add(Calendar.MONTH, mCurrentMonthIndex);
+                            refreshCalendar(mCalendar);
+
+                            if (mOnMonthChangedListener != null) {
+                                mOnMonthChangedListener.onMonthChanged(mCalendar.getTime());
+                            }
+
+                        } else {
+                            mCurrentMonthIndex--;
+                            mCalendar = Calendar.getInstance(Locale.getDefault());
+                            mCalendar.add(Calendar.MONTH, mCurrentMonthIndex);
+
+                            refreshCalendar(mCalendar);
+                            if (mOnMonthChangedListener != null) {
+                                mOnMonthChangedListener.onMonthChanged(mCalendar.getTime());
+                            }
+                        }
+                    }
+                    result = true;
+                }
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+            return result;
+        }
+    }
+
+    /**
+     * @author jonatan.salas
      */
     public interface OnDateSelectedListener {
 
-        /***
+        /**
          *
          * @param selectedDate
          */
         void onDateSelected(@NonNull Date selectedDate);
     }
 
-    /***
+    /**
      * @author jonatan.salas
      */
     public interface OnMonthChangedListener {
 
-        /***
+        /**
          *
          * @param monthDate
          */
@@ -437,6 +522,10 @@ public class CalendarView extends LinearLayout {
 
     public Locale getLocale() {
         return mContext.getResources().getConfiguration().locale;
+    }
+
+    public String getCurrentMonth() {
+        return new DateFormatSymbols(mLocale).getMonths()[mCalendar.get(Calendar.MONTH)].toUpperCase();
     }
 
     public boolean isIsOverflowDateVisible() {
