@@ -29,7 +29,7 @@ In your project main **build.gradle** file you have to add this:
 In your application **build.gradle** file you have to add this:
   ```
 	dependencies {
-	       compile 'com.github.SAMSistemas:MaterialCalendarView:v0.0.1'
+	       compile 'com.github.SAMSistemas:MaterialCalendarView:v1.0.0'
 	}
 	 
 
