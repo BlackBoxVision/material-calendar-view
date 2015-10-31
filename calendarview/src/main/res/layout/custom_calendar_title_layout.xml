@@ -32,7 +32,7 @@
         android:tag="dateTitle"
         tools:text="MONTH 2014"/>
 
-    <ImageView android:id="@+id/rightButton"
+    <ImageView android:id="@+id/right_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"

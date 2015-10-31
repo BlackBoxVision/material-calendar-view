@@ -40,11 +40,6 @@ public class AttributeUtil implements Styleables {
                     ContextCompat.getColor(context, R.color.black)
             );
 
-            final int dayOfMonthTextColor = typedArray.getColor(
-                    MONTH_TEXT_COLOR,
-                    ContextCompat.getColor(context, R.color.black)
-            );
-
             final int disabledDayBackgroundColor = typedArray.getColor(
                     DISABLE_DAY_BACKGROUND_COLOR,
                     ContextCompat.getColor(context, R.color.day_disabled_background_color)
@@ -76,7 +71,6 @@ public class AttributeUtil implements Styleables {
                     calendarTitleTextColor,
                     weekLayoutBackgroundColor,
                     dayOfWeekTextColor,
-                    dayOfMonthTextColor,
                     disabledDayBackgroundColor,
                     disabledDayTextColor,
                     selectedDayBackground,

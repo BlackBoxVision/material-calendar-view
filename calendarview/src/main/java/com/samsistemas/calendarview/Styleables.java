@@ -6,7 +6,6 @@ public interface Styleables {
     int TITLE_TEXT_COLOR = R.styleable.CustomCalendarView_calendarTitleTextColor;
     int WEEK_BACKGROUND_COLOR = R.styleable.CustomCalendarView_weekLayoutBackgroundColor;
     int DAY_TEXT_COLOR = R.styleable.CustomCalendarView_dayOfWeekTextColor;
-    int MONTH_TEXT_COLOR = R.styleable.CustomCalendarView_dayOfMonthTextColor;
     int DISABLE_DAY_BACKGROUND_COLOR = R.styleable.CustomCalendarView_disabledDayBackgroundColor;
     int DISABLE_DAY_TEXT_COLOR = R.styleable.CustomCalendarView_disabledDayTextColor;
     int SELECTED_DAY_BACKGROUND_COLOR = R.styleable.CustomCalendarView_selectedDayBackgroundColor;

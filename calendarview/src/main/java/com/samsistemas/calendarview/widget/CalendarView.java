@@ -24,24 +24,21 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+/***
+ * @author jonatan.salas
+ */
 public class CalendarView extends LinearLayout {
     private Context mContext;
-
     private View mView;
-    private ImageView mPreviousMonthButton;
-    private ImageView mNextMonthButton;
 
     private OnDateSelectedListener mOnDateSelectedListener;
     private OnMonthChangedListener mOnMonthChangedListener;
+
     private Calendar mCalendar;
     private Locale mLocale;
     private Date mLastSelectedDay;
 
     private Typeface mTypeface;
-    private List<DayDecorator> mDecoratorsList = null;
-    private boolean mIsOverflowDateVisible = true;
-
-    private int mFirstDayOfWeek = Calendar.SUNDAY;
     private int mDisabledDayBackgroundColor;
     private int mDisabledDayTextColor;
     private int mCalendarBackgroundColor;
@@ -51,14 +48,24 @@ public class CalendarView extends LinearLayout {
     private int mSelectedDayTextColor;
     private int mCalendarTitleTextColor;
     private int mDayOfWeekTextColor;
-    private int mDayOfMonthTextColor;
     private int mCurrentDayOfMonth;
+
+    private List<DayDecorator> mDecoratorsList = null;
+    private boolean mIsOverflowDateVisible = true;
+    private int mFirstDayOfWeek = Calendar.SUNDAY;
     private int mCurrentMonthIndex = 0;
 
+    /**
+     * @param context
+     */
     public CalendarView(Context context) {
         this(context, null);
     }
 
+    /**
+     * @param context
+     * @param attrs
+     */
     public CalendarView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.mContext = context;
@@ -80,20 +87,20 @@ public class CalendarView extends LinearLayout {
         mCalendarTitleTextColor = stylesArray[2];
         mWeekLayoutBackgroundColor = stylesArray[3];
         mDayOfWeekTextColor = stylesArray[4];
-        mDayOfMonthTextColor = stylesArray[5];
-        mDisabledDayBackgroundColor = stylesArray[6];
-        mDisabledDayTextColor = stylesArray[7];
-        mSelectedDayBackground = stylesArray[8];
-        mSelectedDayTextColor = stylesArray[9];
-        mCurrentDayOfMonth = stylesArray[10];
+        mDisabledDayBackgroundColor = stylesArray[5];
+        mDisabledDayTextColor = stylesArray[6];
+        mSelectedDayBackground = stylesArray[7];
+        mSelectedDayTextColor = stylesArray[8];
+        mCurrentDayOfMonth = stylesArray[9];
     }
 
     private void init() {
         mView = LayoutInflater.from(mContext).inflate(R.layout.custom_calendar_layout, this, true);
-        mPreviousMonthButton = (ImageView) mView.findViewById(R.id.left_button);
-        mNextMonthButton = (ImageView) mView.findViewById(R.id.rightButton);
 
-        mPreviousMonthButton.setOnClickListener(new OnClickListener() {
+        final ImageView backButton = (ImageView) mView.findViewById(R.id.left_button);
+        final ImageView nextButton = (ImageView) mView.findViewById(R.id.right_button);
+
+        backButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 mCurrentMonthIndex--;
@@ -107,7 +114,7 @@ public class CalendarView extends LinearLayout {
             }
         });
 
-        mNextMonthButton.setOnClickListener(new OnClickListener() {
+        nextButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 mCurrentMonthIndex++;
@@ -133,15 +140,13 @@ public class CalendarView extends LinearLayout {
         View titleLayout = mView.findViewById(R.id.title_layout);
         titleLayout.setBackgroundColor(mCalendarTitleBackgroundColor);
 
-        String dateText = new DateFormatSymbols(mLocale).getMonths()[mCalendar.get(Calendar.MONTH)].toString();
-        dateText = dateText.substring(0, 1).toUpperCase() + dateText.subSequence(1, dateText.length());
+        String dateText = new DateFormatSymbols(mLocale).getMonths()[mCalendar.get(Calendar.MONTH)].toUpperCase();
 
         TextView dateTitle = (TextView) mView.findViewById(R.id.dateTitle);
+        dateTitle.setText(dateText);
         dateTitle.setTextColor(mCalendarTitleTextColor);
-        dateTitle.setText(dateText + " " + mCalendar.get(Calendar.YEAR));
-        dateTitle.setTextColor(mCalendarTitleTextColor);
-        if (null != getCustomTypeface()) {
-            dateTitle.setTypeface(getCustomTypeface(), Typeface.BOLD);
+        if (null != getTypeface()) {
+            dateTitle.setTypeface(getTypeface(), Typeface.BOLD);
         }
     }
 
@@ -165,8 +170,8 @@ public class CalendarView extends LinearLayout {
             dayOfWeek.setText(dayOfTheWeekString);
             dayOfWeek.setTextColor(mDayOfWeekTextColor);
 
-            if (null != getCustomTypeface()) {
-                dayOfWeek.setTypeface(getCustomTypeface());
+            if (null != getTypeface()) {
+                dayOfWeek.setTypeface(getTypeface());
             }
         }
     }
@@ -197,11 +202,11 @@ public class CalendarView extends LinearLayout {
 
             //Apply the default styles
             dayOfMonthContainer.setOnClickListener(null);
-            dayView.bind(startCalendar.getTime(), getDecorators());
+            dayView.bind(startCalendar.getTime(), getDecoratorsList());
             dayView.setVisibility(View.VISIBLE);
 
-            if (null != getCustomTypeface()) {
-                dayView.setTypeface(getCustomTypeface());
+            if (null != getTypeface()) {
+                dayView.setTypeface(getTypeface());
             }
 
             if (CalendarUtil.isSameMonth(calendar, startCalendar)) {
@@ -212,7 +217,7 @@ public class CalendarView extends LinearLayout {
                 dayView.setBackgroundColor(mDisabledDayBackgroundColor);
                 dayView.setTextColor(mDisabledDayTextColor);
 
-                if (!isOverflowDateVisible())
+                if (!isIsOverflowDateVisible())
                     dayView.setVisibility(View.GONE);
                 else if (i >= 36 && ((float) monthEndIndex / 7.0f) >= 1) {
                     dayView.setVisibility(View.GONE);
@@ -276,14 +281,6 @@ public class CalendarView extends LinearLayout {
         setDaysInCalendar();
     }
 
-    public int getFirstDayOfWeek() {
-        return mFirstDayOfWeek;
-    }
-
-    public void setFirstDayOfWeek(int firstDayOfWeek) {
-        this.mFirstDayOfWeek = firstDayOfWeek;
-    }
-
     public void markDayAsCurrentDay(Calendar calendar) {
         if (calendar != null && CalendarUtil.isToday(calendar)) {
             DayView dayOfMonth = getDayOfMonthText(calendar);
@@ -300,24 +297,12 @@ public class CalendarView extends LinearLayout {
         clearDayOfTheMonthStyle(mLastSelectedDay);
 
         // Store current values as last values
-        storeLastValues(currentDate);
+        setLastSelectedDay(currentDate);
 
         // Mark current day as selected
         DayView view = getDayOfMonthText(currentCalendar);
         view.setBackgroundColor(mSelectedDayBackground);
         view.setTextColor(mSelectedDayTextColor);
-    }
-
-    private void storeLastValues(Date currentDate) {
-        mLastSelectedDay = currentDate;
-    }
-
-    public void setOnDateSelectedListener(OnDateSelectedListener onDateSelectedListener) {
-        this.mOnDateSelectedListener = onDateSelectedListener;
-    }
-
-    public void setOnMonthChangedListener(OnMonthChangedListener onMonthChangedListener) {
-        this.mOnMonthChangedListener = onMonthChangedListener;
     }
 
     private OnClickListener onDayOfMonthClickListener = new OnClickListener() {
@@ -344,45 +329,117 @@ public class CalendarView extends LinearLayout {
         }
     };
 
-    public List<DayDecorator> getDecorators() {
-        return mDecoratorsList;
+
+
+    /**
+     *
+     */
+    public interface OnDateSelectedListener {
+
+        /***
+         *
+         * @param selectedDate
+         */
+        void onDateSelected(@NonNull Date selectedDate);
     }
 
-    public void setDecorators(List<DayDecorator> decorators) {
-        this.mDecoratorsList = decorators;
+    /***
+     * @author jonatan.salas
+     */
+    public interface OnMonthChangedListener {
+
+        /***
+         *
+         * @param monthDate
+         */
+        void onMonthChanged(@NonNull Date monthDate);
     }
 
-    public boolean isOverflowDateVisible() {
-        return mIsOverflowDateVisible;
+
+    /**
+     *  Attributes setters and getters.
+     */
+    public void setOnDateSelectedListener(OnDateSelectedListener onDateSelectedListener) {
+        this.mOnDateSelectedListener = onDateSelectedListener;
     }
 
-    public void setShowOverflowDate(boolean isOverFlowEnabled) {
-        mIsOverflowDateVisible = isOverFlowEnabled;
+    public void setOnMonthChangedListener(OnMonthChangedListener onMonthChangedListener) {
+        this.mOnMonthChangedListener = onMonthChangedListener;
     }
 
-    public void setCustomTypeface(Typeface customTypeface) {
-        this.mTypeface = customTypeface;
+    private void setLastSelectedDay(Date lastSelectedDay) {
+        this.mLastSelectedDay = lastSelectedDay;
     }
 
-    public Typeface getCustomTypeface() {
+    public void setTypeface(Typeface typeface) {
+        this.mTypeface = typeface;
+    }
+
+    public void setDecoratorsList(List<DayDecorator> decoratorsList) {
+        this.mDecoratorsList = decoratorsList;
+    }
+
+    public void setIsOverflowDateVisible(boolean isOverflowDateVisible) {
+        this.mIsOverflowDateVisible = isOverflowDateVisible;
+    }
+
+    public void setFirstDayOfWeek(int firstDayOfWeek) {
+        this.mFirstDayOfWeek = firstDayOfWeek;
+    }
+
+    public void setDisabledDayBackgroundColor(int disabledDayBackgroundColor) {
+        this.mDisabledDayBackgroundColor = disabledDayBackgroundColor;
+    }
+
+    public void setDisabledDayTextColor(int disabledDayTextColor) {
+        this.mDisabledDayTextColor = disabledDayTextColor;
+    }
+
+    public void setCalendarBackgroundColor(int calendarBackgroundColor) {
+        this.mCalendarBackgroundColor = calendarBackgroundColor;
+    }
+
+    public void setSelectedDayBackground(int selectedDayBackground) {
+        this.mSelectedDayBackground = selectedDayBackground;
+    }
+
+    public void setWeekLayoutBackgroundColor(int weekLayoutBackgroundColor) {
+        this.mWeekLayoutBackgroundColor = weekLayoutBackgroundColor;
+    }
+
+    public void setCalendarTitleBackgroundColor(int calendarTitleBackgroundColor) {
+        this.mCalendarTitleBackgroundColor = calendarTitleBackgroundColor;
+    }
+
+    public void setSelectedDayTextColor(int selectedDayTextColor) {
+        this.mSelectedDayTextColor = selectedDayTextColor;
+    }
+
+    public void setCalendarTitleTextColor(int calendarTitleTextColor) {
+        this.mCalendarTitleTextColor = calendarTitleTextColor;
+    }
+
+    public void setDayOfWeekTextColor(int dayOfWeekTextColor) {
+        this.mDayOfWeekTextColor = dayOfWeekTextColor;
+    }
+
+    public void setCurrentDayOfMonth(int currentDayOfMonth) {
+        this.mCurrentDayOfMonth = currentDayOfMonth;
+    }
+
+    public Typeface getTypeface() {
         return mTypeface;
     }
 
-    public Calendar getCurrentCalendar() {
-        return mCalendar;
+    public List<DayDecorator> getDecoratorsList() {
+        return mDecoratorsList;
     }
 
     public Locale getLocale() {
         return mContext.getResources().getConfiguration().locale;
     }
 
-    public interface OnDateSelectedListener {
-
-        void onDateSelected(@NonNull Date selectedDate);
-    }
-
-    public interface OnMonthChangedListener {
-
-        void onMonthChanged(@NonNull Date monthDate);
+    public boolean isIsOverflowDateVisible() {
+        return mIsOverflowDateVisible;
     }
 }

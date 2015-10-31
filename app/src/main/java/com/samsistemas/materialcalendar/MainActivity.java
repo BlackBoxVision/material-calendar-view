@@ -7,6 +7,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         calendarView = (CalendarView) findViewById(R.id.calendar_view);
 
         calendarView.setFirstDayOfWeek(Calendar.MONDAY);
-        calendarView.setShowOverflowDate(true);
+        calendarView.setIsOverflowDateVisible(true);
         calendarView.refreshCalendar(Calendar.getInstance(Locale.getDefault()));
         calendarView.setOnDateSelectedListener(new CalendarView.OnDateSelectedListener() {
             @Override
