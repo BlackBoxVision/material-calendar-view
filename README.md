@@ -28,7 +28,7 @@ I have some features that I want to add in order to make the Calendar more custo
 ----------
 Screenshots
 -------------
-<img src="https://raw.githubusercontent.com/SAMSistemas/MaterialCalendarView/master/screenshots/calendars.png" height="500" width="100%">
+<img src="https://raw.githubusercontent.com/SAMSistemas/MaterialCalendarView/master/screenshots/calendars.png" height="350" width="100%">
 
 ----------
 Adding to your Project 
