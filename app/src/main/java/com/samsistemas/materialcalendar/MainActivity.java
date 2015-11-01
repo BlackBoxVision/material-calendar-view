@@ -1,13 +1,11 @@
 package com.samsistemas.materialcalendar;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -19,15 +17,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.samsistemas.calendarview.decor.DayDecorator;
-import com.samsistemas.calendarview.widget.DayView;
 import com.samsistemas.calendarview.widget.CalendarView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     CalendarView calendarView;
@@ -85,15 +80,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    private class ColorDecorator implements DayDecorator {
-
-        @Override
-        public void decorate(DayView cell) {
-            Random rnd = new Random();
-            int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-            cell.setBackgroundColor(color);
-        }
-    }
+//    private class ColorDecorator implements DayDecorator {
+//
+//        @Override
+//        public void decorate(@NonNull DayView cell) {
+//            Random rnd = new Random();
+//            int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+//            cell.setBackgroundColor(color);
+//        }
+//    }
 
     @Override
     public void onBackPressed() {

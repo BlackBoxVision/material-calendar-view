@@ -9,8 +9,17 @@ import android.util.AttributeSet;
 import com.samsistemas.calendarview.R;
 import com.samsistemas.calendarview.Styleables;
 
+/**
+ * @author jonatan.salas
+ */
 public class AttributeUtil implements Styleables {
 
+    /**
+     *
+     * @param context
+     * @param attrs
+     * @return
+     */
     public static int[] getAttributes(@NonNull Context context, AttributeSet attrs) {
         final TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CustomCalendarView, 0, 0);
 

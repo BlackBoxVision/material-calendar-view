@@ -1,6 +1,21 @@
+/*
+ * Copyright (C) 2015 ImanoWeb {link: http://imanoweb.com}.
+ * Copyright (C) 2015 Jonisaa  {link: http://the-android-developer.blogspot.com.ar}.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.samsistemas.calendarview.widget;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -35,6 +50,8 @@ import java.util.List;
 import java.util.Locale;
 
 /***
+ * Custom CalendarView class.
+ *
  * @author jonatan.salas
  */
 public class CalendarView extends LinearLayout {
@@ -71,7 +88,6 @@ public class CalendarView extends LinearLayout {
 
     /**
      * Sentinel value for no current active pointer.
-     * Used by {@link #mActivePointerId}.
      */
     private static final int INVALID_POINTER = -1;
 
@@ -113,11 +129,12 @@ public class CalendarView extends LinearLayout {
         }
     };
 
-
+    // Gesture Detector used to handle Swipe gestures.
     private GestureDetectorCompat mGestureDetector;
     private Context mContext;
     private View mView;
 
+    //Listeners used by the Calendar...
     private OnDateSelectedListener mOnDateSelectedListener;
     private OnMonthChangedListener mOnMonthChangedListener;
 
@@ -125,6 +142,7 @@ public class CalendarView extends LinearLayout {
     private Locale mLocale;
     private Date mLastSelectedDay;
 
+    //Customizable variables...
     private Typeface mTypeface;
     private int mDisabledDayBackgroundColor;
     private int mDisabledDayTextColor;
@@ -143,20 +161,30 @@ public class CalendarView extends LinearLayout {
     private int mCurrentMonthIndex = 0;
 
     /**
-     * @param context
+     * Constructor with arguments. It receives a
+     * Context used to get the resources.
+     *
+     * @param context - the context used to get the resources.
      */
     public CalendarView(Context context) {
         this(context, null);
+
+        //Initialize the gesture listener needed..
         mGestureDetector = new GestureDetectorCompat(context, new CalendarGestureDetector());
     }
 
     /**
-     * @param context
-     * @param attrs
+     * Constructor with arguments. It receives a
+     * Context used to get the resources.
+     *
+     * @param context - the context used to get the resources.
+     * @param attrs - attribute set with custom styles.
      */
     public CalendarView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
+
+        //Initialize the gesture listener needed..
         mGestureDetector = new GestureDetectorCompat(context, new CalendarGestureDetector());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.CUPCAKE) {
@@ -168,7 +196,13 @@ public class CalendarView extends LinearLayout {
         init();
     }
 
+    /***
+     * Method that gets and set the attributes of the CalendarView class.
+     *
+     * @param attrs - Attribute set object with custom values to be setted
+     */
     private void getAttributes(AttributeSet attrs) {
+        //Use this method to simplify and clarify the code..
         final int[] stylesArray = AttributeUtil.getAttributes(mContext, attrs);
 
         mCalendarBackgroundColor = stylesArray[0];
@@ -183,12 +217,17 @@ public class CalendarView extends LinearLayout {
         mCurrentDayOfMonth = stylesArray[9];
     }
 
+    /**
+     * This method init all necessary variables and Views that our Calendar is going to use.
+     */
     private void init() {
         mScroller = new Scroller(mContext, null);
 
+        //Variables associated to handle touch events..
         final ViewConfiguration configuration = ViewConfiguration.get(mContext);
         final float density = mContext.getResources().getDisplayMetrics().density;
 
+        //Variables associated to Swipe..
         mTouchSlop = ViewConfigurationCompat.getScaledPagingTouchSlop(configuration);
         mMinimumVelocity = (int) (MIN_FLING_VELOCITY * density);
         mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
@@ -196,8 +235,10 @@ public class CalendarView extends LinearLayout {
         mCloseEnough = (int) (CLOSE_ENOUGH * density);
         mDefaultGutterSize = (int) (DEFAULT_GUTTER_SIZE * density);
 
-        mView = LayoutInflater.from(mContext).inflate(R.layout.custom_calendar_layout, this, true);
+        //Inflate current view..
+        mView = LayoutInflater.from(mContext).inflate(R.layout.material_calendar_with_title, this, true);
 
+        //Get buttons for Calendar and set it´s listeners..
         final ImageView backButton = (ImageView) mView.findViewById(R.id.left_button);
         final ImageView nextButton = (ImageView) mView.findViewById(R.id.right_button);
 
@@ -233,7 +274,6 @@ public class CalendarView extends LinearLayout {
         refreshCalendar(Calendar.getInstance(getLocale()));
     }
 
-
     /**
      * Display calendar title with next previous month button
      */
@@ -254,7 +294,6 @@ public class CalendarView extends LinearLayout {
     /**
      * Initialize the calendar week layout, considers start day
      */
-    @SuppressLint("DefaultLocale")
     private void initWeekLayout() {
         TextView dayOfWeek;
         String dayOfTheWeekString;
@@ -277,6 +316,9 @@ public class CalendarView extends LinearLayout {
         }
     }
 
+    /**
+     * This method prepare and populate the days in the CalendarView
+     */
     private void setDaysInCalendar() {
         Calendar calendar = Calendar.getInstance(mLocale);
         calendar.setTime(mCalendar.getTime());
@@ -318,7 +360,7 @@ public class CalendarView extends LinearLayout {
                 dayView.setBackgroundColor(mDisabledDayBackgroundColor);
                 dayView.setTextColor(mDisabledDayTextColor);
 
-                if (!isIsOverflowDateVisible())
+                if (!isOverflowDateVisible())
                     dayView.setVisibility(View.GONE);
                 else if (i >= 36 && ((float) monthEndIndex / 7.0f) >= 1) {
                     dayView.setVisibility(View.GONE);
@@ -480,9 +522,9 @@ public class CalendarView extends LinearLayout {
     }
 
     /**
-     * Tests scrollability within child views of v given a delta of dx.
+     * Tests scroll ability within child views of v given a delta of dx.
      *
-     * @param v View to test for horizontal scrollability
+     * @param v View to test for horizontal scroll ability
      * @param checkV Whether the view v passed should itself be checked for scrollability (true),
      *               or just its children (false).
      * @param dx Delta scrolled in pixels
@@ -677,6 +719,8 @@ public class CalendarView extends LinearLayout {
     }
 
     /**
+     * CalendarGestureDetector class used to detect Swipes gestures.
+     *
      * @author jonatan.salas
      */
     public class CalendarGestureDetector extends GestureDetector.SimpleOnGestureListener {
@@ -727,25 +771,35 @@ public class CalendarView extends LinearLayout {
     }
 
     /**
+     * Interface that define a method to
+     * implement to handle a selected date event,
+     *
      * @author jonatan.salas
      */
     public interface OnDateSelectedListener {
 
         /**
+         * Method that lets you handle
+         * when a user touches a particular date.
          *
-         * @param selectedDate
+         * @param selectedDate - the date selected by the user.
          */
         void onDateSelected(@NonNull Date selectedDate);
     }
 
     /**
+     * Interface that define a method to implement to handle
+     * a month changed event.
+     *
      * @author jonatan.salas
      */
     public interface OnMonthChangedListener {
 
         /**
+         * Method that lets you handle when a goes to back or next
+         * month.
          *
-         * @param monthDate
+         * @param monthDate - the date with the current month
          */
         void onMonthChanged(@NonNull Date monthDate);
     }
@@ -838,7 +892,7 @@ public class CalendarView extends LinearLayout {
         return new DateFormatSymbols(mLocale).getMonths()[mCalendar.get(Calendar.MONTH)].toUpperCase();
     }
 
-    public boolean isIsOverflowDateVisible() {
+    public boolean isOverflowDateVisible() {
         return mIsOverflowDateVisible;
     }
 }

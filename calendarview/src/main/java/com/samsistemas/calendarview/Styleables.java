@@ -1,5 +1,8 @@
 package com.samsistemas.calendarview;
 
+/**
+ * @author jonatan.salas
+ */
 public interface Styleables {
     int CALENDAR_BACKGROUND_COLOR = R.styleable.CustomCalendarView_calendarBackgroundColor;
     int TITLE_BACKGROUND_COLOR = R.styleable.CustomCalendarView_titleLayoutBackgroundColor;

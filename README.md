@@ -33,7 +33,7 @@ Screenshots
 ----------
 Adding to your Project 
 -------------
-Actually the Project has a release version 1.0.0. I´m working in other release that will be launched the first day of November. 
+Actually the Project has a release version 1.0.0. I´m working in other release that will be launched the first days of November. 
 
 ### For Gradle:
 **Step 1:** Add the JitPack repository to your build file. Add it in your build.gradle at the end of repositories.
