@@ -38,7 +38,7 @@ Screencast
 ----------
 Adding to your Project 
 -------------
-Actually the Project has a release version 1.1.0. 
+Actually the Project has a release version 1.1.1. 
 
 ### For Gradle:
 **Step 1:** Add the JitPack repository to your build file. Add it in your build.gradle at the end of repositories.
@@ -55,7 +55,7 @@ Actually the Project has a release version 1.1.0.
 
 ```java
 dependencies {
-    compile 'com.github.SAMSistemas:MaterialCalendarView:v1.1.0'
+    compile 'com.github.SAMSistemas:MaterialCalendarView:v1.1.1'
 }
 ```
 ###For Maven:
@@ -72,7 +72,7 @@ dependencies {
 <dependency>
      <groupId>com.github.SAMSistemas</groupId>
      <artifactId>MaterialCalendarView</artifactId>
-     <version>v1.1.0</version>
+     <version>v1.1.1</version>
 </dependency>
 ```
 ###For SBT:
@@ -83,7 +83,7 @@ resolvers += "jitpack" at "https://jitpack.io"
 ```
 **Step 2:** Add the dependency in the form
 ```java
-libraryDependencies += "com.github.SAMSistemas" % "MaterialCalendarView" % "v1.1.0"	
+libraryDependencies += "com.github.SAMSistemas" % "MaterialCalendarView" % "v1.1.1"	
 ```
 ----------
 Using Material Calendar View library
@@ -148,7 +148,7 @@ calendarView.setOnMonthChangedListener(new CalendarView.OnMonthChangedListener()
 ----------
 License
 -------------
-This library is distributed under **APACHE2** license, feel free to do any modification.
+This library is distributed under **Apache License 2**, feel free to do any modification.
 
 ```
 /*
