@@ -1,10 +1,12 @@
-package com.samsistemas.materialcalendar;
+package com.samsistemas.materialcalendar.activity;
 
 import android.graphics.Rect;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.TouchUtils;
 
 import com.samsistemas.calendarview.widget.CalendarView;
+import com.samsistemas.materialcalendar.MainActivity;
+import com.samsistemas.materialcalendar.R;
 
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
