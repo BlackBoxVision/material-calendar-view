@@ -1,6 +1,7 @@
 /*
- * Copyright (C) 2015 ImanoWeb {link: http://imanoweb.com}.
- * Copyright (C) 2015 Jonisaa  {link: http://the-android-developer.blogspot.com.ar}.
+ * Copyright (C) 2015 ImanoWeb 	   {link: http://imanoweb.com}.
+ * Copyright (C) 2015 SAMSistemas  {link: http://www.samsistemas.com.ar}
+ * Copyright (C) 2015 Jonisaa  	   {link: http://the-android-developer.blogspot.com.ar}.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
