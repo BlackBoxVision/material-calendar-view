@@ -31,6 +31,11 @@ Screenshots
 <img src="https://raw.githubusercontent.com/SAMSistemas/MaterialCalendarView/master/screenshots/calendars.png" height="425" width="100%">
 
 ----------
+Screencast
+-------------
+<img src="https://i.imgur.com/ViolZD2.gif" height="450" width="85%" style="align: center;">
+
+----------
 Adding to your Project 
 -------------
 Actually the Project has a release version 1.1.0. 
