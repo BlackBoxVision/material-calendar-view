@@ -7,15 +7,20 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MotionEventCompat;
+import android.support.v4.view.ViewCompat;
+import android.support.v4.view.ViewConfigurationCompat;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Scroller;
 import android.widget.TextView;
 
 import com.samsistemas.calendarview.R;
@@ -33,8 +38,82 @@ import java.util.Locale;
  * @author jonatan.salas
  */
 public class CalendarView extends LinearLayout {
+    private static final boolean USE_CACHE = false;
+    private static final int MIN_DISTANCE_FOR_FLING = 25; // dips
+    private static final int DEFAULT_GUTTER_SIZE = 16; // dips
+    private static final int MIN_FLING_VELOCITY = 400; // dips
     private static final int SWIPE_THRESHOLD = 150;
     private static final int SWIPE_VELOCITY_THRESHOLD = 100;
+
+    private boolean mIsBeingDragged;
+    private boolean mIsUnableToDrag;
+    private int mDefaultGutterSize;
+    private int mGutterSize;
+    private int mTouchSlop;
+
+    private boolean mScrollingCacheEnabled;
+
+    /**
+     * Position of the last motion event.
+     */
+    private float mLastMotionX;
+    private float mLastMotionY;
+    private float mInitialMotionX;
+    private float mInitialMotionY;
+
+    private Scroller mScroller;
+
+    /**
+     * ID of the active pointer. This is used to retain consistency during
+     * drags/flings if multiple pointers are used.
+     */
+    private int mActivePointerId = INVALID_POINTER;
+
+    /**
+     * Sentinel value for no current active pointer.
+     * Used by {@link #mActivePointerId}.
+     */
+    private static final int INVALID_POINTER = -1;
+
+    /**
+     * Determines speed during touch scrolling
+     */
+    private VelocityTracker mVelocityTracker;
+    private int mMinimumVelocity;
+    private int mMaximumVelocity;
+    private int mFlingDistance;
+    private int mCloseEnough;
+
+    /**
+     * Indicates that the CalendarView is in an idle, settled state. The current page
+     * is fully in view and no animation is in progress.
+     */
+    public static final int SCROLL_STATE_IDLE = 0;
+
+    /**
+     * Indicates that the CalendarView is currently being dragged by the user.
+     */
+    public static final int SCROLL_STATE_DRAGGING = 1;
+
+    /**
+     * Indicates that the CalendarView is in the process of settling to a final position.
+     */
+    public static final int SCROLL_STATE_SETTLING = 2;
+
+    private int mScrollState = SCROLL_STATE_IDLE;
+
+    // If the CalendarView is at least this close to its final position, complete the scroll
+    // on touch down and let the user interact with the content inside instead of
+    // "catching" the flinging pager.
+    private static final int CLOSE_ENOUGH = 2; // dp
+
+    private final Runnable mEndScrollRunnable = new Runnable() {
+        public void run() {
+            setScrollState(SCROLL_STATE_IDLE);
+        }
+    };
+
+
     private GestureDetectorCompat mGestureDetector;
     private Context mContext;
     private View mView;
@@ -105,6 +184,18 @@ public class CalendarView extends LinearLayout {
     }
 
     private void init() {
+        mScroller = new Scroller(mContext, null);
+
+        final ViewConfiguration configuration = ViewConfiguration.get(mContext);
+        final float density = mContext.getResources().getDisplayMetrics().density;
+
+        mTouchSlop = ViewConfigurationCompat.getScaledPagingTouchSlop(configuration);
+        mMinimumVelocity = (int) (MIN_FLING_VELOCITY * density);
+        mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
+        mFlingDistance = (int) (MIN_DISTANCE_FOR_FLING * density);
+        mCloseEnough = (int) (CLOSE_ENOUGH * density);
+        mDefaultGutterSize = (int) (DEFAULT_GUTTER_SIZE * density);
+
         mView = LayoutInflater.from(mContext).inflate(R.layout.custom_calendar_layout, this, true);
 
         final ImageView backButton = (ImageView) mView.findViewById(R.id.left_button);
@@ -339,26 +430,245 @@ public class CalendarView extends LinearLayout {
         }
     };
 
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        ViewConfiguration vc = ViewConfiguration.get(mView.getContext());
-        final int action = MotionEventCompat.getActionMasked(ev);
-        int slop = vc.getScaledTouchSlop();
-        float downX = 0;
+    private boolean isGutterDrag(float x, float dx) {
+        return (x < mGutterSize && dx > 0) || (x > getWidth() - mGutterSize && dx < 0);
+    }
 
-        switch (action) {
-            case MotionEvent.ACTION_DOWN:
-                downX = ev.getRawX();
-            case MotionEvent.ACTION_MOVE:
-                float deltaX = ev.getRawX() - downX;
-                if (Math.abs(deltaX) > slop) {
-                    return true;
-                } else if(Math.abs(deltaX) > slop) {
-                    return true;
+    private void setScrollingCacheEnabled(boolean enabled) {
+        if (mScrollingCacheEnabled != enabled) {
+            mScrollingCacheEnabled = enabled;
+            if (USE_CACHE) {
+                final int size = getChildCount();
+                for (int i = 0; i < size; ++i) {
+                    final View child = getChildAt(i);
+                    if (child.getVisibility() != GONE) {
+                        child.setDrawingCacheEnabled(enabled);
+                    }
                 }
+            }
+        }
+    }
+
+    private void onSecondaryPointerUp(MotionEvent ev) {
+        final int pointerIndex = MotionEventCompat.getActionIndex(ev);
+        final int pointerId = MotionEventCompat.getPointerId(ev, pointerIndex);
+        if (pointerId == mActivePointerId) {
+            // This was our active pointer going up. Choose a new
+            // active pointer and adjust accordingly.
+            final int newPointerIndex = pointerIndex == 0 ? 1 : 0;
+            mLastMotionX = MotionEventCompat.getX(ev, newPointerIndex);
+            mActivePointerId = MotionEventCompat.getPointerId(ev, newPointerIndex);
+            if (mVelocityTracker != null) {
+                mVelocityTracker.clear();
+            }
+        }
+    }
+
+    private void setScrollState(int newState) {
+        if (mScrollState == newState) {
+            return;
         }
 
-        return false;
+        mScrollState = newState;
+    }
+
+    private void requestParentDisallowInterceptTouchEvent(boolean disallowIntercept) {
+        final ViewParent parent = getParent();
+        if (parent != null) {
+            parent.requestDisallowInterceptTouchEvent(disallowIntercept);
+        }
+    }
+
+    /**
+     * Tests scrollability within child views of v given a delta of dx.
+     *
+     * @param v View to test for horizontal scrollability
+     * @param checkV Whether the view v passed should itself be checked for scrollability (true),
+     *               or just its children (false).
+     * @param dx Delta scrolled in pixels
+     * @param x X coordinate of the active touch point
+     * @param y Y coordinate of the active touch point
+     * @return true if child views of v can be scrolled by delta of dx.
+     */
+    protected boolean canScroll(View v, boolean checkV, int dx, int x, int y) {
+        if (v instanceof ViewGroup) {
+            final ViewGroup group = (ViewGroup) v;
+            final int scrollX = v.getScrollX();
+            final int scrollY = v.getScrollY();
+            final int count = group.getChildCount();
+            // Count backwards - let topmost views consume scroll distance first.
+            for (int i = count - 1; i >= 0; i--) {
+                // This will not work for transformed views in Honeycomb+
+                final View child = group.getChildAt(i);
+                if (x + scrollX >= child.getLeft() && x + scrollX < child.getRight() &&
+                        y + scrollY >= child.getTop() && y + scrollY < child.getBottom() &&
+                        canScroll(child, true, dx, x + scrollX - child.getLeft(),
+                                y + scrollY - child.getTop())) {
+                    return true;
+                }
+            }
+        }
+
+        return checkV && ViewCompat.canScrollHorizontally(v, -dx);
+    }
+
+    private void completeScroll(boolean postEvents) {
+        boolean needPopulate = mScrollState == SCROLL_STATE_SETTLING;
+        if (needPopulate) {
+            // Done with scroll, no longer want to cache view drawing.
+            setScrollingCacheEnabled(false);
+            mScroller.abortAnimation();
+            int oldX = getScrollX();
+            int oldY = getScrollY();
+            int x = mScroller.getCurrX();
+            int y = mScroller.getCurrY();
+            if (oldX != x || oldY != y) {
+                scrollTo(x, y);
+            }
+        }
+
+        if (needPopulate) {
+            if (postEvents) {
+                ViewCompat.postOnAnimation(this, mEndScrollRunnable);
+            } else {
+                mEndScrollRunnable.run();
+            }
+        }
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if(null != mGestureDetector) {
+            mGestureDetector.onTouchEvent(ev);
+            super.dispatchTouchEvent(ev);
+            return true;
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        /*
+         * This method JUST determines whether we want to intercept the motion.
+         * If we return true, onMotionEvent will be called and we do the actual
+         * scrolling there.
+         */
+
+        final int action = ev.getAction() & MotionEventCompat.ACTION_MASK;
+
+        // Always take care of the touch gesture being complete.
+        if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
+            // Release the drag.
+            mIsBeingDragged = false;
+            mIsUnableToDrag = false;
+            mActivePointerId = INVALID_POINTER;
+            if (mVelocityTracker != null) {
+                mVelocityTracker.recycle();
+                mVelocityTracker = null;
+            }
+            return false;
+        }
+
+        // Nothing more to do here if we have decided whether or not we
+        // are dragging.
+        if (action != MotionEvent.ACTION_DOWN) {
+            if (mIsBeingDragged) {
+                return true;
+            }
+            if (mIsUnableToDrag) {
+                return false;
+            }
+        }
+
+        switch (action) {
+            case MotionEvent.ACTION_MOVE: {
+                /*
+                 * mIsBeingDragged == false, otherwise the shortcut would have caught it. Check
+                 * whether the user has moved far enough from his original down touch.
+                 */
+
+                /*
+                * Locally do absolute value. mLastMotionY is set to the y value
+                * of the down event.
+                */
+                final int activePointerId = mActivePointerId;
+                if (activePointerId == INVALID_POINTER) {
+                    // If we don't have a valid id, the touch down wasn't on content.
+                    break;
+                }
+
+                final int pointerIndex = MotionEventCompat.findPointerIndex(ev, activePointerId);
+                final float x = MotionEventCompat.getX(ev, pointerIndex);
+                final float dx = x - mLastMotionX;
+                final float xDiff = Math.abs(dx);
+                final float y = MotionEventCompat.getY(ev, pointerIndex);
+                final float yDiff = Math.abs(y - mInitialMotionY);
+
+                if (dx != 0 && !isGutterDrag(mLastMotionX, dx) &&
+                        canScroll(this, false, (int) dx, (int) x, (int) y)) {
+                    // Nested view has scrollable area under this point. Let it be handled there.
+                    mLastMotionX = x;
+                    mLastMotionY = y;
+                    mIsUnableToDrag = true;
+                    return false;
+                }
+                if (xDiff > mTouchSlop && xDiff * 0.5f > yDiff) {
+                    mIsBeingDragged = true;
+                    requestParentDisallowInterceptTouchEvent(true);
+                    setScrollState(SCROLL_STATE_DRAGGING);
+                    mLastMotionX = dx > 0 ? mInitialMotionX + mTouchSlop :
+                            mInitialMotionX - mTouchSlop;
+                    mLastMotionY = y;
+                    setScrollingCacheEnabled(true);
+                } else if (yDiff > mTouchSlop) {
+                    // The finger has moved enough in the vertical
+                    // direction to be counted as a drag...  abort
+                    // any attempt to drag horizontally, to work correctly
+                    // with children that have scrolling containers.
+                    mIsUnableToDrag = true;
+                }
+                break;
+            }
+
+            case MotionEvent.ACTION_DOWN: {
+                /*
+                 * Remember location of down touch.
+                 * ACTION_DOWN always refers to pointer index 0.
+                 */
+                mLastMotionX = mInitialMotionX = ev.getX();
+                mLastMotionY = mInitialMotionY = ev.getY();
+                mActivePointerId = MotionEventCompat.getPointerId(ev, 0);
+                mIsUnableToDrag = false;
+
+                mScroller.computeScrollOffset();
+                if (mScrollState == SCROLL_STATE_SETTLING &&
+                        Math.abs(mScroller.getFinalX() - mScroller.getCurrX()) > mCloseEnough) {
+                    mIsBeingDragged = true;
+                    requestParentDisallowInterceptTouchEvent(true);
+                    setScrollState(SCROLL_STATE_DRAGGING);
+                } else {
+                    completeScroll(false);
+                    mIsBeingDragged = false;
+                }
+                break;
+            }
+
+            case MotionEventCompat.ACTION_POINTER_UP:
+                onSecondaryPointerUp(ev);
+                break;
+        }
+
+        if (mVelocityTracker == null) {
+            mVelocityTracker = VelocityTracker.obtain();
+        }
+
+        mVelocityTracker.addMovement(ev);
+
+        /*
+         * The only time we want to intercept motion events is if we are in the
+         * drag mode.
+         */
+        return mIsBeingDragged;
     }
 
     @Override
@@ -378,14 +688,13 @@ public class CalendarView extends LinearLayout {
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            boolean result = false;
             try {
                 float diffY = e2.getY() - e1.getY();
                 float diffX = e2.getX() - e1.getX();
                 if (Math.abs(diffX) > Math.abs(diffY)) {
-                    if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
-                        if (diffX > 0) {
-                            mCurrentMonthIndex++;
+                    if (Math.abs(diffX) > mTouchSlop && Math.abs(velocityX) > mMinimumVelocity && Math.abs(velocityX) < mMaximumVelocity) {
+                        if (e2.getX() - e1.getX() > mFlingDistance) {
+                            mCurrentMonthIndex--;
                             mCalendar = Calendar.getInstance(Locale.getDefault());
                             mCalendar.add(Calendar.MONTH, mCurrentMonthIndex);
                             refreshCalendar(mCalendar);
@@ -394,8 +703,8 @@ public class CalendarView extends LinearLayout {
                                 mOnMonthChangedListener.onMonthChanged(mCalendar.getTime());
                             }
 
-                        } else {
-                            mCurrentMonthIndex--;
+                        } else if(e1.getX() - e2.getX() > mFlingDistance) {
+                            mCurrentMonthIndex++;
                             mCalendar = Calendar.getInstance(Locale.getDefault());
                             mCalendar.add(Calendar.MONTH, mCurrentMonthIndex);
 
@@ -405,14 +714,15 @@ public class CalendarView extends LinearLayout {
                             }
                         }
                     }
-                    result = true;
                 }
+
+                return true;
 
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
 
-            return result;
+            return super.onFling(e1, e2, velocityX, velocityY);
         }
     }
 
