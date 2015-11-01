@@ -97,20 +97,20 @@ Here it goes!
 The above code snippet will show the simple Calendar View with default design. Now, you can use the following attributes, to customize the appearance of calendar:
 ```xml
 <com.samsistemas.calendarview.widget.CalendarView
-        android:id="@+id/calendar_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/off_white"
-        app:calendarBackgroundColor="@color/off_white"
-        app:calendarTitleTextColor="@color/black"
-        app:currentDayOfMonthColor="@color/blue"
-        app:dayOfMonthTextColor="@color/black"
-        app:dayOfWeekTextColor="@color/black"
-        app:disabledDayBackgroundColor="@color/off_white"
-        app:disabledDayTextColor="@color/grey"
-        app:selectedDayBackgroundColor="@color/blue"
-        app:titleLayoutBackgroundColor="@color/white"
-        app:weekLayoutBackgroundColor="@color/white">
+    android:id="@+id/calendar_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/off_white"
+    app:calendarBackgroundColor="@color/off_white"
+    app:calendarTitleTextColor="@color/black"
+    app:currentDayOfMonthColor="@color/blue"
+    app:dayOfMonthTextColor="@color/black"
+    app:dayOfWeekTextColor="@color/black"
+    app:disabledDayBackgroundColor="@color/off_white"
+    app:disabledDayTextColor="@color/grey"
+    app:selectedDayBackgroundColor="@color/blue"
+    app:titleLayoutBackgroundColor="@color/white"
+    app:weekLayoutBackgroundColor="@color/white">
 </com.samsistemas.calendarview.widget.CalendarView>
 ```
 Let us now, initialize the calendar view to control the various other appearance and behavior of calendar using the following methods.
