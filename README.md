@@ -33,7 +33,7 @@ Screenshots
 ----------
 Screencast
 -------------
-<img src="https://i.imgur.com/ViolZD2.gif" height="450" width="85%" style="align: center;">
+<img src="https://i.imgur.com/ViolZD2.gif" height="550" width="100%" style="align: center;">
 
 ----------
 Adding to your Project 
