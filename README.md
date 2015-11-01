@@ -7,7 +7,7 @@ I found [Custom Calendar View](https://github.com/npanigrahy/Custom-Calendar-Vie
 So I decided to fork Custom Calendar View to make the modifications I needed. Thanks to [Npanigrahy](https://github.com/npanigrahy)! 
 
 Actually my project supports the next features: 
-> - Compatibility with Android API 7+
+> - Compatibility with Android API 8+
 > - Swipe gesture based navigation
 > - Next and Previous month based navigation
 > - Full customization of calendar from XML file, or setters. 
