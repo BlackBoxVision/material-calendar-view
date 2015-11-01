@@ -1,50 +1,91 @@
-# MaterialCalendarView ![Build Status](https://travis-ci.org/SAMSistemas/MaterialCalendarView.svg?branch=master)
+Material Calendar View ![Build Status](https://travis-ci.org/SAMSistemas/MaterialCalendarView.svg?branch=master)
+===================
+Material calendar view is a Library based on this GitHub project: [Custom Calendar View](https://github.com/npanigrahy/Custom-Calendar-View)
 
-Material Calendar view library. This library code is based on this project: ![Custom Calendar View](https://github.com/npanigrahy/Custom-Calendar-View)
+I found [Custom Calendar View](https://github.com/npanigrahy/Custom-Calendar-View) as a really interesting project. But when I started first of all using Custom Calendar View I find that this project need some modifications in order to work as expected. 
 
-Currently it supports the following features:
+So I decided to fork Custom Calendar View to make the modifications I needed. Thanks to [Npanigrahy](https://github.com/npanigrahy)! 
 
-    - Compatible with API 7+ 
-    - Next and previous month navigation
-    - Allow various customization including background color for day, week and title from xml and setters
-    - Set custom typeface using setTypeFace() method.
-    - Show hide next previous month overflow days
-    - Set custom day options for start day of week. By default it is set to Calendar.SUNDAY
-    - Unlimited customizations for day of the month using custom Decorators.
-    - Allow you to handle event when user changes month and day selection.
-		
-##Features in process: 
-    
-    - Support swipe gestures
-    - Binding events from Google Calendar ContentProvider
+Actually my project supports the next features: 
+> - Compatibility with Android API 7+
+> - Swipe gesture based navigation
+> - Next and Previous month based navigation
+> - Full customization of calendar from XML file, or setters. 
+> - Allow you to handle events when user changes month and day selection using two listeners. 
+> - Show hide next previous month overflow days.
+> - Allows you to modify Typeface of the Calendar View using setTypeface() method.
+> - Unlimited customizations for Day of the Month using custom Decorators.
 
-##How to use
+----------
+Features in Process
+-------------
+I have some features that I want to add in order to make the Calendar more customizable and Interactive:
+> - Binding Events with Google Calendar ContentProvider
+> - Add Roboto Fonts files and a Util class to make this fonts accessible. (This probably increase library size) 
+> - Add Ripple effects when a user touches a day.   
+> - Making two layouts for CalendarView. One that supports only Swipe navigation without buttons; and the other one that supports swipe, and back/next button navigation (Actually the default view).
+ 
+----------
+Screenshots
+-------------
+<img src="https://raw.githubusercontent.com/SAMSistemas/MaterialCalendarView/master/screenshots/calendars.png" height="500">
 
-Actually this library has a release version V1.0.0, if you want to integrate to your project, the best way to achieve this is to work with jitpack and gradle files. 
+----------
+Adding to your Project 
+-------------
+Actually the Project has a release version 1.0.0. I´m working in other release that will be launched the first day of November. 
 
-In your project main **build.gradle** file you have to add this: 
-   ```  
-   repositories {
-          // ...
-          mavenCentral()
-          //This is the line you have to add..
-          maven { 
-          	url "https://jitpack.io" 
-          }
-   }
-   ```
-   
-In your application **build.gradle** file you have to add this:
-  ```
-  dependencies {
-	 compile 'com.github.SAMSistemas:MaterialCalendarView:v1.0.0'
-  } 
-  ```
-	 
-## Using MaterialCalendarView Library
+### For Gradle:
+**Step 1:** Add the JitPack repository to your build file. Add it in your build.gradle at the end of repositories.
 
-The GitHub project source includes a sample application, that is used for demonstrating the various features currently supported by this library. Once the library is added to your project, you can include the MaterialCalendarView into your activity/fragment layout using the following code snippets.
+```java
+  repositories {
+    maven { 
+	    url "https://jitpack.io"
+	}
+  }
+```
 
+**Step 2:** Add the dependency in the form
+
+```java
+dependencies {
+    compile 'com.github.SAMSistemas:MaterialCalendarView:v1.0.0'
+}
+```
+###For Maven:
+
+**Step 1:** Add the JitPack repository to your maven file. 
+```xml
+<repository>
+     <id>jitpack.io</id>
+     <url>https://jitpack.io</url>
+</repository>
+```
+**Step 2:** Add the dependency in the form
+```xml
+<dependency>
+     <groupId>com.github.SAMSistemas</groupId>
+     <artifactId>MaterialCalendarView</artifactId>
+     <version>v1.0.0</version>
+</dependency>
+```
+###For SBT:
+
+**Step 1:** Add it in your build.sbt at the end of resolvers:
+```java
+resolvers += "jitpack" at "https://jitpack.io"
+```
+**Step 2:** Add the dependency in the form
+```java
+libraryDependencies += "com.github.SAMSistemas" % "MaterialCalendarView" % "v1.0.0"	
+```
+----------
+Using Material Calendar View library
+-------------
+This project includes a Sample App that shows you the power of this library. If you want to know more, clone, deploy and play with it. Else I will give you a little code snippets! 
+
+Here it goes! 
 ```xml
 <com.samsistemas.calendarview.widget.CalendarView
 	android:id="@+id/calendar_view"
@@ -53,8 +94,7 @@ The GitHub project source includes a sample application, that is used for demons
 	android:background="#ffffff">
 </com.samsistemas.calendarview.widget.CalendarView>
 ```
-The above code snippet will show the simple Calendar View with default design. Now, you can use the following attributes, to customize the appearance of calendar.
-
+The above code snippet will show the simple Calendar View with default design. Now, you can use the following attributes, to customize the appearance of calendar:
 ```xml
 <com.samsistemas.calendarview.widget.CalendarView
         android:id="@+id/calendar_view"
@@ -76,28 +116,26 @@ The above code snippet will show the simple Calendar View with default design. N
 Let us now, initialize the calendar view to control the various other appearance and behavior of calendar using the following methods.
 
 ```java
-    	calendarView = (CalendarView) findViewById(R.id.calendar_view);
+calendarView = (CalendarView) findViewById(R.id.calendar_view);
 
- 	calendarView.setFirstDayOfWeek(Calendar.MONDAY);
-        calendarView.setIsOverflowDateVisible(true);
-        calendarView.refreshCalendar(Calendar.getInstance(Locale.getDefault()));
-        calendarView.setOnDateSelectedListener(new CalendarView.OnDateSelectedListener() {
-            @Override
-            public void onDateSelected(@NonNull Date selectedDate) {
-                SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-                Toast.makeText(MainActivity.this, df.format(selectedDate), Toast.LENGTH_SHORT).show();
-            }
-        });
+calendarView.setFirstDayOfWeek(Calendar.MONDAY);
+calendarView.setIsOverflowDateVisible(true);
+calendarView.refreshCalendar(Calendar.getInstance(Locale.getDefault()));
+calendarView.setOnDateSelectedListener(new CalendarView.OnDateSelectedListener() {
+    @Override
+    public void onDateSelected(@NonNull Date selectedDate) {
+        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        Toast.makeText(MainActivity.this, df.format(selectedDate), Toast.LENGTH_SHORT).show();
+    }
+});
 
-        calendarView.setOnMonthChangedListener(new CalendarView.OnMonthChangedListener() {
-            @Override
-            public void onMonthChanged(@NonNull Date monthDate) {
-                SimpleDateFormat df = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
-                if (null != actionBar)
-                    actionBar.setTitle(df.format(monthDate));
-                Toast.makeText(MainActivity.this, df.format(monthDate), Toast.LENGTH_SHORT).show();
-            }
-        });
+calendarView.setOnMonthChangedListener(new CalendarView.OnMonthChangedListener() {
+    @Override
+    public void onMonthChanged(@NonNull Date monthDate) {
+        SimpleDateFormat df = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
+        if (null != actionBar)
+            actionBar.setTitle(df.format(monthDate));
+        Toast.makeText(MainActivity.this, df.format(monthDate), Toast.LENGTH_SHORT).show();
+    }
+});
 ```
-
-
