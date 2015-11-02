@@ -7,11 +7,28 @@ env:
     - MALLOC_ARENA_MAX=2
     # wait up to 10 minutes for adb to connect to emulator
     - ADB_INSTALL_TIMEOUT=10
+  matrix:
+    - ANDROID_TARGET=android-23  ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-22  ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-21  ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-20  ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-19  ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-18  ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-17  ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-16  ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-15  ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-14  ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-13  ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-12  ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-11  ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-10  ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-9  ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-8  ANDROID_ABI=armeabi-v7a
+
 
 android:
   components:
     - build-tools-23.0.1
-    - android-23
     - extra
     - extra-google-google_play_services
     - extra-google-m2repository
@@ -26,7 +43,7 @@ script:
   - ./gradlew assemble lint
 
 after_script:
-  - echo no | android create avd --force -n test -t android-21 --abi armeabi-v7a
+  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
   - emulator -avd test -no-skin -no-audio -no-window &
   - curl http://is.gd/android_wait_for_emulator > android-wait-for-emulator
   - chmod u+x android-wait-for-emulator
