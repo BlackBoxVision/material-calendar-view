@@ -20,6 +20,7 @@ Actually my project supports the next features:
 Features in Process
 -------------
 I have some features that I want to add in order to make the Calendar more customizable and Interactive:
+> - Provide two CalendarViews, one build in Java Calendar API, and the other in JODA Time API
 > - Binding Events with Google Calendar ContentProvider
 > - Add Roboto Fonts files and a Util class to make this fonts accessible. (This probably increase library size) 
 > - Add Ripple effects when a user touches a day.   
