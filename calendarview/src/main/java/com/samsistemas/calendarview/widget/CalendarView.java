@@ -18,9 +18,13 @@
 package com.samsistemas.calendarview.widget;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.support.annotation.ColorRes;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
@@ -40,6 +44,8 @@ import android.widget.Scroller;
 import android.widget.TextView;
 
 import com.samsistemas.calendarview.R;
+import com.samsistemas.calendarview.constant.ScrollableConst;
+import com.samsistemas.calendarview.constant.TouchableConst;
 import com.samsistemas.calendarview.decor.DayDecorator;
 import com.samsistemas.calendarview.util.AttributeUtil;
 import com.samsistemas.calendarview.util.CalendarUtil;
@@ -55,14 +61,7 @@ import java.util.Locale;
  *
  * @author jonatan.salas
  */
-public class CalendarView extends LinearLayout {
-    private static final boolean USE_CACHE = false;
-    private static final int MIN_DISTANCE_FOR_FLING = 25; // dips
-    private static final int DEFAULT_GUTTER_SIZE = 16; // dips
-    private static final int MIN_FLING_VELOCITY = 400; // dips
-    private static final int SWIPE_THRESHOLD = 150;
-    private static final int SWIPE_VELOCITY_THRESHOLD = 100;
-
+public class CalendarView extends LinearLayout implements ScrollableConst, TouchableConst {
     private boolean mIsBeingDragged;
     private boolean mIsUnableToDrag;
     private int mDefaultGutterSize;
@@ -88,11 +87,6 @@ public class CalendarView extends LinearLayout {
     private int mActivePointerId = INVALID_POINTER;
 
     /**
-     * Sentinel value for no current active pointer.
-     */
-    private static final int INVALID_POINTER = -1;
-
-    /**
      * Determines speed during touch scrolling
      */
     private VelocityTracker mVelocityTracker;
@@ -101,28 +95,7 @@ public class CalendarView extends LinearLayout {
     private int mFlingDistance;
     private int mCloseEnough;
 
-    /**
-     * Indicates that the CalendarView is in an idle, settled state. The current page
-     * is fully in view and no animation is in progress.
-     */
-    public static final int SCROLL_STATE_IDLE = 0;
-
-    /**
-     * Indicates that the CalendarView is currently being dragged by the user.
-     */
-    public static final int SCROLL_STATE_DRAGGING = 1;
-
-    /**
-     * Indicates that the CalendarView is in the process of settling to a final position.
-     */
-    public static final int SCROLL_STATE_SETTLING = 2;
-
     private int mScrollState = SCROLL_STATE_IDLE;
-
-    // If the CalendarView is at least this close to its final position, complete the scroll
-    // on touch down and let the user interact with the content inside instead of
-    // "catching" the flinging pager.
-    private static final int CLOSE_ENOUGH = 2; // dp
 
     private final Runnable mEndScrollRunnable = new Runnable() {
         public void run() {
@@ -134,13 +107,14 @@ public class CalendarView extends LinearLayout {
     private GestureDetectorCompat mGestureDetector;
     private Context mContext;
     private View mView;
+    private ImageView mNextButton;
+    private ImageView mBackButton;
 
     //Listeners used by the Calendar...
     private OnDateSelectedListener mOnDateSelectedListener;
     private OnMonthChangedListener mOnMonthChangedListener;
 
     private Calendar mCalendar;
-    private Locale mLocale;
     private Date mLastSelectedDay;
 
     //Customizable variables...
@@ -240,10 +214,10 @@ public class CalendarView extends LinearLayout {
         mView = LayoutInflater.from(mContext).inflate(R.layout.material_calendar_with_title, this, true);
 
         //Get buttons for Calendar and set it´s listeners..
-        final ImageView backButton = (ImageView) mView.findViewById(R.id.left_button);
-        final ImageView nextButton = (ImageView) mView.findViewById(R.id.right_button);
+        mBackButton = (ImageView) mView.findViewById(R.id.left_button);
+        mNextButton = (ImageView) mView.findViewById(R.id.right_button);
 
-        backButton.setOnClickListener(new OnClickListener() {
+        mBackButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 mCurrentMonthIndex--;
@@ -257,7 +231,7 @@ public class CalendarView extends LinearLayout {
             }
         });
 
-        nextButton.setOnClickListener(new OnClickListener() {
+        mNextButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 mCurrentMonthIndex++;
@@ -284,7 +258,8 @@ public class CalendarView extends LinearLayout {
 
         TextView dateTitle = (TextView) mView.findViewById(R.id.dateTitle);
 
-        dateTitle.setText(getCurrentMonth());
+        String dateText = getCurrentMonth() + " " + getCurrentYear();
+        dateTitle.setText(dateText);
         dateTitle.setTextColor(mCalendarTitleTextColor);
 
         if (null != getTypeface()) {
@@ -303,7 +278,7 @@ public class CalendarView extends LinearLayout {
         View titleLayout = mView.findViewById(R.id.week_layout);
         titleLayout.setBackgroundColor(mWeekLayoutBackgroundColor);
 
-        final String[] weekDaysArray = new DateFormatSymbols(mLocale).getShortWeekdays();
+        final String[] weekDaysArray = new DateFormatSymbols(getLocale()).getShortWeekdays();
         for (int i = 1; i < weekDaysArray.length; i++) {
             dayOfTheWeekString = weekDaysArray[i];
             dayOfTheWeekString = dayOfTheWeekString.substring(0, 3).toUpperCase();
@@ -321,7 +296,7 @@ public class CalendarView extends LinearLayout {
      * This method prepare and populate the days in the CalendarView
      */
     private void setDaysInCalendar() {
-        Calendar calendar = Calendar.getInstance(mLocale);
+        Calendar calendar = Calendar.getInstance(getLocale());
         calendar.setTime(mCalendar.getTime());
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         calendar.setFirstDayOfWeek(mFirstDayOfWeek);
@@ -417,7 +392,6 @@ public class CalendarView extends LinearLayout {
     public void refreshCalendar(Calendar calendar) {
         mCalendar = calendar;
         mCalendar.setFirstDayOfWeek(mFirstDayOfWeek);
-        mLocale = getLocale();
 
         initTitleLayout();
         initWeekLayout();
@@ -877,6 +851,23 @@ public class CalendarView extends LinearLayout {
         this.mCurrentDayOfMonth = currentDayOfMonth;
     }
 
+    public void setBackButtonColor(@ColorRes int colorId) {
+        this.mBackButton.setColorFilter(ContextCompat.getColor(mContext, colorId), PorterDuff.Mode.SRC_ATOP);
+    }
+
+    public void setNextButtonColor(@ColorRes int colorId) {
+        this.mNextButton.setColorFilter(ContextCompat.getColor(mContext, colorId), PorterDuff.Mode.SRC_ATOP);
+    }
+
+    public void setBackButtonDrawable(@DrawableRes int drawableId) {
+        this.mBackButton.setImageDrawable(ContextCompat.getDrawable(mContext, drawableId));
+    }
+
+    public void setNextButtonDrawable(@DrawableRes int drawableId) {
+        this.mNextButton.setImageDrawable(ContextCompat.getDrawable(mContext, drawableId));
+    }
+
+
     public Typeface getTypeface() {
         return mTypeface;
     }
@@ -890,7 +881,11 @@ public class CalendarView extends LinearLayout {
     }
 
     public String getCurrentMonth() {
-        return new DateFormatSymbols(mLocale).getMonths()[mCalendar.get(Calendar.MONTH)].toUpperCase();
+        return new DateFormatSymbols(getLocale()).getMonths()[mCalendar.get(Calendar.MONTH)].toUpperCase();
+    }
+
+    public String getCurrentYear() {
+        return String.valueOf(mCalendar.get(Calendar.YEAR));
     }
 
     public boolean isOverflowDateVisible() {

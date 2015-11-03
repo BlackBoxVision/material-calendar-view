@@ -1,9 +1,11 @@
-package com.samsistemas.calendarview;
+package com.samsistemas.calendarview.constant;
+
+import com.samsistemas.calendarview.R;
 
 /**
  * @author jonatan.salas
  */
-public interface Styleables {
+public interface StyleableConst {
     int CALENDAR_BACKGROUND_COLOR = R.styleable.CustomCalendarView_calendarBackgroundColor;
     int TITLE_BACKGROUND_COLOR = R.styleable.CustomCalendarView_titleLayoutBackgroundColor;
     int TITLE_TEXT_COLOR = R.styleable.CustomCalendarView_calendarTitleTextColor;

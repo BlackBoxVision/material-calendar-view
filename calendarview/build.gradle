@@ -25,7 +25,9 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.0'
+    compile 'joda-time:joda-time:2.9'
 }
+
 task findbugs(type: FindBugs) {
     description 'Run findbugs'
     group 'verification'
@@ -44,6 +46,7 @@ task findbugs(type: FindBugs) {
         }
     }
 }
+
 task pmd(type: Pmd) {
     ignoreFailures = true
     ruleSetFiles = files("config/quality/pmd/pmd-ruleset.xml")
@@ -65,6 +68,7 @@ task pmd(type: Pmd) {
         }
     }
 }
+
 task checkstyle(type: Checkstyle) {
     ignoreFailures = true
     configFile file("config/quality/checkstyle/checkstyle.xml")

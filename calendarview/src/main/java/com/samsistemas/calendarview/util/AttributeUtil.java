@@ -7,12 +7,12 @@ import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 
 import com.samsistemas.calendarview.R;
-import com.samsistemas.calendarview.Styleables;
+import com.samsistemas.calendarview.constant.StyleableConst;
 
 /**
  * @author jonatan.salas
  */
-public class AttributeUtil implements Styleables {
+public class AttributeUtil implements StyleableConst {
 
     /**
      *

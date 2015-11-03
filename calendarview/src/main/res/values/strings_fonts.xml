@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Font paths -->
+    <string name="roboto_black" translatable="false">fonts/Roboto-Black.ttf</string>
+    <string name="roboto_black_italic" translatable="false">fonts/Roboto-BlackItalic.ttf</string>
+    <string name="roboto_bold" translatable="false">fonts/Roboto-Bold.ttf</string>
+    <string name="roboto_bold_italic" translatable="false">fonts/Roboto-BoldItalic.ttf</string>
+    <string name="roboto_italic" translatable="false">fonts/Roboto-Italic.ttf</string>
+    <string name="roboto_light" translatable="false">fonts/Roboto-Light.ttf</string>
+    <string name="roboto_light_italic" translatable="false">fonts/Roboto-LightItalic.ttf</string>
+    <string name="roboto_medium" translatable="false">fonts/Roboto-Medium.ttf</string>
+    <string name="roboto_medium_italic" translatable="false">fonts/Roboto-MediumItalic.ttf</string>
+    <string name="roboto_regular" translatable="false">fonts/Roboto-Regular.ttf</string>
+    <string name="roboto_thin" translatable="false">fonts/Roboto-Thin.ttf</string>
+    <string name="roboto_thin_italic" translatable="false">fonts/Roboto-ThinItalic.ttf</string>
+    <string name="roboto_condensed_bold" translatable="false">fonts/RobotoCondensed-Bold.ttf</string>
+    <string name="roboto_condensed_bold_italic" translatable="false">fonts/RobotoCondensed-BoldItalic.ttf</string>
+    <string name="roboto_condensed_italic" translatable="false">fonts/RobotoCondensed-Italic.ttf</string>
+    <string name="roboto_condensed_light" translatable="false">fonts/RobotoCondensed-Light.ttf</string>
+    <string name="roboto_condensed_light_italic" translatable="false">fonts/RobotoCondensed-LightItalic.ttf</string>
+    <string name="roboto_condensed_regular" translatable="false">fonts/RobotoCondensed-Regular.ttf</string>
+    <string name="roboto_slab_bold" translatable="false">fonts/RobotoSlab-Bold.ttf</string>
+    <string name="roboto_slab_light" translatable="false">fonts/RobotoSlab-Light.ttf</string>
+    <string name="roboto_slab_regular" translatable="false">fonts/RobotoSlab-Regular.ttf</string>
+    <string name="roboto_slab_thin" translatable="false">fonts/RobotoSlab-Thin.ttf</string>
+
+</resources>

@@ -20,7 +20,7 @@
         android:paddingRight="@dimen/padding"
         android:paddingStart="@dimen/padding"
         android:paddingEnd="@dimen/padding"
-        android:src="@drawable/button_previous_month_selector" />
+        android:src="@drawable/ic_arrow_back_white_24dp" />
 
     <TextView
         android:id="@+id/dateTitle"
@@ -43,6 +43,6 @@
         android:paddingEnd="@dimen/padding"
         android:paddingStart="@dimen/padding"
         android:paddingLeft="@dimen/padding"
-        android:src="@drawable/button_next_month_selector" />
+        android:src="@drawable/ic_arrow_forward_white_24dp" />
 
 </RelativeLayout>

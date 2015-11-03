@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         calendarView.setFirstDayOfWeek(Calendar.MONDAY);
         calendarView.setIsOverflowDateVisible(true);
+        calendarView.setBackButtonColor(R.color.colorAccent);
+        calendarView.setNextButtonColor(R.color.colorAccent);
         calendarView.refreshCalendar(Calendar.getInstance(Locale.getDefault()));
         calendarView.setOnDateSelectedListener(new CalendarView.OnDateSelectedListener() {
             @Override
