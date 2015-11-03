@@ -144,6 +144,19 @@ calendarView.setOnMonthChangedListener(new CalendarView.OnMonthChangedListener()
     }
 });
 ```
+----------
+Issues 
+-------------
+
+Actually this library has no issues detected. I build this library againts travis and run the sample app in the supported API emulators. But maybe it could have an Issue that i can't detect or whatever. 
+
+If you found it, please, open an Issue. I will be proud to solve it in order to help you!
+
+----------
+Contact Me
+-------------
+If you like this library, and want me to add some cool features in order to make it better just tell me! 
+My contact emails are: jonatansalas@live.com.ar or jonatan.salas.js@gmail.com
 
 ----------
 License
