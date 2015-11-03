@@ -62,13 +62,11 @@ import java.util.Locale;
  * @author jonatan.salas
  */
 public class CalendarView extends LinearLayout implements ScrollableConst, TouchableConst {
+    private boolean mScrollingCacheEnabled;
     private boolean mIsBeingDragged;
     private boolean mIsUnableToDrag;
     private int mDefaultGutterSize;
-    private int mGutterSize;
     private int mTouchSlop;
-
-    private boolean mScrollingCacheEnabled;
 
     /**
      * Position of the last motion event.
@@ -448,7 +446,7 @@ public class CalendarView extends LinearLayout implements ScrollableConst, Touch
     };
 
     private boolean isGutterDrag(float x, float dx) {
-        return (x < mGutterSize && dx > 0) || (x > getWidth() - mGutterSize && dx < 0);
+        return (x < mDefaultGutterSize && dx > 0) || (x > getWidth() - mDefaultGutterSize && dx < 0);
     }
 
     private void setScrollingCacheEnabled(boolean enabled) {
