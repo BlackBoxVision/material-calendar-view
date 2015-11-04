@@ -18,6 +18,7 @@ using two listeners.
 > - User-allowed modify Typeface of the Calendar View by using setTypeface()
 method.
 > - Unlimited customizations for Day of the Month using custom Decorators.
+> - Add Roboto Fonts files and a Util class to make this fonts accessible. *(This probably increase library size)*
 
 ----------
 Features in Process
@@ -25,11 +26,30 @@ Features in Process
 In order to make the Calendar more customizable and Interactive, the next is
 a list of some features that I want to add:
 > - Provide two CalendarViews, one build in Java Calendar API, and the other in JODA Time API
-> - Synchonize Events with Google Calendar ContentProvider
-> - Add Roboto Fonts files and a Util class to make this fonts accessible. *(This probably increase library size)* 
+> - Synchonize Events with Google Calendar ContentProvider 
 > - Add Ripple Effects when the user touches a day.  
 > - Add two layouts for CalendarView: first one that supports only Swipe navigation without buttons; the second one will support Swipe, and back/next button navigation (actually the default view).
- 
+
+----------
+4th November 2015
+-------------
+Announcing the draft of a new release v1.2.1. The changes applied are the next: 
+>-    Deleted unused resources to reduce library file size.
+>-    Added RobotoFonts to the Assets folder.
+>-    Added a String file handling all path to RobotoFonts.
+>-    Added a Util class to get the Roboto typefaces called TypefaceUtil.
+>-    Better performance on Swipe by making some adjustments.
+>-    Added setBackButtonColor method, it allows you to change back arrow color.
+>-    Added setNextButtonColor method, it allows you to change next arrow color
+>-    Added setBackButtonDrawable method, it allows you to change back button drawable.
+>-    Added setNextButtonDrawable method, it allows you to change next button drawable.
+>-    Modified the month title show format from "MONTH_NAME" to "MONTH_NAME + ' ' + YEAR"
+>-    BugFix: Retain current day style even if you swipe to another month and come back to actual month.
+>-    Added method findViewByDate(), it receives a Date as param and returns a DayView object (Custom TextView). It lets you style dayView as you want.
+>-    Refactor of some methods in order to clarify code readability.
+>-    markCurrentDay is now renamed to setCurrentDay().
+>-    markCurrentDateAsSelected is now renamed to setDateAsSelected().
+    
 ----------
 Screenshots
 -------------
@@ -43,7 +63,7 @@ Screencast
 ----------
 Adding to your Project 
 -------------
-The last version of the Project is the 1.1.1.
+Nowadays the library current stable version is 1.2.1. 
 
 ### For Gradle:
 **Step 1:** you must add the JitPack repository to your build file. Type the
@@ -61,7 +81,7 @@ on your build.gradle at the end of repositories.
 
 ```java
 dependencies {
-    compile 'com.github.SAMSistemas:MaterialCalendarView:v1.1.1'
+    compile 'com.github.SAMSistemas:MaterialCalendarView:v1.2.1'
 }
 ```
 ###For Maven:
@@ -78,7 +98,7 @@ dependencies {
 <dependency>
      <groupId>com.github.SAMSistemas</groupId>
      <artifactId>MaterialCalendarView</artifactId>
-     <version>v1.1.1</version>
+     <version>v1.2.1</version>
 </dependency>
 ```
 ###For SBT:
@@ -89,7 +109,7 @@ resolvers += "jitpack" at "https://jitpack.io"
 ```
 **Step 2:** Add the dependency in the form
 ```java
-libraryDependencies += "com.github.SAMSistemas" % "MaterialCalendarView" % "v1.1.1"	
+libraryDependencies += "com.github.SAMSistemas" % "MaterialCalendarView" % "v1.2.1"	
 ```
 ----------
 Using Material Calendar View library
@@ -136,6 +156,7 @@ calendarView = (CalendarView) findViewById(R.id.calendar_view);
 
 calendarView.setFirstDayOfWeek(Calendar.MONDAY);
 calendarView.setIsOverflowDateVisible(true);
+calendarView.setCurrentDay(new Date(System.currentTimeMillis()));
 calendarView.setBackButtonColor(R.color.colorAccent);
 calendarView.setNextButtonColor(R.color.colorAccent);
 calendarView.refreshCalendar(Calendar.getInstance(Locale.getDefault()));
@@ -143,7 +164,7 @@ calendarView.setOnDateSelectedListener(new CalendarView.OnDateSelectedListener()
     @Override
     public void onDateSelected(@NonNull Date selectedDate) {
         SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-        Toast.makeText(MainActivity.this, df.format(selectedDate), Toast.LENGTH_SHORT).show();
+        textView.setText(df.format(selectedDate));
     }
 });
 
@@ -153,9 +174,12 @@ calendarView.setOnMonthChangedListener(new CalendarView.OnMonthChangedListener()
         SimpleDateFormat df = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
         if (null != actionBar)
             actionBar.setTitle(df.format(monthDate));
-        Toast.makeText(MainActivity.this, df.format(monthDate), Toast.LENGTH_SHORT).show();
     }
 });
+
+final DayView dayView = calendarView.findViewByDate(new Date(System.currentTimeMillis()));
+if(null != dayView)
+    Toast.makeText(getApplicationContext(), "Today is: " + dayView.getText().toString() + "/" + calendarView.getCurrentMonth() + "/" +  calendarView.getCurrentYear(), Toast.LENGTH_SHORT).show();
 ```
 ----------
 Known issues
@@ -164,6 +188,11 @@ Known issues
 I’ve made a lot of testand I’ve found no issues. This library I’ve built againts travis and run the sample app in the supported API emulators. But maybe you can find an Issue that i can't detect or whatever.
 
 If you do so, please, let me know. I will be happy to solve it in order to help you.
+
+----------
+Specially Thanks
+-------------
+Thanks to Mai Arrojo, who colaborate by my side to make English README file more understandable. We are working actually in the library code documentantion. She is good with translations. If you want to contact her for a job opportunity mail her to: maira.arrojo2015@gmail.com
 
 ----------
 Contact Me
