@@ -90,16 +90,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Toast.makeText(getApplicationContext(), "Today is: " + dayView.getText().toString() + "/" + calendarView.getCurrentMonth() + "/" +  calendarView.getCurrentYear(), Toast.LENGTH_SHORT).show();
     }
 
-//    private class ColorDecorator implements DayDecorator {
-//
-//        @Override
-//        public void decorate(@NonNull DayView cell) {
-//            Random rnd = new Random();
-//            int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-//            cell.setBackgroundColor(color);
-//        }
-//    }
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
