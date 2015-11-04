@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         DayView dayView = calendarView.findViewByDate(new Date(System.currentTimeMillis()));
         if(null != dayView)
-            Toast.makeText(getApplicationContext(), "Today is:" + dayView.getText().toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Today is: " + dayView.getText().toString() + "/" + calendarView.getCurrentMonth() + "/" +  calendarView.getCurrentYear(), Toast.LENGTH_SHORT).show();
     }
 
 //    private class ColorDecorator implements DayDecorator {

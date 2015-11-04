@@ -8,8 +8,7 @@
     android:paddingBottom="@dimen/calendarTitlePaddingBottom"
     android:paddingTop="@dimen/calendarTitlePaddingTop">
 
-    <ImageView
-        android:id="@+id/left_button"
+    <ImageView android:id="@+id/left_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -20,13 +19,19 @@
         android:paddingRight="@dimen/padding"
         android:paddingStart="@dimen/padding"
         android:paddingEnd="@dimen/padding"
-        android:src="@drawable/ic_arrow_back_white_24dp" />
+        android:background="?attr/selectableItemBackground"
+        android:src="@drawable/ic_arrow_back_white_24dp"
+        tools:ignore="contentDescription"/>
 
-    <TextView
-        android:id="@+id/dateTitle"
+    <TextView android:id="@+id/dateTitle"
         style="@style/CalendarView.MonthTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal|center|center_vertical"
+        android:layout_marginEnd="56dp"
+        android:layout_marginLeft="56dp"
+        android:layout_marginRight="56dp"
+        android:layout_marginStart="56dp"
         android:layout_alignParentTop="false"
         android:layout_centerInParent="true"
         android:tag="dateTitle"
@@ -43,6 +48,8 @@
         android:paddingEnd="@dimen/padding"
         android:paddingStart="@dimen/padding"
         android:paddingLeft="@dimen/padding"
-        android:src="@drawable/ic_arrow_forward_white_24dp" />
+        android:background="?attr/selectableItemBackground"
+        android:src="@drawable/ic_arrow_forward_white_24dp"
+        tools:ignore="contentDescription"/>
 
 </RelativeLayout>
