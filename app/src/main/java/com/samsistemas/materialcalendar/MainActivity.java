@@ -15,9 +15,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.samsistemas.calendarview.widget.CalendarView;
+import com.samsistemas.calendarview.widget.DayView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -47,6 +49,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+        final TextView textView = (TextView) findViewById(R.id.textview);
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -60,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         calendarView.setFirstDayOfWeek(Calendar.MONDAY);
         calendarView.setIsOverflowDateVisible(true);
+        calendarView.setCurrentDay(new Date(System.currentTimeMillis()));
         calendarView.setBackButtonColor(R.color.colorAccent);
         calendarView.setNextButtonColor(R.color.colorAccent);
         calendarView.refreshCalendar(Calendar.getInstance(Locale.getDefault()));
@@ -67,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onDateSelected(@NonNull Date selectedDate) {
                 SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-                Toast.makeText(MainActivity.this, df.format(selectedDate), Toast.LENGTH_SHORT).show();
+                textView.setText(df.format(selectedDate));
             }
         });
 
@@ -77,9 +82,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 SimpleDateFormat df = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
                 if (null != actionBar)
                     actionBar.setTitle(df.format(monthDate));
-                Toast.makeText(MainActivity.this, df.format(monthDate), Toast.LENGTH_SHORT).show();
             }
         });
+
+        DayView dayView = calendarView.findViewByDate(new Date(System.currentTimeMillis()));
+        if(null != dayView)
+            Toast.makeText(getApplicationContext(), "Today is:" + dayView.getText().toString(), Toast.LENGTH_SHORT).show();
     }
 
 //    private class ColorDecorator implements DayDecorator {

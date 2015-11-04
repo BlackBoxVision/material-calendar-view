@@ -343,7 +343,8 @@ public class CalendarView extends LinearLayout implements ScrollableConst, Touch
             dayView.decorate();
 
             //Set the current day color
-            markDayAsCurrentDay(startCalendar);
+            if(mCalendar.get(Calendar.MONTH) == startCalendar.get(Calendar.MONTH) )
+                setCurrentDay(mCalendar.getTime());
 
             startCalendar.add(Calendar.DATE, 1);
             dayOfMonthIndex++;
@@ -365,14 +366,20 @@ public class CalendarView extends LinearLayout implements ScrollableConst, Touch
             calendar.setFirstDayOfWeek(mFirstDayOfWeek);
             calendar.setTime(currentDate);
 
-            final DayView dayView = getDayOfMonthText(calendar);
+            final DayView dayView = findViewByCalendar(calendar);
             dayView.setBackgroundColor(mCalendarBackgroundColor);
             dayView.setTextColor(mDayOfWeekTextColor);
         }
     }
 
-    private DayView getDayOfMonthText(Calendar currentCalendar) {
-        return (DayView) getView(mContext.getString(R.string.day_of_month_text), currentCalendar);
+    public DayView findViewByDate(@NonNull Date dateToFind) {
+        final Calendar calendar = Calendar.getInstance(getLocale());
+        calendar.setTime(dateToFind);
+        return (DayView) getView(mContext.getString(R.string.day_of_month_text), calendar);
+    }
+
+    private DayView findViewByCalendar(@NonNull Calendar calendarToFind) {
+        return (DayView) getView(mContext.getString(R.string.day_of_month_text), calendarToFind);
     }
 
     private int getDayIndexByDate(Calendar calendar) {
@@ -397,14 +404,19 @@ public class CalendarView extends LinearLayout implements ScrollableConst, Touch
         setDaysInCalendar();
     }
 
-    public void markDayAsCurrentDay(Calendar calendar) {
-        if (calendar != null && CalendarUtil.isToday(calendar)) {
-            DayView dayOfMonth = getDayOfMonthText(calendar);
+    public void setCurrentDay(@NonNull Date todayDate) {
+        final Calendar calendar = Calendar.getInstance(getLocale());
+        calendar.setTime(todayDate);
+
+        if (CalendarUtil.isToday(calendar)) {
+            final DayView dayOfMonth = findViewByCalendar(calendar);
+
             dayOfMonth.setTextColor(mCurrentDayOfMonth);
+            dayOfMonth.setBackgroundColor(mSelectedDayBackground);
         }
     }
 
-    public void markDayAsSelectedDay(Date currentDate) {
+    public void setDateAsSelected(Date currentDate) {
         final Calendar currentCalendar = CalendarUtil.getTodayCalendar(mContext, mFirstDayOfWeek);
         currentCalendar.setFirstDayOfWeek(mFirstDayOfWeek);
         currentCalendar.setTime(currentDate);
@@ -416,7 +428,7 @@ public class CalendarView extends LinearLayout implements ScrollableConst, Touch
         setLastSelectedDay(currentDate);
 
         // Mark current day as selected
-        DayView view = getDayOfMonthText(currentCalendar);
+        DayView view = findViewByCalendar(currentCalendar);
         view.setBackgroundColor(mSelectedDayBackground);
         view.setTextColor(mSelectedDayTextColor);
     }
@@ -435,10 +447,10 @@ public class CalendarView extends LinearLayout implements ScrollableConst, Touch
             calendar.setFirstDayOfWeek(mFirstDayOfWeek);
             calendar.setTime(mCalendar.getTime());
             calendar.set(Calendar.DAY_OF_MONTH, Integer.valueOf(dayOfMonthText.getText().toString()));
-            markDayAsSelectedDay(calendar.getTime());
+            setDateAsSelected(calendar.getTime());
 
             //Set the current day color
-            markDayAsCurrentDay(mCalendar);
+            setCurrentDay(mCalendar.getTime());
 
             if (mOnDateSelectedListener != null)
                 mOnDateSelectedListener.onDateSelected(calendar.getTime());
