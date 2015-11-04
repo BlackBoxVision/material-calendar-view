@@ -109,19 +109,24 @@ The above code snippet will show the simple Calendar View on the default layout.
 ```xml
 <com.samsistemas.calendarview.widget.CalendarView
     android:id="@+id/calendar_view"
+    android:layout_marginTop="56dp"
+    android:layout_marginEnd="2dp"
+    android:layout_marginLeft="2dp"
+    android:layout_marginRight="2dp"
+    android:layout_marginStart="2dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/off_white"
-    app:calendarBackgroundColor="@color/off_white"
-    app:calendarTitleTextColor="@color/black"
-    app:currentDayOfMonthColor="@color/blue"
-    app:dayOfMonthTextColor="@color/black"
-    app:dayOfWeekTextColor="@color/black"
-    app:disabledDayBackgroundColor="@color/off_white"
-    app:disabledDayTextColor="@color/grey"
-    app:selectedDayBackgroundColor="@color/blue"
-    app:titleLayoutBackgroundColor="@color/white"
-    app:weekLayoutBackgroundColor="@color/white">
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    app:calendarBackgroundColor="@color/colorPrimary"
+    app:calendarTitleTextColor="@color/colorAccent"
+    app:currentDayOfMonthColor="@color/white"
+    app:dayOfMonthTextColor="@color/white"
+    app:dayOfWeekTextColor="@android:color/white"
+    app:disabledDayBackgroundColor="@color/colorPrimary"
+    app:disabledDayTextColor="@color/colorAccent"
+    app:selectedDayBackgroundColor="@color/colorAccent"
+    app:titleLayoutBackgroundColor="@color/colorPrimary"
+    app:weekLayoutBackgroundColor="@color/colorPrimary">
 </com.samsistemas.calendarview.widget.CalendarView>
 ```
 The next step is initialize the Calendar View to change the appearance and behavior of calendar using the following methods:
@@ -131,6 +136,8 @@ calendarView = (CalendarView) findViewById(R.id.calendar_view);
 
 calendarView.setFirstDayOfWeek(Calendar.MONDAY);
 calendarView.setIsOverflowDateVisible(true);
+calendarView.setBackButtonColor(R.color.colorAccent);
+calendarView.setNextButtonColor(R.color.colorAccent);
 calendarView.refreshCalendar(Calendar.getInstance(Locale.getDefault()));
 calendarView.setOnDateSelectedListener(new CalendarView.OnDateSelectedListener() {
     @Override
