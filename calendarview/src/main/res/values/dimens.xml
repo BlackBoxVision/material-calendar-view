@@ -16,12 +16,14 @@
     <dimen name="dayOfMonthImageMarginTop">20dp</dimen>
     <dimen name="padding">8dp</dimen>
 
-
     <!--New dimens-->
     <dimen name="calendarTitlePaddingTop">8dp</dimen>
     <dimen name="calendarTitlePaddingBottom">8dp</dimen>
     <dimen name="weekTitlePaddingTop">8dp</dimen>
     <dimen name="weekTitlePaddingBottom">8dp</dimen>
     <dimen name="minDayCellHeight">40dp</dimen>
+
+    <dimen name="actionbar_size">56dp</dimen>
+
 
 </resources>
