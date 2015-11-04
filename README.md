@@ -102,7 +102,7 @@ Pay attention to the following:
 	android:id="@+id/calendar_view"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	android:background="#ffffff">
+	android:background="@color/colorPrimary">
 </com.samsistemas.calendarview.widget.CalendarView>
 ```
 The above code snippet will show the simple Calendar View on the default layout. Now, you can use the following attributes if you want to customize the appearance of calendar:
