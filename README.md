@@ -1,30 +1,34 @@
 Material Calendar View ![Build Status](https://travis-ci.org/SAMSistemas/MaterialCalendarView.svg?branch=master)
 ===================
-Material calendar view is a Library based on this GitHub project: [Custom Calendar View](https://github.com/npanigrahy/Custom-Calendar-View)
+Material Calendar View is a Library based on the GitHub project: [Custom Calendar View](https://github.com/npanigrahy/Custom-Calendar-View)
 
-I found [Custom Calendar View](https://github.com/npanigrahy/Custom-Calendar-View) as a really interesting project. But when I started first of all using Custom Calendar View I find that this project need some modifications in order to work as expected. 
+I found [Custom Calendar View](https://github.com/npanigrahy/Custom-Calendar-View) as a really interesting project. But when I started using Custom Calendar View I’ve found that it needed some modifications in order to work as I expected. 
 
-So I decided to fork Custom Calendar View to make the modifications I needed. Thanks to [Npanigrahy](https://github.com/npanigrahy)! 
+So I decided to get involved onto Custom Calendar View to get the modifications I
+needed. *(Thanks to [Npanigrahy](https://github.com/npanigrahy))* 
 
-Actually my project supports the next features: 
+Nowadays my project supports this features: 
 > - Compatibility with Android API 8+
-> - Swipe gesture based navigation
-> - Next and Previous month based navigation
+> - Swipe gesture-based navigation
+> - 'Next' and 'Previous' month-based navigation
 > - Full customization of calendar from XML file, or setters. 
-> - Allow you to handle events when user changes month and day selection using two listeners. 
-> - Show hide next previous month overflow days.
-> - Allows you to modify Typeface of the Calendar View using setTypeface() method.
+> - User-allowed to handle events when changes month and day selection
+using two listeners.
+> - Show/hide next/previous month overflow days.
+> - User-allowed modify Typeface of the Calendar View by using setTypeface()
+method.
 > - Unlimited customizations for Day of the Month using custom Decorators.
 
 ----------
 Features in Process
 -------------
-I have some features that I want to add in order to make the Calendar more customizable and Interactive:
+In order to make the Calendar more customizable and Interactive, the next is
+a list of some features that I want to add:
 > - Provide two CalendarViews, one build in Java Calendar API, and the other in JODA Time API
-> - Binding Events with Google Calendar ContentProvider
-> - Add Roboto Fonts files and a Util class to make this fonts accessible. (This probably increase library size) 
-> - Add Ripple effects when a user touches a day.   
-> - Making two layouts for CalendarView. One that supports only Swipe navigation without buttons; and the other one that supports swipe, and back/next button navigation (Actually the default view).
+> - Synchonize Events with Google Calendar ContentProvider
+> - Add Roboto Fonts files and a Util class to make this fonts accessible. *(This probably increase library size)* 
+> - Add Ripple Effects when the user touches a day.  
+> - Add two layouts for CalendarView: first one that supports only Swipe navigation without buttons; the second one will support Swipe, and back/next button navigation (actually the default view).
  
 ----------
 Screenshots
@@ -39,10 +43,11 @@ Screencast
 ----------
 Adding to your Project 
 -------------
-Actually the Project has a release version 1.1.1. 
+The last version of the Project is the 1.1.1.
 
 ### For Gradle:
-**Step 1:** Add the JitPack repository to your build file. Add it in your build.gradle at the end of repositories.
+**Step 1:** you must add the JitPack repository to your build file. Type the
+on your build.gradle at the end of repositories.
 
 ```java
   repositories {
@@ -89,43 +94,50 @@ libraryDependencies += "com.github.SAMSistemas" % "MaterialCalendarView" % "v1.1
 ----------
 Using Material Calendar View library
 -------------
-This project includes a Sample App that shows you the power of this library. If you want to know more, clone, deploy and play with it. Else I will give you a little code snippets! 
+This project includes a Sample App that shows you the true power of this library. If you want to know more, feel free to clone, deploy and play with it. Else I’ll give you a little code snippets.
 
-Here it goes! 
+Pay attention to the following:
 ```xml
 <com.samsistemas.calendarview.widget.CalendarView
 	android:id="@+id/calendar_view"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	android:background="#ffffff">
+	android:background="@color/colorPrimary">
 </com.samsistemas.calendarview.widget.CalendarView>
 ```
-The above code snippet will show the simple Calendar View with default design. Now, you can use the following attributes, to customize the appearance of calendar:
+The above code snippet will show the simple Calendar View on the default layout. Now, you can use the following attributes if you want to customize the appearance of calendar:
 ```xml
 <com.samsistemas.calendarview.widget.CalendarView
     android:id="@+id/calendar_view"
+    android:layout_marginTop="56dp"
+    android:layout_marginEnd="2dp"
+    android:layout_marginLeft="2dp"
+    android:layout_marginRight="2dp"
+    android:layout_marginStart="2dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/off_white"
-    app:calendarBackgroundColor="@color/off_white"
-    app:calendarTitleTextColor="@color/black"
-    app:currentDayOfMonthColor="@color/blue"
-    app:dayOfMonthTextColor="@color/black"
-    app:dayOfWeekTextColor="@color/black"
-    app:disabledDayBackgroundColor="@color/off_white"
-    app:disabledDayTextColor="@color/grey"
-    app:selectedDayBackgroundColor="@color/blue"
-    app:titleLayoutBackgroundColor="@color/white"
-    app:weekLayoutBackgroundColor="@color/white">
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    app:calendarBackgroundColor="@color/colorPrimary"
+    app:calendarTitleTextColor="@color/colorAccent"
+    app:currentDayOfMonthColor="@color/white"
+    app:dayOfMonthTextColor="@color/white"
+    app:dayOfWeekTextColor="@android:color/white"
+    app:disabledDayBackgroundColor="@color/colorPrimary"
+    app:disabledDayTextColor="@color/colorAccent"
+    app:selectedDayBackgroundColor="@color/colorAccent"
+    app:titleLayoutBackgroundColor="@color/colorPrimary"
+    app:weekLayoutBackgroundColor="@color/colorPrimary">
 </com.samsistemas.calendarview.widget.CalendarView>
 ```
-Let us now, initialize the calendar view to control the various other appearance and behavior of calendar using the following methods.
+The next step is initialize the Calendar View to change the appearance and behavior of calendar using the following methods:
 
 ```java
 calendarView = (CalendarView) findViewById(R.id.calendar_view);
 
 calendarView.setFirstDayOfWeek(Calendar.MONDAY);
 calendarView.setIsOverflowDateVisible(true);
+calendarView.setBackButtonColor(R.color.colorAccent);
+calendarView.setNextButtonColor(R.color.colorAccent);
 calendarView.refreshCalendar(Calendar.getInstance(Locale.getDefault()));
 calendarView.setOnDateSelectedListener(new CalendarView.OnDateSelectedListener() {
     @Override
@@ -146,18 +158,17 @@ calendarView.setOnMonthChangedListener(new CalendarView.OnMonthChangedListener()
 });
 ```
 ----------
-Issues 
+Known issues
 -------------
 
-Actually this library has no issues detected. I build this library againts travis and run the sample app in the supported API emulators. But maybe it could have an Issue that i can't detect or whatever. 
+I’ve made a lot of testand I’ve found no issues. This library I’ve built againts travis and run the sample app in the supported API emulators. But maybe you can find an Issue that i can't detect or whatever.
 
-If you found it, please, open an Issue. I will be proud to solve it in order to help you!
+If you do so, please, let me know. I will be happy to solve it in order to help you.
 
 ----------
 Contact Me
 -------------
-If you like this library, and want me to add some cool features in order to make it better just tell me! 
-My contact emails are: jonatansalas@live.com.ar or jonatan.salas.js@gmail.com
+If you like this library, and want me to add some features in order to make it better just mail me to jonatansalas@live.com.ar or jonatan.salas.js@gmail.com. I’ll make it count.
 
 ----------
 License
