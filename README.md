@@ -81,7 +81,7 @@ on your build.gradle at the end of repositories.
 
 ```java
 dependencies {
-    compile 'com.github.SAMSistemas:MaterialCalendarView:v1.2.1'
+    compile 'com.github.jonisaa:MaterialCalendarview:v1.2.1'
 }
 ```
 ###For Maven:
@@ -96,7 +96,7 @@ dependencies {
 **Step 2:** Add the dependency in the form
 ```xml
 <dependency>
-     <groupId>com.github.SAMSistemas</groupId>
+     <groupId>com.github.jonisaa</groupId>
      <artifactId>MaterialCalendarView</artifactId>
      <version>v1.2.1</version>
 </dependency>
@@ -109,7 +109,7 @@ resolvers += "jitpack" at "https://jitpack.io"
 ```
 **Step 2:** Add the dependency in the form
 ```java
-libraryDependencies += "com.github.SAMSistemas" % "MaterialCalendarView" % "v1.2.1"	
+libraryDependencies += "com.github.jonisaa" % "MaterialCalendarView" % "v1.2.1"	
 ```
 ----------
 Using Material Calendar View library
