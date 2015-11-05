@@ -1,4 +1,6 @@
-Material Calendar View ![Build Status](https://travis-ci.org/jonisaa/MaterialCalendarView.svg?branch=master) [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Material%20Calendar%20View-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/2715)
+Material Calendar View ![Build Status](https://travis-ci.org/jonisaa/MaterialCalendarView.svg?branch=master)
+![Jitpack](https://img.shields.io/github/release/jonisaa/MaterialCalendarview.svg?label=JitPack)
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Material%20Calendar%20View-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/2715)
 ===================
 Material Calendar View is a Library based on the GitHub project: [Custom Calendar View](https://github.com/npanigrahy/Custom-Calendar-View)
 
