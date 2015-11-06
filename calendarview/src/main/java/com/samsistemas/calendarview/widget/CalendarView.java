@@ -279,7 +279,8 @@ public class CalendarView extends LinearLayout implements ScrollableConst, Touch
         final String[] weekDaysArray = new DateFormatSymbols(getLocale()).getShortWeekdays();
         for (int i = 1; i < weekDaysArray.length; i++) {
             dayOfTheWeekString = weekDaysArray[i];
-            dayOfTheWeekString = dayOfTheWeekString.substring(0, 3).toUpperCase();
+            int length = dayOfTheWeekString.length() < 3 ? dayOfTheWeekString.length() : 3;
+            dayOfTheWeekString = dayOfTheWeekString.substring(0, length).toUpperCase();
             dayOfWeek = (TextView) mView.findViewWithTag(mContext.getString(R.string.day_of_week) + CalendarUtil.getWeekIndex(i, mCalendar));
             dayOfWeek.setText(dayOfTheWeekString);
             dayOfWeek.setTextColor(mDayOfWeekTextColor);
