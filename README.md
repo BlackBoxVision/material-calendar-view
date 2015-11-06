@@ -35,7 +35,7 @@ a list of some features that I want to add:
 6th November 2015
 -------------
 Announcing the draft of a new release v1.2.2.The changes applied are the next:
->- BugFix of ![issue1](https://github.com/jonisaa/MaterialCalendarView/issues/1), now CalendarView should not break activity when displaying for Chinese Locale. Speccially thanks to @maddie who solve submit a pull request
+>- BugFix of ![issue1](https://github.com/jonisaa/MaterialCalendarView/issues/1), now CalendarView should not break activity when displaying for Chinese Locale. Speccially thanks to @maddie who solve submiting a pull request
 
 ----------
 4th November 2015
