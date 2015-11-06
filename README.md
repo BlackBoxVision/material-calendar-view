@@ -1,6 +1,5 @@
 
-#Material Calendar View ![Build Status](https://travis-ci.org/jonisaa/MaterialCalendarView.svg?branch=master)
-[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Material%20Calendar%20View-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/2715)   
+#Material Calendar View ![Build Status](https://travis-ci.org/jonisaa/MaterialCalendarView.svg?branch=master) [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Material%20Calendar%20View-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/2715)   
 ===================
 Material Calendar View is a Library based on the GitHub project: [Custom Calendar View](https://github.com/npanigrahy/Custom-Calendar-View)
 
@@ -31,6 +30,12 @@ a list of some features that I want to add:
 > - Synchonize Events with Google Calendar ContentProvider 
 > - Add Ripple Effects when the user touches a day.  
 > - Add two layouts for CalendarView: first one that supports only Swipe navigation without buttons; the second one will support Swipe, and back/next button navigation (actually the default view).
+
+----------
+6th November 2015
+-------------
+Announcing the draft of a new release v1.2.2.The changes applied are the next:
+>- BugFix of ![issue1](https://github.com/jonisaa/MaterialCalendarView/issues/1), now CalendarView should not break activity when displaying for Chinese Locale. Speccially thanks to @maddie who solve submit a pull request
 
 ----------
 4th November 2015
@@ -65,7 +70,7 @@ Screencast
 ----------
 Adding to your Project 
 -------------
-Nowadays the library current stable version is 1.2.1. 
+Nowadays the library current stable version is 1.2.2. 
 
 ### For Gradle:
 **Step 1:** you must add the JitPack repository to your build file. Type the
@@ -83,7 +88,7 @@ on your build.gradle at the end of repositories.
 
 ```java
 dependencies {
-    compile 'com.github.jonisaa:MaterialCalendarview:v1.2.1'
+    compile 'com.github.jonisaa:MaterialCalendarview:v1.2.2'
 }
 ```
 ###For Maven:
@@ -100,7 +105,7 @@ dependencies {
 <dependency>
      <groupId>com.github.jonisaa</groupId>
      <artifactId>MaterialCalendarView</artifactId>
-     <version>v1.2.1</version>
+     <version>v1.2.2</version>
 </dependency>
 ```
 ###For SBT:
@@ -111,7 +116,7 @@ resolvers += "jitpack" at "https://jitpack.io"
 ```
 **Step 2:** Add the dependency in the form
 ```java
-libraryDependencies += "com.github.jonisaa" % "MaterialCalendarView" % "v1.2.1"	
+libraryDependencies += "com.github.jonisaa" % "MaterialCalendarView" % "v1.2.2"	
 ```
 ----------
 Using Material Calendar View library
