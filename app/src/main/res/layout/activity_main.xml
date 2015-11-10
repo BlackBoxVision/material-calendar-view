@@ -22,7 +22,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <com.samsistemas.calendarview.widget.CalendarView
+                    <com.android.support.v8.widget.CalendarView
                         android:id="@+id/calendar_view"
                         android:layout_marginTop="56dp"
                         android:layout_marginEnd="2dp"
@@ -31,18 +31,8 @@
                         android:layout_marginStart="2dp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@color/colorPrimary"
-                        app:calendarBackgroundColor="@color/colorPrimary"
-                        app:calendarTitleTextColor="@color/colorAccent"
-                        app:currentDayOfMonthColor="@color/white"
-                        app:dayOfMonthTextColor="@color/white"
-                        app:dayOfWeekTextColor="@android:color/white"
-                        app:disabledDayBackgroundColor="@color/colorPrimary"
-                        app:disabledDayTextColor="@color/colorAccent"
-                        app:selectedDayBackgroundColor="@color/colorAccent"
-                        app:titleLayoutBackgroundColor="@color/colorPrimary"
-                        app:weekLayoutBackgroundColor="@color/colorPrimary">
-                    </com.samsistemas.calendarview.widget.CalendarView>
+                        android:background="@color/colorPrimary">
+                    </com.android.support.v8.widget.CalendarView>
 
                 </FrameLayout>
 
@@ -58,7 +48,7 @@
         <android.support.design.widget.FloatingActionButton android:id="@+id/fab"
             android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:layout_margin="@dimen/fab_margin" app:layout_anchor="@id/app_bar"
-            app:layout_anchorGravity="bottom|end" android:src="@drawable/ic_add_white_24dp" />
+            app:layout_anchorGravity="bottom|end" android:src="@android:drawable/ic_input_add" />
 
     </android.support.design.widget.CoordinatorLayout>
 

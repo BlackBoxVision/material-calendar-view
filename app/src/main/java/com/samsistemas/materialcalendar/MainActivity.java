@@ -1,7 +1,6 @@
 package com.samsistemas.materialcalendar;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -16,15 +15,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.samsistemas.calendarview.widget.CalendarView;
-import com.samsistemas.calendarview.widget.DayView;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
+import com.android.support.v8.widget.CalendarView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     CalendarView calendarView;
@@ -61,33 +53,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         calendarView = (CalendarView) findViewById(R.id.calendar_view);
-
-        calendarView.setFirstDayOfWeek(Calendar.MONDAY);
-        calendarView.setIsOverflowDateVisible(true);
-        calendarView.setCurrentDay(new Date(System.currentTimeMillis()));
-        calendarView.setBackButtonColor(R.color.colorAccent);
-        calendarView.setNextButtonColor(R.color.colorAccent);
-        calendarView.refreshCalendar(Calendar.getInstance(Locale.getDefault()));
-        calendarView.setOnDateSelectedListener(new CalendarView.OnDateSelectedListener() {
-            @Override
-            public void onDateSelected(@NonNull Date selectedDate) {
-                SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-                textView.setText(df.format(selectedDate));
-            }
-        });
-
-        calendarView.setOnMonthChangedListener(new CalendarView.OnMonthChangedListener() {
-            @Override
-            public void onMonthChanged(@NonNull Date monthDate) {
-                SimpleDateFormat df = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
-                if (null != actionBar)
-                    actionBar.setTitle(df.format(monthDate));
-            }
-        });
-
-        DayView dayView = calendarView.findViewByDate(new Date(System.currentTimeMillis()));
-        if(null != dayView)
-            Toast.makeText(getApplicationContext(), "Today is: " + dayView.getText().toString() + "/" + calendarView.getCurrentMonth() + "/" +  calendarView.getCurrentYear(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
