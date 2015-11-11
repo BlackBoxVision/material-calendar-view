@@ -18,13 +18,9 @@ package com.android.support.v8.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.graphics.Outline;
-import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,7 +29,6 @@ import android.util.MonthDisplayHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewOutlineProvider;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -192,7 +187,6 @@ public class CalendarView extends FrameLayout {
         if(isInEditMode())
             return;
 
-        ViewCompat.setLayerType(this, ViewCompat.LAYER_TYPE_SOFTWARE, null);
         saveValues(context);
         init();
     }
@@ -211,15 +205,9 @@ public class CalendarView extends FrameLayout {
         if(isInEditMode())
             return;
 
-        ViewCompat.setLayerType(this, ViewCompat.LAYER_TYPE_SOFTWARE, null);
         saveValues(context);
         style(attrs);
         init();
-    }
-
-    @Override
-    public ViewOutlineProvider getOutlineProvider() {
-        return null;
     }
 
     /**
@@ -254,7 +242,6 @@ public class CalendarView extends FrameLayout {
      */
     protected void init() {
         mRootView = mInflater.inflate(R.layout.calendar_view, this, true);
-        ViewCompat.setLayerType(mRootView, ViewCompat.LAYER_TYPE_SOFTWARE, null);
 
         //Init CalendarView parts..
         initHeaderView();
