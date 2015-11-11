@@ -1,16 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="CalendarView">
-        <attr name="isScrollEnabled" format="boolean"/>
-        <attr name="calendarTitleTextColor" format="color" />
-        <attr name="dayOfWeekTextColor" format="color" />
-        <attr name="dayOfMonthTextColor" format="color" />
-        <attr name="calendarBackgroundColor" format="color" />
-        <attr name="disabledDayBackgroundColor" format="color" />
-        <attr name="disabledDayTextColor" format="color" />
-        <attr name="selectedDayBackgroundColor" format="color" />
-        <attr name="selectedDayTextColor" format="color" />
-        <attr name="weekLayoutBackgroundColor" format="color" />
-        <attr name="titleLayoutBackgroundColor" format="color" />
+        <attr name="scrollEnable" format="boolean"/>
+        <attr name="headerViewEnable" format="boolean"/>
+        <attr name="weekendEnable" format="boolean"/>
+        <attr name="holidayEnable" format="boolean"/>
+        <attr name="calendarViewBackgroundColor" format="color" />
+        <attr name="headerViewBackgroundColor" format="color" />
+        <attr name="headerViewTextColor" format="color" />
+        <attr name="headerViewFontSize" format="float" />
+        <attr name="weekViewBackgroundColor" format="color" />
+        <attr name="weekViewTextColor" format="color" />
+        <attr name="weekViewFontSize" format="float" />
+        <attr name="adapterViewBackgroundColor" format="color" />
+        <attr name="adapterViewTextColor" format="color" />
+        <attr name="adapterViewFontSize" format="float" />
+        <attr name="disabledBackgroundColor" format="color" />
+        <attr name="disabledTextColor" format="color" />
+        <attr name="selectedBackgroundColor" format="color" />
+        <attr name="selectedTextColor" format="color" />
+        <attr name="weekendBackgroundColor" format="color" />
+        <attr name="weekendTextColor" format="color" />
+        <attr name="holidayBackgroundColor" format="color" />
+        <attr name="holidayTextColor" format="color" />
+        <attr name="currentBackgroundColor" format="color" />
+        <attr name="currentTextColor" format="color" />
     </declare-styleable>
 </resources>

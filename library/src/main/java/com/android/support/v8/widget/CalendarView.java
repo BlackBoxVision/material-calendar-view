@@ -18,8 +18,13 @@ package com.android.support.v8.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.Outline;
+import android.graphics.Paint;
+import android.graphics.Typeface;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,6 +33,7 @@ import android.util.MonthDisplayHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -42,7 +48,33 @@ import com.android.support.v8.model.Day;
 import com.android.support.v8.util.CalendarUtil;
 
 /**
- * This class is a calendar widget for displaying and selecting dates.
+ * This class is a calendar widget for displaying dates, selecting, adding and associating event for a
+ * specific day.
+ *
+ * @attr ref android.R.styleable#CalendarView_scrollEnable
+ * @attr ref android.R.styleable#CalendarView_headerViewEnable
+ * @attr ref android.R.styleable#CalendarView_weekendEnable
+ * @attr ref android.R.styleable#CalendarView_holidayEnable
+ * @attr ref android.R.styleable#CalendarView_calendarViewBackgroundColor
+ * @attr ref android.R.styleable#CalendarView_headerViewBackgroundColor
+ * @attr ref android.R.styleable#CalendarView_headerViewTextColor
+ * @attr ref android.R.styleable#CalendarView_headerViewFontSize
+ * @attr ref android.R.styleable#CalendarView_weekViewBackgroundColor
+ * @attr ref android.R.styleable#CalendarView_weekViewTextColor
+ * @attr ref android.R.styleable#CalendarView_weekViewFontSize
+ * @attr ref android.R.styleable#CalendarView_adapterViewBackgroundColor
+ * @attr ref android.R.styleable#CalendarView_adapterViewTextColor
+ * @attr ref android.R.styleable#CalendarView_adapterViewFontSize
+ * @attr ref android.R.styleable#CalendarView_disabledBackgroundColor
+ * @attr ref android.R.styleable#CalendarView_disabledTextColor
+ * @attr ref android.R.styleable#CalendarView_selectedBackgroundColor
+ * @attr ref android.R.styleable#CalendarView_selectedTextColor
+ * @attr ref android.R.styleable#CalendarView_weekendBackgroundColor
+ * @attr ref android.R.styleable#CalendarView_weekendTextColor
+ * @attr ref android.R.styleable#CalendarView_holidayBackgroundColor
+ * @attr ref android.R.styleable#CalendarView_holidayTextColor
+ * @attr ref android.R.styleable#CalendarView_currentBackgroundColor
+ * @attr ref android.R.styleable#CalendarView_currentTextColor
  *
  * @author jonatan.salas
  */
@@ -60,13 +92,58 @@ public class CalendarView extends FrameLayout {
     protected View mWeekView;
 
     protected Calendar mCurrentCalendar;
-    private Boolean mScrollEnabled = true;
 
     @Nullable
     private OnMonthChangeListener mOnMonthChangeListener;
 
     @Nullable
     private OnDateChangeListener mOnDateChangeListener;
+
+    private Boolean mScrollEnabled = true;
+    private Boolean mHeaderViewEnabled = true;
+    private Boolean mWeekendEnabled = true;
+    private Boolean mHolidayEnabled = true;
+
+    //Variable for custom typeface
+    private Typeface mTypeface;
+
+    //General background color
+    private int mCalendarViewBackgroundColor;
+
+    //HeaderView background and text color + font size
+    private int mHeaderViewBackgroundColor;
+    private int mHeaderViewTextColor;
+    private float mHeaderViewFontSize;
+
+    //WeekView background and text color + font size
+    private int mWeekViewBackgroundColor;
+    private int mWeekViewTextColor;
+    private int mWeekViewFontSize;
+
+    //AdapterView background and text color + font size
+    private int mAdapterViewBackgroundColor;
+    private int mAdapterViewTextColor;
+    private int mAdapterViewFontSize;
+
+    //Disable days background and text color variables
+    private int mDisabledBackgroundColor;
+    private int mDisabledTextColor;
+
+    //Selected day background and text color variables
+    private int mSelectedBackgroundColor;
+    private int mSelectedTextColor;
+
+    //Weekend day background and text color variables
+    private int mWeekendBackgroundColor;
+    private int mWeekendTextColor;
+
+    //Holiday background and text color variables
+    private int mHolidayBackgroundColor;
+    private int mHolidayTextColor;
+
+    //Current day background and text color
+    private int mCurrentBackgroundColor;
+    private int mCurrentTextColor;
 
     /**
      * The callback used to indicate the user changes the date.
@@ -111,11 +188,13 @@ public class CalendarView extends FrameLayout {
      */
     public CalendarView(@NonNull Context context) {
         super(context, null, 0);
-        saveValues(context);
 
-        if(!isInEditMode()) {
-            init();
-        }
+        if(isInEditMode())
+            return;
+
+        ViewCompat.setLayerType(this, ViewCompat.LAYER_TYPE_SOFTWARE, null);
+        saveValues(context);
+        init();
     }
 
     /**
@@ -128,12 +207,19 @@ public class CalendarView extends FrameLayout {
      */
     public CalendarView(@NonNull Context context, @NonNull AttributeSet attrs) {
         super(context, attrs, 0);
-        saveValues(context);
 
-        if(!isInEditMode()) {
-            style(attrs);
-            init();
-        }
+        if(isInEditMode())
+            return;
+
+        ViewCompat.setLayerType(this, ViewCompat.LAYER_TYPE_SOFTWARE, null);
+        saveValues(context);
+        style(attrs);
+        init();
+    }
+
+    @Override
+    public ViewOutlineProvider getOutlineProvider() {
+        return null;
     }
 
     /**
@@ -157,7 +243,7 @@ public class CalendarView extends FrameLayout {
 
         try {
             //TODO JS: Obtain values here..
-            mScrollEnabled = a.getBoolean(R.styleable.CalendarView_isScrollEnabled, true);
+            mScrollEnabled = a.getBoolean(R.styleable.CalendarView_scrollEnable, true);
         } finally {
             a.recycle();
         }
@@ -168,6 +254,7 @@ public class CalendarView extends FrameLayout {
      */
     protected void init() {
         mRootView = mInflater.inflate(R.layout.calendar_view, this, true);
+        ViewCompat.setLayerType(mRootView, ViewCompat.LAYER_TYPE_SOFTWARE, null);
 
         //Init CalendarView parts..
         initHeaderView();
@@ -182,8 +269,8 @@ public class CalendarView extends FrameLayout {
         mHeaderView = mRootView.findViewById(R.id.header_view);
         mHeaderView.invalidate();
 
-        final TextView dateTitle = (TextView) findViewById(R.id.date_title);
-        dateTitle.setText(getDateTitle());
+        final TextView monthTitleTextView = (TextView) findViewById(R.id.date_title);
+        monthTitleTextView.setText(getHeaderTitle());
     }
 
     /**
@@ -491,7 +578,7 @@ public class CalendarView extends FrameLayout {
         return new DateFormatSymbols(Locale.getDefault()).getShortWeekdays();
     }
 
-    public String getDateTitle() {
+    public String getHeaderTitle() {
         final String month = new DateFormatSymbols(Locale.getDefault()).getMonths()[getMonth()];
         return month.toUpperCase(Locale.getDefault()) + " " + String.valueOf(getYear());
     }
