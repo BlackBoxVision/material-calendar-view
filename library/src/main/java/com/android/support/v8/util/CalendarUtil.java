@@ -1,6 +1,21 @@
+/*
+ * Copyright (C) 2015 Jonatan E. Salas { link: http://the-android-developer.blogspot.com.ar }
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.android.support.v8.util;
 
-import android.content.Context;
+import android.support.annotation.NonNull;
 
 import java.util.Calendar;
 
@@ -11,24 +26,35 @@ public class CalendarUtil {
 
     /**
      *
-     * @param c1
-     * @param c2
+     * @param calendar
      * @return
      */
-    public static boolean isSameMonth(Calendar c1, Calendar c2) {
-        return !(c1 == null || c2 == null) &&
-               (c1.get(Calendar.ERA) == c2.get(Calendar.ERA) &&
-               (c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR)) &&
-               (c1.get(Calendar.MONTH) == c2.get(Calendar.MONTH)));
+    public static boolean isWeekend(Calendar calendar) {
+        int position = calendar.get(Calendar.DAY_OF_WEEK);
+        return position == Calendar.SATURDAY || position == Calendar.SUNDAY;
     }
 
     /**
      *
-     * @param calendar
+     * @param c1
+     * @param c2
      * @return
      */
-    public static boolean isToday(Calendar calendar) {
-        return isSameDay(calendar, Calendar.getInstance());
+    public static boolean isSameYear(@NonNull Calendar c1, @NonNull Calendar c2) {
+        return (c1.get(Calendar.ERA) == c2.get(Calendar.ERA) &&
+               (c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR)));
+    }
+
+    /**
+     *
+     * @param c1
+     * @param c2
+     * @return
+     */
+    public static boolean isSameMonth(@NonNull Calendar c1, @NonNull Calendar c2) {
+        return (c1.get(Calendar.ERA) == c2.get(Calendar.ERA) &&
+               (c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR)) &&
+               (c1.get(Calendar.MONTH) == c2.get(Calendar.MONTH)));
     }
 
     /**
@@ -37,51 +63,10 @@ public class CalendarUtil {
      * @param cal2
      * @return
      */
-    public static boolean isSameDay(Calendar cal1, Calendar cal2) {
-        if (cal1 == null || cal2 == null)
-            throw new IllegalArgumentException("The dates must not be null");
+    public static boolean isSameDay(@NonNull Calendar cal1, @NonNull Calendar cal2) {
         return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) &&
                (cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)) &&
                (cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)));
-    }
-
-    /**
-     *
-     * @param context
-     * @param firstDayOfWeek
-     * @return
-     */
-    public static Calendar getTodayCalendar(Context context, int firstDayOfWeek) {
-        Calendar currentCalendar = Calendar.getInstance(context.getResources().getConfiguration().locale);
-        currentCalendar.setFirstDayOfWeek(firstDayOfWeek);
-
-        return currentCalendar;
-    }
-
-    /**
-     *
-     * @param currentCalendar
-     * @param firstDayOfWeek
-     * @return
-     */
-    public static int getMonthOffset(Calendar currentCalendar, int firstDayOfWeek) {
-        final Calendar calendar = Calendar.getInstance();
-        calendar.setFirstDayOfWeek(firstDayOfWeek);
-        calendar.setTime(currentCalendar.getTime());
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-
-        int firstDayWeekPosition = calendar.getFirstDayOfWeek();
-        int dayPosition = calendar.get(Calendar.DAY_OF_WEEK);
-
-        if (firstDayWeekPosition == 1) {
-            return dayPosition - 1;
-        } else {
-            if (dayPosition == 1) {
-                return 6;
-            } else {
-                return dayPosition - 2;
-            }
-        }
     }
 
     /**
@@ -90,7 +75,7 @@ public class CalendarUtil {
      * @param calendar
      * @return
      */
-    public static int getWeekIndex(int weekIndex, Calendar calendar) {
+    public static int calculateWeekIndex(int weekIndex, Calendar calendar) {
         int firstDayWeekPosition = calendar.getFirstDayOfWeek();
         if (firstDayWeekPosition == 1) {
             return weekIndex;

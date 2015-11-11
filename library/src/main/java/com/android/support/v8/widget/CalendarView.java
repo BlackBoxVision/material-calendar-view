@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Jonisaa {link: http://the-android-developer.blogspot.com.ar}.
+ * Copyright (C) 2015 Jonatan E. Salas { link: http://the-android-developer.blogspot.com.ar }
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package com.android.support.v8.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -39,6 +38,8 @@ import java.util.List;
 import java.util.Locale;
 
 import com.android.support.v8.R;
+import com.android.support.v8.model.Day;
+import com.android.support.v8.util.CalendarUtil;
 
 /**
  * This class is a calendar widget for displaying and selecting dates.
@@ -111,7 +112,10 @@ public class CalendarView extends FrameLayout {
     public CalendarView(@NonNull Context context) {
         super(context, null, 0);
         saveValues(context);
-        init();
+
+        if(!isInEditMode()) {
+            init();
+        }
     }
 
     /**
@@ -125,14 +129,10 @@ public class CalendarView extends FrameLayout {
     public CalendarView(@NonNull Context context, @NonNull AttributeSet attrs) {
         super(context, attrs, 0);
         saveValues(context);
-        style(attrs);
-        init();
 
-        //Do this in order to render..
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.CUPCAKE) {
-            if (isInEditMode()) {
-                return;
-            }
+        if(!isInEditMode()) {
+            style(attrs);
+            init();
         }
     }
 
@@ -180,9 +180,10 @@ public class CalendarView extends FrameLayout {
      */
     protected void initHeaderView() {
         mHeaderView = mRootView.findViewById(R.id.header_view);
+        mHeaderView.invalidate();
+
         final TextView dateTitle = (TextView) findViewById(R.id.date_title);
         dateTitle.setText(getDateTitle());
-        mHeaderView.invalidate();
     }
 
     /**
@@ -198,7 +199,9 @@ public class CalendarView extends FrameLayout {
             int length = (dayName.length() < 3)? dayName.length() : 3;
             dayName = dayName.substring(0, length).toUpperCase();
 
-            dayOfWeek = (TextView) findViewWithTag(String.valueOf(calculateWeekIndex(i, getCurrentCalendar())));
+            final String tag = String.valueOf(CalendarUtil.calculateWeekIndex(i, getCurrentCalendar()));
+
+            dayOfWeek = (TextView) findViewWithTag(tag);
             dayOfWeek.setText(dayName);
         }
 
@@ -209,7 +212,7 @@ public class CalendarView extends FrameLayout {
      *
      */
     protected void initAdapterView() {
-        final List<Day> days = obtainDays(obtainMonthDisplayHelper(), getCurrentDay());
+        final List<Day> days = obtainDays(obtainMonthDisplayHelper(), getCurrentCalendar());
         final DayAdapter dayAdapter = new DayAdapter(mContext, days);
 
         mRecyclerView = (RecyclerView) mRootView.findViewById(R.id.recycler_view);
@@ -222,58 +225,6 @@ public class CalendarView extends FrameLayout {
         dayAdapter.notifyDataSetChanged();
 
         mRecyclerView.invalidate();
-    }
-
-    /**
-     * POJO class, representing a Day with properties needed to style the view.
-     *
-     * @author jonatan.salas
-     */
-    protected class Day {
-        private int day;
-        private boolean isCurrentDay;
-        private boolean isThisMonth;
-        private boolean isWeekend;
-
-        /**
-         * Constructor with params.
-         *
-         * @param day int representing a Day of Month
-         * @param isThisMonth boolean value, used to verify if the day is or not in this month.
-         * @param isCurrentDay boolean value, used to verify if the day is the current.
-         * @param isWeekend boolean value, used to verify if the day is at weekend.
-         */
-        public Day(int day, boolean isThisMonth, boolean isCurrentDay, boolean isWeekend) {
-            this.day = day;
-            this.isThisMonth = isThisMonth;
-            this.isCurrentDay = isCurrentDay;
-            this.isWeekend = isWeekend;
-        }
-
-        /**
-         * Constructor with params. It sets by default all boolean params to false.
-         *
-         * @param day int representing a Day of Month
-         */
-        public Day(int day) {
-            this(day, false, false, false);
-        }
-
-        public int getDay() {
-            return day;
-        }
-
-        public boolean isCurrentDay() {
-            return isCurrentDay;
-        }
-
-        public boolean isThisMonth() {
-            return isThisMonth;
-        }
-
-        public boolean isWeekend() {
-            return isWeekend;
-        }
     }
 
     /**
@@ -321,7 +272,7 @@ public class CalendarView extends FrameLayout {
             holder.mDayView.setClickable(true);
             holder.mDayView.setText(String.valueOf(day.getDay()));
 
-            if (!day.isThisMonth()) {
+            if (!day.isCurrentMonth()) {
                 holder.mDayView.setTextColor(Color.BLUE);
                 holder.mDayView.setEnabled(false);
                 holder.mDayView.setClickable(false);
@@ -343,7 +294,7 @@ public class CalendarView extends FrameLayout {
         }
 
         /**
-         * Method using to set a List of days in the adapter.
+         * Method used to set a List of days in the adapter.
          *
          * @param items the list of days to show.
          */
@@ -355,51 +306,97 @@ public class CalendarView extends FrameLayout {
     //-----------------------------------------------------------------//
     //                         PROTECTED GETTERS                       //
     //-----------------------------------------------------------------//
-    /***
-     *
-     * @param weekIndex
-     * @param calendar
-     * @return
-     */
-    protected int calculateWeekIndex(int weekIndex, Calendar calendar) {
-        int firstDayWeekPosition = calendar.getFirstDayOfWeek();
-        if (firstDayWeekPosition == 1) {
-            return weekIndex;
-        } else {
-            if (weekIndex == 1) {
-                return 7;
-            } else {
-                return weekIndex - 1;
-            }
-        }
-    }
-
     /**
      *
      * @param helper
-     * @param currentDay
+     * @param currentCalendar
      * @return
      */
-    protected List<Day> obtainDays(@NonNull MonthDisplayHelper helper, int currentDay) {
+    protected List<Day> obtainDays(@NonNull MonthDisplayHelper helper, Calendar currentCalendar) {
         List<Day> days = new ArrayList<>(SIZE);
 
         for(int i = 0; i < 6; i++) {
             int n[] = helper.getDigitsForRow(i);
 
             for(int d = 0; d < 7; d++) {
-                if (helper.isWithinCurrentMonth(i, d)) {
+                if(helper.isWithinCurrentMonth(i, d)) {
                     Calendar calendar = obtainCalendar();
                     calendar.set(Calendar.DAY_OF_MONTH, n[d]);
 
-                    if(n[d] == currentDay && isWeekend(calendar)) {
-                        days.add(new Day(n[d], true, true, true));
-                    } else if(isWeekend(calendar)) {
-                        days.add(new Day(n[d], true, false, true));
+                    if(n[d] == currentCalendar.get(Calendar.DAY_OF_MONTH) && CalendarUtil.isWeekend(calendar)) {
+                        final Day day = new Day()
+                                .setDay(n[d])
+                                .setMonth(currentCalendar.get(Calendar.MONTH))
+                                .setYear(currentCalendar.get(Calendar.YEAR))
+                                .setIsCurrentDay(true)
+                                .setIsCurrentMonth(true)
+                                .setIsCurrentYear(true)
+                                .setIsWeekend(true)
+                                .setEventList(null);
+
+                        days.add(day);
+                    } else if(n[d] == currentCalendar.get(Calendar.DAY_OF_MONTH)) {
+                        final Day day = new Day()
+                                .setDay(n[d])
+                                .setMonth(currentCalendar.get(Calendar.MONTH))
+                                .setYear(currentCalendar.get(Calendar.YEAR))
+                                .setIsCurrentDay(true)
+                                .setIsCurrentMonth(true)
+                                .setIsCurrentYear(true)
+                                .setIsWeekend(false)
+                                .setEventList(null);
+
+                        days.add(day);
+                    } else if(CalendarUtil.isWeekend(calendar)) {
+                        final Day day = new Day()
+                                .setDay(n[d])
+                                .setMonth(currentCalendar.get(Calendar.MONTH))
+                                .setYear(currentCalendar.get(Calendar.YEAR))
+                                .setIsCurrentDay(false)
+                                .setIsCurrentMonth(true)
+                                .setIsCurrentYear(true)
+                                .setIsWeekend(true)
+                                .setEventList(null);
+
+                        days.add(day);
                     } else {
-                        days.add(new Day(n[d], true, false, false));
+                        final Day day = new Day()
+                                .setDay(n[d])
+                                .setMonth(currentCalendar.get(Calendar.MONTH))
+                                .setYear(currentCalendar.get(Calendar.YEAR))
+                                .setIsCurrentDay(false)
+                                .setIsCurrentMonth(true)
+                                .setIsCurrentYear(true)
+                                .setIsWeekend(false)
+                                .setEventList(null);
+
+                        days.add(day);
                     }
+
                 } else {
-                    days.add(new Day(n[d]));
+                    int month = getMonth();
+                    int year = getYear();
+
+                    if(d == 0) {
+                        Calendar calendar = obtainCalendar();
+                        calendar.set(Calendar.DAY_OF_MONTH, n[d]);
+                        calendar.set(Calendar.MONTH, -1);
+
+                        month = calendar.get(Calendar.MONTH);
+                        year = calendar.get(Calendar.YEAR);
+                    }
+
+                    final Day day = new Day()
+                            .setDay(n[d])
+                            .setMonth(month)
+                            .setYear(year)
+                            .setIsCurrentDay(false)
+                            .setIsCurrentMonth(false)
+                            .setIsCurrentYear(true)
+                            .setIsWeekend(false)
+                            .setEventList(null);
+
+                    days.add(day);
                 }
             }
         }
@@ -440,17 +437,6 @@ public class CalendarView extends FrameLayout {
         return Calendar.getInstance(Locale.getDefault());
     }
 
-    /**
-     *
-     * @param calendar
-     * @return
-     */
-    protected boolean isWeekend(Calendar calendar) {
-        int position = calendar.get(Calendar.DAY_OF_WEEK);
-        return position == Calendar.SATURDAY || position == Calendar.SUNDAY;
-    }
-
-    //TODO JS: HERE GOES SETTERS AND GETTERS. DOCUMENT THEM..
     //-----------------------------------------------------------------//
     //                            SETTERS                              //
     //-----------------------------------------------------------------//
