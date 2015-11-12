@@ -25,5 +25,8 @@
         <attr name="holidayTextColor" format="color" />
         <attr name="currentBackgroundColor" format="color" />
         <attr name="currentTextColor" format="color" />
+        <attr name="drawableColor" format="color"/>
+        <attr name="leftArrowDrawable" format="integer"/>
+        <attr name="rightArrowDrawable" format="integer" />
     </declare-styleable>
 </resources>

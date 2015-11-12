@@ -8,7 +8,7 @@
     <dimen name="dayOfWeekTextSize">16sp</dimen>
     <!-- weekRowLayout -->
     <!--<dimen name="week_bottom_padding">5dp</dimen>-->
-    <!-- Day of the month -->
+    <!-- DayTime of the month -->
     <dimen name="underline_weight">6dp</dimen>
     <dimen name="underline_height">2dp</dimen>
     <dimen name="day_of_month_background_size">32dp</dimen>

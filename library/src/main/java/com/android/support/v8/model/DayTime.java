@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * @author jonatan.salas
  */
-public class Day {
+public class DayTime {
     private int day;
     private int month;
     private int year;
@@ -35,13 +35,13 @@ public class Day {
     @Nullable
     private List<Event> eventList;
 
-    public Day() { }
+    public DayTime() { }
 
     /**
      *
      * @param day
      */
-    public Day setDay(int day) {
+    public DayTime setDay(int day) {
         this.day = day;
         return this;
     }
@@ -50,7 +50,7 @@ public class Day {
      *
      * @param month
      */
-    public Day setMonth(int month) {
+    public DayTime setMonth(int month) {
         this.month = month;
         return this;
     }
@@ -59,7 +59,7 @@ public class Day {
      *
      * @param year
      */
-    public Day setYear(int year) {
+    public DayTime setYear(int year) {
         this.year = year;
         return this;
     }
@@ -68,7 +68,7 @@ public class Day {
      *
      * @param isCurrentDay
      */
-    public Day setIsCurrentDay(boolean isCurrentDay) {
+    public DayTime setIsCurrentDay(boolean isCurrentDay) {
         this.isCurrentDay = isCurrentDay;
         return this;
     }
@@ -77,7 +77,7 @@ public class Day {
      *
      * @param isCurrentMonth
      */
-    public Day setIsCurrentMonth(boolean isCurrentMonth) {
+    public DayTime setIsCurrentMonth(boolean isCurrentMonth) {
         this.isCurrentMonth = isCurrentMonth;
         return this;
     }
@@ -86,7 +86,7 @@ public class Day {
      *
      * @param isCurrentYear
      */
-    public Day setIsCurrentYear(boolean isCurrentYear) {
+    public DayTime setIsCurrentYear(boolean isCurrentYear) {
         this.isCurrentYear = isCurrentYear;
         return this;
     }
@@ -95,7 +95,7 @@ public class Day {
      *
      * @param isWeekend
      */
-    public Day setIsWeekend(boolean isWeekend) {
+    public DayTime setIsWeekend(boolean isWeekend) {
         this.isWeekend = isWeekend;
         return this;
     }
@@ -104,7 +104,7 @@ public class Day {
      *
      * @param eventList
      */
-    public Day setEventList(@Nullable List<Event> eventList) {
+    public DayTime setEventList(@Nullable List<Event> eventList) {
         this.eventList = eventList;
         return this;
     }
