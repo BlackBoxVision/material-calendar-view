@@ -17,7 +17,6 @@ package com.android.support.v8.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -44,6 +43,7 @@ import java.util.Locale;
 
 import com.android.support.v8.R;
 import com.android.support.v8.model.DayTime;
+import com.android.support.v8.model.Event;
 import com.android.support.v8.util.CalendarUtil;
 
 /**
@@ -99,7 +99,7 @@ public class CalendarView extends FrameLayout {
     private OnMonthChangeListener mOnMonthChangeListener;
 
     @Nullable
-    private OnDateChangeListener mOnDateChangeListener;
+    private OnDateSelectedListener mOnDateSelectedListener;
 
     private Boolean mScrollEnabled = true;
     private Boolean mHeaderViewEnabled = true;
@@ -159,7 +159,7 @@ public class CalendarView extends FrameLayout {
      *
      * @author jonatan.salas
      */
-    public interface OnDateChangeListener {
+    public interface OnDateSelectedListener {
 
         /**
          * Called upon change of the selected day.
@@ -169,7 +169,7 @@ public class CalendarView extends FrameLayout {
          * @param month The month that was set [0-11].
          * @param dayOfMonth The day of the month that was set.
          */
-        void onDateChanged(@NonNull View view, int year, int month, int dayOfMonth);
+        void onDateSelected(@NonNull View view, int year, int month, int dayOfMonth, @Nullable List<Event> eventList);
     }
 
     /**
@@ -252,7 +252,7 @@ public class CalendarView extends FrameLayout {
     protected void saveValues(@NonNull Context context) {
         mInflater = obtainLayoutInflater(context);
         mCurrentCalendar = obtainCalendar();
-        mContext = context;
+        mContext = context.getApplicationContext();
     }
 
     /**
@@ -261,12 +261,12 @@ public class CalendarView extends FrameLayout {
      * @param attrs AttributeSet object with custom values to be applied.
      */
     protected void style(@NonNull Context context, @NonNull AttributeSet attrs) {
-        final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CalendarView);
+        final TypedArray a = context.getApplicationContext().obtainStyledAttributes(attrs, R.styleable.CalendarView);
 
-        final int white = ContextCompat.getColor(context, R.color.white);
-        final int colorPrimary = ContextCompat.getColor(context, R.color.colorPrimary);
-        final int colorAccent = ContextCompat.getColor(context, R.color.colorAccent);
-        final int darkerGray = ContextCompat.getColor(context, android.R.color.darker_gray);
+        final int white = ContextCompat.getColor(context.getApplicationContext(), R.color.white);
+        final int colorPrimary = ContextCompat.getColor(context.getApplicationContext(), R.color.colorPrimary);
+        final int colorAccent = ContextCompat.getColor(context.getApplicationContext(), R.color.colorAccent);
+        final int darkerGray = ContextCompat.getColor(context.getApplicationContext(), android.R.color.darker_gray);
 
         final float titleFontSize = 15f;
         final float fontSize = 14f;
@@ -320,13 +320,19 @@ public class CalendarView extends FrameLayout {
      *
      */
     protected void init() {
-        mRootView = mInflater.inflate(R.layout.calendar_view, this, true);
-        mRootView.setBackgroundColor(mCalendarViewBackgroundColor);
-
         //Init CalendarView parts..
+        initRootView();
         initHeaderView();
         initWeekView();
         initAdapterView();
+    }
+
+    /**
+     *
+     */
+    protected void initRootView() {
+        mRootView = mInflater.inflate(R.layout.calendar_view, this, true);
+        mRootView.setBackgroundColor(mCalendarViewBackgroundColor);
     }
 
     /**
@@ -354,7 +360,6 @@ public class CalendarView extends FrameLayout {
         nextButton.setColorFilter(mDrawableColor, PorterDuff.Mode.SRC_ATOP);
 
         final ImageView backButton = (ImageView) findViewById(R.id.back_button);
-
         backButton.setEnabled(true);
         backButton.setClickable(true);
 
@@ -396,17 +401,17 @@ public class CalendarView extends FrameLayout {
      */
     protected void initAdapterView() {
         final List<DayTime> days = obtainDays(obtainMonthDisplayHelper(), getCurrentCalendar());
-        final DayAdapter dayAdapter = new DayAdapter(mContext, days);
+        final DayTimeAdapter dayTimeAdapter = new DayTimeAdapter(mContext, days);
 
         mAdapterView = (RecyclerView) mRootView.findViewById(R.id.recycler_view);
         mAdapterView.setLayoutManager(obtainGridLayoutManager());
         mAdapterView.setHasFixedSize(true);
-        mAdapterView.setAdapter(dayAdapter);
+        mAdapterView.setAdapter(dayTimeAdapter);
         mAdapterView.setItemAnimator(new DefaultItemAnimator());
         mAdapterView.setNestedScrollingEnabled(mScrollEnabled);
         mAdapterView.setBackgroundColor(mAdapterViewBackgroundColor);
 
-        dayAdapter.notifyDataSetChanged();
+        dayTimeAdapter.notifyDataSetChanged();
 
         mAdapterView.invalidate();
     }
@@ -414,7 +419,7 @@ public class CalendarView extends FrameLayout {
     /**
      * @author jonatan.salas
      */
-    protected class DayAdapter extends RecyclerView.Adapter<DayAdapter.DayViewHolder> {
+    protected class DayTimeAdapter extends RecyclerView.Adapter<DayTimeAdapter.DayViewHolder> {
         protected List<DayTime> mItems;
         protected Context mContext;
 
@@ -439,7 +444,7 @@ public class CalendarView extends FrameLayout {
          * @param context
          * @param items
          */
-        public DayAdapter(@NonNull Context context, @NonNull List<DayTime> items) {
+        public DayTimeAdapter(@NonNull Context context, @NonNull List<DayTime> items) {
             mContext = context;
             mItems = items;
         }
@@ -452,13 +457,14 @@ public class CalendarView extends FrameLayout {
 
         @Override
         public void onBindViewHolder(DayViewHolder holder, int position) {
-            final DayTime day = mItems.get(position);
+            final DayTime dayTime = mItems.get(position);
+
             holder.mDayView.setClickable(true);
-            holder.mDayView.setText(String.valueOf(day.getDay()));
+            holder.mDayView.setText(String.valueOf(dayTime.getDay()));
             holder.mDayView.setTextSize(mAdapterViewFontSize);
             holder.mDayView.setTextColor(mAdapterViewTextColor);
 
-            if (!day.isCurrentMonth()) {
+            if (!dayTime.isCurrentMonth()) {
                 holder.mDayView.setTypeface(Typeface.DEFAULT_BOLD);
                 holder.mDayView.setBackgroundColor(mDisabledBackgroundColor);
                 holder.mDayView.setTextColor(mDisabledTextColor);
@@ -466,16 +472,31 @@ public class CalendarView extends FrameLayout {
                 holder.mDayView.setClickable(false);
             }
 
-            if(day.isWeekend()) {
+            if(dayTime.isWeekend()) {
                 holder.mDayView.setBackgroundColor(mWeekendBackgroundColor);
                 holder.mDayView.setTextColor(mWeekendTextColor);
                 holder.mDayView.setTypeface(Typeface.DEFAULT_BOLD);
+                holder.mDayView.setEnabled(true);
+                holder.mDayView.setClickable(true);
             }
 
-            if(day.isCurrentDay()) {
+            if(dayTime.isCurrentDay()) {
                 holder.mDayView.setBackgroundColor(mCurrentBackgroundColor);
                 holder.mDayView.setTextColor(mCurrentTextColor);
+                holder.mDayView.setEnabled(true);
+                holder.mDayView.setClickable(true);
             }
+
+            holder.mDayView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(null != mOnDateSelectedListener) {
+                        mOnDateSelectedListener.onDateSelected(v, dayTime.getYear(), dayTime.getMonth(), dayTime.getDay(), dayTime.getEventList());
+                    }
+                }
+            });
+
+            holder.mDayView.invalidate();
         }
 
         @Override
@@ -642,8 +663,8 @@ public class CalendarView extends FrameLayout {
         this.mOnMonthChangeListener = onMonthChangeListener;
     }
 
-    public void setOnDateChangeListener(@Nullable OnDateChangeListener onDateChangeListener) {
-        this.mOnDateChangeListener = onDateChangeListener;
+    public void setOnDateSelectedListener(@Nullable OnDateSelectedListener onDateSelectedListener) {
+        this.mOnDateSelectedListener = onDateSelectedListener;
     }
 
     public void setScrollEnabled(Boolean scrollEnabled) {
@@ -657,8 +678,8 @@ public class CalendarView extends FrameLayout {
         return mOnMonthChangeListener;
     }
 
-    public OnDateChangeListener getOnDateChangeListener() {
-        return mOnDateChangeListener;
+    public OnDateSelectedListener getOnDateSelectedListener() {
+        return mOnDateSelectedListener;
     }
 
     public Boolean isScrollEnabled() {
