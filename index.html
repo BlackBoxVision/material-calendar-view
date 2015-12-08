@@ -2,307 +2,246 @@
 <html lang="en-us">
   <head>
     <meta charset="UTF-8">
-    <title>Materialcalendarview by jonisaa</title>
+    <title>Material Calendar View</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/materialize.min.css" media="screen">
+
+    <!-- Import font awesome icons -->
+    <link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css' rel='stylesheet'/>
+    <link rel="icon" href="images/calendar.png" sizes="32x32">
+
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/styles/default.min.css">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/highlight.min.js"></script>
+
+    <!-- Import materialize js -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="js/materialize.min.js"></script>
+
+    <style>
+        .container {
+            width: 93.5% !important;
+        }
+
+        .footer-ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .footer-li {
+            display: inline;
+        }
+
+        .margin-5 {
+            margin: 5px;
+        }
+
+        .margin-top-50 {
+            margin-top: 50px;
+        }
+
+        .card-border {
+            border-radius: 4px;
+        }
+    </style>
+
   </head>
-  <body>
-    <section class="page-header">
-      <h1 class="project-name">Materialcalendarview</h1>
-      <h2 class="project-tagline">Material Calendar View library compatible with devices API 8+</h2>
-      <a href="https://github.com/jonisaa/MaterialCalendarView" class="btn">View on GitHub</a>
-      <a href="https://github.com/jonisaa/MaterialCalendarView/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/jonisaa/MaterialCalendarView/tarball/master" class="btn">Download .tar.gz</a>
-    </section>
+  <body class="grey lighten-2">
 
-    <section class="main-content">
-      <h1>
-<a id="material-calendar-view--" class="anchor" href="#material-calendar-view--" aria-hidden="true"><span class="octicon octicon-link"></span></a>Material Calendar View <img src="https://travis-ci.org/jonisaa/MaterialCalendarView.svg?branch=master" alt="Build Status"> <a href="http://android-arsenal.com/details/1/2715"><img src="https://img.shields.io/badge/Android%20Arsenal-Material%20Calendar%20View-brightgreen.svg?style=flat" alt="Android Arsenal"></a>
-</h1>
+      <!-- Dropdown Structure -->
+      <ul id="dropdown1" class="dropdown-content">
+          <li>
+              <a class="indigo-text" href="https://github.com/jonisaa/MaterialCalendarView/zipball/master">
+                  <i class="large material-icons left teal-text">file_download</i>
+                  Download .zip
+              </a>
+          </li>
+          <li class="divider"></li>
+          <li>
+              <a class="indigo-text" href="https://github.com/jonisaa/MaterialCalendarView/tarball/master">
+                  <i class="large material-icons left teal-text">file_download</i>
+                  Download .tar.gz
+              </a>
+          </li>
+      </ul>
 
-<p>Material Calendar View is a Library based on the GitHub project: <a href="https://github.com/npanigrahy/Custom-Calendar-View">Custom Calendar View</a></p>
+      <nav>
+          <div class="nav-wrapper indigo z-depth-2">
+              <div class="container">
+                  <a href="#" class="brand-logo">
+                      <i class="large material-icons left hide-on-small-only">event</i>
+                      Material Calendar View
+                  </a>
+                  <ul id="nav-mobile" class="right hide-on-med-and-down">
+                      <li>
+                          <a href="https://github.com/jonisaa/MaterialCalendarView" target="_blank">
+                              <i class="large material-icons left">launch</i>
+                              Fork me on GitHub
+                          </a>
+                      </li>
+                      <li>
+                          <a class="dropdown-button" href="#" data-activates="dropdown1">
+                              <i class="large material-icons left">cloud_download</i>
+                              Download
+                              <i class="large material-icons right">arrow_drop_down</i>
+                          </a>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+      </nav>
 
-<p>I found <a href="https://github.com/npanigrahy/Custom-Calendar-View">Custom Calendar View</a> as a really interesting project. But when I started using Custom Calendar View I’ve found that it needed some modifications in order to work as I expected. </p>
-
-<p>So I decided to get involved onto Custom Calendar View to get the modifications I
-needed. <em>(Thanks to <a href="https://github.com/npanigrahy">Npanigrahy</a>)</em> </p>
-
-<p>Nowadays my project supports this features: </p>
-
-<blockquote>
-<ul>
-<li>Compatibility with Android API 8+</li>
-<li>Swipe gesture-based navigation</li>
-<li>'Next' and 'Previous' month-based navigation</li>
-<li>Full customization of calendar from XML file, or setters. </li>
-<li>User-allowed to handle events when changes month and day selection
-using two listeners.</li>
-<li>Show/hide next/previous month overflow days.</li>
-<li>User-allowed modify Typeface of the Calendar View by using setTypeface()
-method.</li>
-<li>Unlimited customizations for Day of the Month using custom Decorators.</li>
-<li>Add Roboto Fonts files and a Util class to make this fonts accessible. <em>(This probably increase library size)</em>
-</li>
-</ul>
-</blockquote>
-
-<hr>
-
-<h2>
-<a id="features-in-process" class="anchor" href="#features-in-process" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features in Process</h2>
-
-<p>In order to make the Calendar more customizable and Interactive, the next is
-a list of some features that I want to add:</p>
-
-<blockquote>
-<ul>
-<li>Provide two CalendarViews, one build in Java Calendar API, and the other in JODA Time API</li>
-<li>Synchonize Events with Google Calendar ContentProvider </li>
-<li>Add Ripple Effects when the user touches a day.<br>
-</li>
-<li>Add two layouts for CalendarView: first one that supports only Swipe navigation without buttons; the second one will support Swipe, and back/next button navigation (actually the default view).</li>
-</ul>
-</blockquote>
-
-<hr>
-
-<h2>
-<a id="6th-november-2015" class="anchor" href="#6th-november-2015" aria-hidden="true"><span class="octicon octicon-link"></span></a>6th November 2015</h2>
-
-<p>Announcing the draft of a new release v1.2.2.The changes applied are the next:</p>
-
-<blockquote>
-<ul>
-<li>BugFix of <img src="https://github.com/jonisaa/MaterialCalendarView/issues/1" alt="issue1">, now CalendarView should not break activity when displaying for Chinese Locale. Speccially thanks to <a href="https://github.com/maddie" class="user-mention">@maddie</a> who solve submiting a pull request</li>
-</ul>
-</blockquote>
-
-<hr>
-
-<h2>
-<a id="4th-november-2015" class="anchor" href="#4th-november-2015" aria-hidden="true"><span class="octicon octicon-link"></span></a>4th November 2015</h2>
-
-<p>Announcing the draft of a new release v1.2.1. The changes applied are the next: </p>
-
-<blockquote>
-<ul>
-<li>   Deleted unused resources to reduce library file size.</li>
-<li>   Added RobotoFonts to the Assets folder.</li>
-<li>   Added a String file handling all path to RobotoFonts.</li>
-<li>   Added a Util class to get the Roboto typefaces called TypefaceUtil.</li>
-<li>   Better performance on Swipe by making some adjustments.</li>
-<li>   Added setBackButtonColor method, it allows you to change back arrow color.</li>
-<li>   Added setNextButtonColor method, it allows you to change next arrow color</li>
-<li>   Added setBackButtonDrawable method, it allows you to change back button drawable.</li>
-<li>   Added setNextButtonDrawable method, it allows you to change next button drawable.</li>
-<li>   Modified the month title show format from "MONTH_NAME" to "MONTH_NAME + ' ' + YEAR"</li>
-<li>   BugFix: Retain current day style even if you swipe to another month and come back to actual month.</li>
-<li>   Added method findViewByDate(), it receives a Date as param and returns a DayView object (Custom TextView). It lets you style dayView as you want.</li>
-<li>   Refactor of some methods in order to clarify code readability.</li>
-<li>   markCurrentDay is now renamed to setCurrentDay().</li>
-<li>   markCurrentDateAsSelected is now renamed to setDateAsSelected().</li>
-</ul>
-</blockquote>
-
-<hr>
-
-<h2>
-<a id="screenshots" class="anchor" href="#screenshots" aria-hidden="true"><span class="octicon octicon-link"></span></a>Screenshots</h2>
-
-<p><img src="https://raw.githubusercontent.com/SAMSistemas/MaterialCalendarView/master/screenshots/calendars.png" height="425" width="100%"></p>
-
-<hr>
-
-<h2>
-<a id="screencast" class="anchor" href="#screencast" aria-hidden="true"><span class="octicon octicon-link"></span></a>Screencast</h2>
-
-<p><img src="https://i.imgur.com/ViolZD2.gif" height="550" width="100%"></p>
-
-<hr>
-
-<h2>
-<a id="adding-to-your-project-" class="anchor" href="#adding-to-your-project-" aria-hidden="true"><span class="octicon octicon-link"></span></a>Adding to your Project </h2>
-
-<p>Nowadays the library current stable version is 1.2.2. </p>
-
-<h3>
-<a id="for-gradle" class="anchor" href="#for-gradle" aria-hidden="true"><span class="octicon octicon-link"></span></a>For Gradle:</h3>
-
-<p><strong>Step 1:</strong> you must add the JitPack repository to your build file. Type the
-on your build.gradle at the end of repositories.</p>
-
-<div class="highlight highlight-source-java"><pre>  repositories {
-    maven { 
-        url <span class="pl-s"><span class="pl-pds">"</span>https://jitpack.io<span class="pl-pds">"</span></span>
+      <div class="container">
+          <div class="row">
+              <div class="col s12 m12 l7 left">
+                  <div class="row">
+                      <div class="card card-border z-depth-2 margin-top-50">
+                          <div class="card-content">
+                              <span class="card-title center bold indigo-text">Material Calendar View for Android APIs 8+</span>
+                              <br>
+                              <p>This library is the result of working in a forked repository. The story of this project started
+                                 when I was developing an Android App at work that needs a Calendar to display events, when doing research,
+                                 I found many solutions, but the trouble was that no one match with the app in the way as I want.</p>
+                              <br>
+                              <p>The project I'm currently using as base is <a class="indigo-text" href="https://github.com/npanigrahy/Custom-Calendar-View" target="_blank">Custom Calendar View</a>, being this one
+                                 of the most beautiful and customizable projects I have found.
+                              </p>
+                              <br>
+                              <span class="card-title center bold indigo-text">Available Features</span>
+                              <br>
+                              <p>Actually, the project has this features supported: </p>
+                              <ul>
+                                  <li>* Compatibility with Android API 8+ (As I specified in the title)</li>
+                                  <li>* Swipe gesture-based navigation</li>
+                                  <li>* 'Next' and 'Previous' month-based navigation</li>
+                                  <li>* Full customization of calendar from XML file, or setters</li>
+                                  <li>* User-allowed to handle events when changes month and day selection using two listeners</li>
+                                  <li>* Show/hide next/previous month overflow days</li>
+                                  <li>* User-allowed modify Typeface of the Calendar View by using setTypeface() method</li>
+                                  <li>* Unlimited customizations for Day of the Month using custom Decorators</li>
+                                  <li>* Add Roboto Fonts files and a Util class to make this fonts accessible. (This probably increase library size)</li>
+                              </ul>
+                              <span class="card-title center bold indigo-text">Features in Process</span>
+                              <br>
+                              <p>In order to make the Calendar more customizable and Interactive, the next is a list of some features that I want to add: </p>
+                              <ul>
+                                  <li>* Provide two Calendar Views, one build in Java Calendar API, and the other in JODA Time API</li>
+                                  <li>* Synchronize Events with Google Calendar ContentProvider</li>
+                                  <li>* Add Ripple Effects when the user touches a day</li>
+                                  <li>* Add two layouts for CalendarView: first one that supports only Swipe navigation without buttons; the second one will support Swipe, and back/next button navigation (actually the default view)</li>
+                              </ul>
+                              <span class="card-title center bold indigo-text">Screenshots</span>
+                              <br>
+                              <p>Here are some screenshots taken from the Sample App running on device emulator.</p>
+                              <img class="responsive-img" src="https://raw.githubusercontent.com/SAMSistemas/MaterialCalendarView/master/screenshots/calendars.png">
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col s12 m12 l1">
+              </div>
+              <div class="col s12 m12 l4 right">
+                  <div class="row">
+                      <div class="card card-border z-depth-2 margin-top-50">
+                          <div class="card-content">
+                              <span class="card-title center bold indigo-text">Demo Video</span>
+                              <br>
+                              <p>This is a gif showing you the swipe working on the Calendar App Sample</p>
+                              <br>
+                              <img class="responsive-img" src="https://camo.githubusercontent.com/145f01864eac338c1b4c6c3c0d03c4acb70cd327/68747470733a2f2f692e696d6775722e636f6d2f56696f6c5a44322e676966">
+                          </div>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="card card-border z-depth-2 margin-top-50">
+                          <div class="card-content">
+                              <span class="card-title center bold indigo-text">Use it in your Project</span>
+                              <br>
+                              <p>Actually, the project has a <b>stable release version 1.2.2</b>. Feel free to use Material Calendar View in your project.</p>
+                              <br>
+                              <p>Well! Pay attention, I'm going to explain how to setup my project for you to use it. I'll show you the configuration
+                                 setup from <b>Gradle, Maven or SBT</b>.
+                              </p>
+                              <br>
+                              <span class="card-title center bold indigo-text">Gradle Setup</span>
+<pre><code class="gradle">
+repositories {
+    maven {
+        url "https://jitpack.io"
     }
-  }</pre></div>
+}</code>
+</pre>
+                              <br>
+                              <span class="card-title center bold indigo-text">Maven Setup</span>
+                              <br>
+                              <span class="card-title center bold indigo-text">SBT Setup</span>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
 
-<p><strong>Step 2:</strong> Add the dependency in the form</p>
-
-<div class="highlight highlight-source-java"><pre>dependencies {
-    compile <span class="pl-s"><span class="pl-pds">'</span>com.github.jonisaa:MaterialCalendarview:v1.2.2<span class="pl-pds">'</span></span>
-}</pre></div>
-
-<h3>
-<a id="for-maven" class="anchor" href="#for-maven" aria-hidden="true"><span class="octicon octicon-link"></span></a>For Maven:</h3>
-
-<p><strong>Step 1:</strong> Add the JitPack repository to your maven file. </p>
-
-<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">repository</span>&gt;
-     &lt;<span class="pl-ent">id</span>&gt;jitpack.io&lt;/<span class="pl-ent">id</span>&gt;
-     &lt;<span class="pl-ent">url</span>&gt;https://jitpack.io&lt;/<span class="pl-ent">url</span>&gt;
-&lt;/<span class="pl-ent">repository</span>&gt;</pre></div>
-
-<p><strong>Step 2:</strong> Add the dependency in the form</p>
-
-<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
-     &lt;<span class="pl-ent">groupId</span>&gt;com.github.jonisaa&lt;/<span class="pl-ent">groupId</span>&gt;
-     &lt;<span class="pl-ent">artifactId</span>&gt;MaterialCalendarView&lt;/<span class="pl-ent">artifactId</span>&gt;
-     &lt;<span class="pl-ent">version</span>&gt;v1.2.2&lt;/<span class="pl-ent">version</span>&gt;
-&lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
-
-<h3>
-<a id="for-sbt" class="anchor" href="#for-sbt" aria-hidden="true"><span class="octicon octicon-link"></span></a>For SBT:</h3>
-
-<p><strong>Step 1:</strong> Add it in your build.sbt at the end of resolvers:</p>
-
-<div class="highlight highlight-source-java"><pre>resolvers <span class="pl-k">+=</span> <span class="pl-s"><span class="pl-pds">"</span>jitpack<span class="pl-pds">"</span></span> at <span class="pl-s"><span class="pl-pds">"</span>https://jitpack.io<span class="pl-pds">"</span></span></pre></div>
-
-<p><strong>Step 2:</strong> Add the dependency in the form</p>
-
-<div class="highlight highlight-source-java"><pre>libraryDependencies <span class="pl-k">+=</span> <span class="pl-s"><span class="pl-pds">"</span>com.github.jonisaa<span class="pl-pds">"</span></span> <span class="pl-k">%</span> <span class="pl-s"><span class="pl-pds">"</span>MaterialCalendarView<span class="pl-pds">"</span></span> <span class="pl-k">%</span> <span class="pl-s"><span class="pl-pds">"</span>v1.2.2<span class="pl-pds">"</span></span> </pre></div>
-
-<hr>
-
-<h2>
-<a id="using-material-calendar-view-library" class="anchor" href="#using-material-calendar-view-library" aria-hidden="true"><span class="octicon octicon-link"></span></a>Using Material Calendar View library</h2>
-
-<p>This project includes a Sample App that shows you the true power of this library. If you want to know more, feel free to clone, deploy and play with it. Else I’ll give you a little code snippets.</p>
-
-<p>Pay attention to the following:</p>
-
-<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">com</span>.samsistemas.calendarview.widget.CalendarView
-    <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>@+id/calendar_view<span class="pl-pds">"</span></span>
-    <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">layout_width</span>=<span class="pl-s"><span class="pl-pds">"</span>match_parent<span class="pl-pds">"</span></span>
-    <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">layout_height</span>=<span class="pl-s"><span class="pl-pds">"</span>wrap_content<span class="pl-pds">"</span></span>
-    <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">background</span>=<span class="pl-s"><span class="pl-pds">"</span>@color/colorPrimary<span class="pl-pds">"</span></span>&gt;
-&lt;/<span class="pl-ent">com</span>.samsistemas.calendarview.widget.CalendarView&gt;</pre></div>
-
-<p>The above code snippet will show the simple Calendar View on the default layout. Now, you can use the following attributes if you want to customize the appearance of calendar:</p>
-
-<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">com</span>.samsistemas.calendarview.widget.CalendarView
-    <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">id</span>=<span class="pl-s"><span class="pl-pds">"</span>@+id/calendar_view<span class="pl-pds">"</span></span>
-    <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">layout_marginTop</span>=<span class="pl-s"><span class="pl-pds">"</span>56dp<span class="pl-pds">"</span></span>
-    <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">layout_marginEnd</span>=<span class="pl-s"><span class="pl-pds">"</span>2dp<span class="pl-pds">"</span></span>
-    <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">layout_marginLeft</span>=<span class="pl-s"><span class="pl-pds">"</span>2dp<span class="pl-pds">"</span></span>
-    <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">layout_marginRight</span>=<span class="pl-s"><span class="pl-pds">"</span>2dp<span class="pl-pds">"</span></span>
-    <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">layout_marginStart</span>=<span class="pl-s"><span class="pl-pds">"</span>2dp<span class="pl-pds">"</span></span>
-    <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">layout_width</span>=<span class="pl-s"><span class="pl-pds">"</span>match_parent<span class="pl-pds">"</span></span>
-    <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">layout_height</span>=<span class="pl-s"><span class="pl-pds">"</span>match_parent<span class="pl-pds">"</span></span>
-    <span class="pl-e">android</span><span class="pl-e">:</span><span class="pl-e">background</span>=<span class="pl-s"><span class="pl-pds">"</span>@color/colorPrimary<span class="pl-pds">"</span></span>
-    <span class="pl-e">app</span><span class="pl-e">:</span><span class="pl-e">calendarBackgroundColor</span>=<span class="pl-s"><span class="pl-pds">"</span>@color/colorPrimary<span class="pl-pds">"</span></span>
-    <span class="pl-e">app</span><span class="pl-e">:</span><span class="pl-e">calendarTitleTextColor</span>=<span class="pl-s"><span class="pl-pds">"</span>@color/colorAccent<span class="pl-pds">"</span></span>
-    <span class="pl-e">app</span><span class="pl-e">:</span><span class="pl-e">currentDayOfMonthColor</span>=<span class="pl-s"><span class="pl-pds">"</span>@color/white<span class="pl-pds">"</span></span>
-    <span class="pl-e">app</span><span class="pl-e">:</span><span class="pl-e">dayOfMonthTextColor</span>=<span class="pl-s"><span class="pl-pds">"</span>@color/white<span class="pl-pds">"</span></span>
-    <span class="pl-e">app</span><span class="pl-e">:</span><span class="pl-e">dayOfWeekTextColor</span>=<span class="pl-s"><span class="pl-pds">"</span>@android:color/white<span class="pl-pds">"</span></span>
-    <span class="pl-e">app</span><span class="pl-e">:</span><span class="pl-e">disabledDayBackgroundColor</span>=<span class="pl-s"><span class="pl-pds">"</span>@color/colorPrimary<span class="pl-pds">"</span></span>
-    <span class="pl-e">app</span><span class="pl-e">:</span><span class="pl-e">disabledDayTextColor</span>=<span class="pl-s"><span class="pl-pds">"</span>@color/colorAccent<span class="pl-pds">"</span></span>
-    <span class="pl-e">app</span><span class="pl-e">:</span><span class="pl-e">selectedDayBackgroundColor</span>=<span class="pl-s"><span class="pl-pds">"</span>@color/colorAccent<span class="pl-pds">"</span></span>
-    <span class="pl-e">app</span><span class="pl-e">:</span><span class="pl-e">titleLayoutBackgroundColor</span>=<span class="pl-s"><span class="pl-pds">"</span>@color/colorPrimary<span class="pl-pds">"</span></span>
-    <span class="pl-e">app</span><span class="pl-e">:</span><span class="pl-e">weekLayoutBackgroundColor</span>=<span class="pl-s"><span class="pl-pds">"</span>@color/colorPrimary<span class="pl-pds">"</span></span>&gt;
-&lt;/<span class="pl-ent">com</span>.samsistemas.calendarview.widget.CalendarView&gt;</pre></div>
-
-<p>The next step is initialize the Calendar View to change the appearance and behavior of calendar using the following methods:</p>
-
-<div class="highlight highlight-source-java"><pre>calendarView <span class="pl-k">=</span> (<span class="pl-smi">CalendarView</span>) findViewById(<span class="pl-smi">R</span><span class="pl-k">.</span>id<span class="pl-k">.</span>calendar_view);
-
-calendarView<span class="pl-k">.</span>setFirstDayOfWeek(<span class="pl-smi">Calendar</span><span class="pl-c1"><span class="pl-k">.</span>MONDAY</span>);
-calendarView<span class="pl-k">.</span>setIsOverflowDateVisible(<span class="pl-c1">true</span>);
-calendarView<span class="pl-k">.</span>setCurrentDay(<span class="pl-k">new</span> <span class="pl-smi">Date</span>(<span class="pl-smi">System</span><span class="pl-k">.</span>currentTimeMillis()));
-calendarView<span class="pl-k">.</span>setBackButtonColor(<span class="pl-smi">R</span><span class="pl-k">.</span>color<span class="pl-k">.</span>colorAccent);
-calendarView<span class="pl-k">.</span>setNextButtonColor(<span class="pl-smi">R</span><span class="pl-k">.</span>color<span class="pl-k">.</span>colorAccent);
-calendarView<span class="pl-k">.</span>refreshCalendar(<span class="pl-smi">Calendar</span><span class="pl-k">.</span>getInstance(<span class="pl-smi">Locale</span><span class="pl-k">.</span>getDefault()));
-calendarView<span class="pl-k">.</span>setOnDateSelectedListener(<span class="pl-k">new</span> <span class="pl-smi">CalendarView</span>.<span class="pl-smi">OnDateSelectedListener</span>() {
-    <span class="pl-k">@Override</span>
-    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onDateSelected</span>(<span class="pl-k">@NonNull</span> <span class="pl-smi">Date</span> <span class="pl-v">selectedDate</span>) {
-        <span class="pl-smi">SimpleDateFormat</span> df <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">SimpleDateFormat</span>(<span class="pl-s"><span class="pl-pds">"</span>dd-MM-yyyy<span class="pl-pds">"</span></span>, <span class="pl-smi">Locale</span><span class="pl-k">.</span>getDefault());
-        textView<span class="pl-k">.</span>setText(df<span class="pl-k">.</span>format(selectedDate));
-    }
-});
-
-calendarView<span class="pl-k">.</span>setOnMonthChangedListener(<span class="pl-k">new</span> <span class="pl-smi">CalendarView</span>.<span class="pl-smi">OnMonthChangedListener</span>() {
-    <span class="pl-k">@Override</span>
-    <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">onMonthChanged</span>(<span class="pl-k">@NonNull</span> <span class="pl-smi">Date</span> <span class="pl-v">monthDate</span>) {
-        <span class="pl-smi">SimpleDateFormat</span> df <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">SimpleDateFormat</span>(<span class="pl-s"><span class="pl-pds">"</span>dd MMMM yyyy<span class="pl-pds">"</span></span>, <span class="pl-smi">Locale</span><span class="pl-k">.</span>getDefault());
-        <span class="pl-k">if</span> (<span class="pl-c1">null</span> <span class="pl-k">!=</span> actionBar)
-            actionBar<span class="pl-k">.</span>setTitle(df<span class="pl-k">.</span>format(monthDate));
-    }
-});
-
-<span class="pl-k">final</span> <span class="pl-smi">DayView</span> dayView <span class="pl-k">=</span> calendarView<span class="pl-k">.</span>findViewByDate(<span class="pl-k">new</span> <span class="pl-smi">Date</span>(<span class="pl-smi">System</span><span class="pl-k">.</span>currentTimeMillis()));
-<span class="pl-k">if</span>(<span class="pl-c1">null</span> <span class="pl-k">!=</span> dayView)
-    <span class="pl-smi">Toast</span><span class="pl-k">.</span>makeText(getApplicationContext(), <span class="pl-s"><span class="pl-pds">"</span>Today is: <span class="pl-pds">"</span></span> <span class="pl-k">+</span> dayView<span class="pl-k">.</span>getText()<span class="pl-k">.</span>toString() <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span>/<span class="pl-pds">"</span></span> <span class="pl-k">+</span> calendarView<span class="pl-k">.</span>getCurrentMonth() <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">"</span>/<span class="pl-pds">"</span></span> <span class="pl-k">+</span>  calendarView<span class="pl-k">.</span>getCurrentYear(), <span class="pl-smi">Toast</span><span class="pl-c1"><span class="pl-k">.</span>LENGTH_SHORT</span>)<span class="pl-k">.</span>show();</pre></div>
-
-<hr>
-
-<h2>
-<a id="known-issues" class="anchor" href="#known-issues" aria-hidden="true"><span class="octicon octicon-link"></span></a>Known issues</h2>
-
-<p>I’ve made a lot of testand I’ve found no issues. This library I’ve built againts travis and run the sample app in the supported API emulators. But maybe you can find an Issue that i can't detect or whatever.</p>
-
-<p>If you do so, please, let me know. I will be happy to solve it in order to help you.</p>
-
-<hr>
-
-<h2>
-<a id="specially-thanks" class="anchor" href="#specially-thanks" aria-hidden="true"><span class="octicon octicon-link"></span></a>Specially Thanks</h2>
-
-<p>Thanks to Mai Arrojo, who colaborate by my side to make English README file more understandable. We are working actually in the library code documentantion. She is good with translations. If you want to contact her for a job opportunity mail her to: <a href="mailto:maira.arrojo2015@gmail.com">maira.arrojo2015@gmail.com</a></p>
-
-<hr>
-
-<h2>
-<a id="contact-me" class="anchor" href="#contact-me" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contact Me</h2>
-
-<p>If you like this library, and want me to add some features in order to make it better just mail me to <a href="mailto:jonatansalas@live.com.ar">jonatansalas@live.com.ar</a> or <a href="mailto:jonatan.salas.js@gmail.com">jonatan.salas.js@gmail.com</a>. I’ll make it count.</p>
-
-<hr>
-
-<h2>
-<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
-
-<p>This library is distributed under <strong>Apache License 2</strong>, feel free to do any modification.</p>
-
-<pre><code>/*
- * Copyright (C) 2015 ImanoWeb     {link: http://imanoweb.com}.
- * Copyright (C) 2015 SAMSistemas  {link: http://www.samsistemas.com.ar}
- * Copyright (C) 2015 Jonisaa      {link: http://the-android-developer.blogspot.com.ar}.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-</code></pre>
-
-      <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/jonisaa/MaterialCalendarView">Materialcalendarview</a> is maintained by <a href="https://github.com/jonisaa">jonisaa</a>.</span>
-
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      <footer class="page-footer indigo">
+          <div class="container">
+              <div class="row">
+                  <div class="col s12 m12 l12 center">
+                      <ul class='footer-ul'>
+                          <li class='margin-5 footer-li'>
+                              <a class='btn-floating btn-large waves-effect waves-light red darken-2' href='https://plus.google.com/u/0/+JonatanSalasJS' target='_blank'>
+                                  <i class='fa fa-google-plus fa-2x'></i>
+                              </a>
+                          </li>
+                          <li class='margin-5 footer-li'>
+                              <a class='btn-floating btn-large waves-effect waves-light orange darken-2' href='http://the-android-developer.blogspot.com.ar' target='_blank'>
+                                  <i class='fa fa-rss fa-3x'></i>
+                              </a>
+                          </li>
+                          <li class='margin-5 footer-li'>
+                              <a class='btn-floating btn-large waves-effect waves-light blue' href='https://twitter.com/jonatan_salas' target='_blank'>
+                                  <i class='fa fa-twitter fa-2x'></i>
+                              </a>
+                          </li>
+                          <li class='margin-5 footer-li'>
+                              <a class='btn-floating btn-large waves-effect waves-light blue darken-3' href='https://ar.linkedin.com/in/jonatanezequielsalas' target='_blank'>
+                                  <i class='fa fa-linkedin fa-2x'></i>
+                              </a>
+                          </li>
+                      </ul>
+                  </div>
+              </div>
+          </div>
+          <div class="footer-copyright">
+              <div class="container center">
+                  <a class="grey-text text-lighten-4 center" href="https://github.com/jonisaa/MaterialCalendarView" target="_blank">
+                      Material Calendar View
+                  </a>
+                  © 2015
+              </div>
+          </div>
       </footer>
 
-    </section>
-
-  
+      <script type="text/javascript">
+          $('.dropdown-button').dropdown({
+                      inDuration: 300,
+                      outDuration: 225,
+                      constrain_width: false, // Does not change width of dropdown to that of the activator
+                      hover: true, // Activate on hover
+                      gutter: 0, // Spacing from edge
+                      belowOrigin: false, // Displays dropdown below the button
+                      alignment: 'left' // Displays dropdown with edge aligned to the left of button
+                  }
+          );
+      </script>
+      <script type="text/javascript">
+          $(document).ready(function() {
+              $('pre code').each(function(i, block) {
+                  hljs.highlightBlock(block);
+              });
+          });
+      </script>
   </body>
 </html>
