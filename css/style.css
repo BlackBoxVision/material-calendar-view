@@ -1,0 +1,29 @@
+.container {
+    width: 93.5% !important;
+}
+
+.footer-ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.footer-li {
+    display: inline;
+}
+
+.margin-5 {
+    margin: 5px;
+}
+
+.margin-top-50 {
+    margin-top: 50px;
+}
+
+.card-border {
+    border-radius: 4px;
+}
+
+.ul-style {
+    list-style-type: disc;
+}

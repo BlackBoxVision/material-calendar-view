@@ -3,50 +3,17 @@
   <head>
     <meta charset="UTF-8">
     <title>Material Calendar View</title>
+    <link rel="icon" href="images/calendar.png" sizes="32x32">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!--Import Google Icon Font-->
-    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" type="text/css" href="css/materialize.min.css" media="screen">
 
     <!-- Import font awesome icons -->
-    <link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css' rel='stylesheet'/>
-    <link rel="icon" href="images/calendar.png" sizes="32x32">
-
-    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/styles/default.min.css">
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/highlight.min.js"></script>
-
-    <!-- Import materialize js -->
-    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script type="text/javascript" src="js/materialize.min.js"></script>
-
-    <style>
-        .container {
-            width: 93.5% !important;
-        }
-
-        .footer-ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-        }
-
-        .footer-li {
-            display: inline;
-        }
-
-        .margin-5 {
-            margin: 5px;
-        }
-
-        .margin-top-50 {
-            margin-top: 50px;
-        }
-
-        .card-border {
-            border-radius: 4px;
-        }
-    </style>
+    <link rel='stylesheet' type="text/css" href='css/font-awesome.min.css'/>
+    <link rel='stylesheet' type="text/css" href="css/prism.css"/>
+    <link rel='stylesheet' type="text/css" href="css/style.css"/>
 
   </head>
   <body class="grey lighten-2">
@@ -113,25 +80,25 @@
                               <span class="card-title center bold indigo-text">Available Features</span>
                               <br>
                               <p>Actually, the project has this features supported: </p>
-                              <ul>
-                                  <li>* Compatibility with Android API 8+ (As I specified in the title)</li>
-                                  <li>* Swipe gesture-based navigation</li>
-                                  <li>* 'Next' and 'Previous' month-based navigation</li>
-                                  <li>* Full customization of calendar from XML file, or setters</li>
-                                  <li>* User-allowed to handle events when changes month and day selection using two listeners</li>
-                                  <li>* Show/hide next/previous month overflow days</li>
-                                  <li>* User-allowed modify Typeface of the Calendar View by using setTypeface() method</li>
-                                  <li>* Unlimited customizations for Day of the Month using custom Decorators</li>
-                                  <li>* Add Roboto Fonts files and a Util class to make this fonts accessible. (This probably increase library size)</li>
+                              <ul class="ul-style">
+                                  <li>- Compatibility with Android API 8+ (As I specified in the title)</li>
+                                  <li>- Swipe gesture-based navigation</li>
+                                  <li>- 'Next' and 'Previous' month-based navigation</li>
+                                  <li>- Full customization of calendar from XML file, or setters</li>
+                                  <li>- User-allowed to handle events when changes month and day selection using two listeners</li>
+                                  <li>- Show/hide next/previous month overflow days</li>
+                                  <li>- User-allowed modify Typeface of the Calendar View by using setTypeface() method</li>
+                                  <li>- Unlimited customizations for Day of the Month using custom Decorators</li>
+                                  <li>- Add Roboto Fonts files and a Util class to make this fonts accessible. (This probably increase library size)</li>
                               </ul>
                               <span class="card-title center bold indigo-text">Features in Process</span>
                               <br>
                               <p>In order to make the Calendar more customizable and Interactive, the next is a list of some features that I want to add: </p>
-                              <ul>
-                                  <li>* Provide two Calendar Views, one build in Java Calendar API, and the other in JODA Time API</li>
-                                  <li>* Synchronize Events with Google Calendar ContentProvider</li>
-                                  <li>* Add Ripple Effects when the user touches a day</li>
-                                  <li>* Add two layouts for CalendarView: first one that supports only Swipe navigation without buttons; the second one will support Swipe, and back/next button navigation (actually the default view)</li>
+                              <ul class="ul-style">
+                                  <li>- Provide two Calendar Views, one build in Java Calendar API, and the other in JODA Time API</li>
+                                  <li>- Synchronize Events with Google Calendar ContentProvider</li>
+                                  <li>- Add Ripple Effects when the user touches a day</li>
+                                  <li>- Add two layouts for CalendarView: first one that supports only Swipe navigation without buttons; the second one will support Swipe, and back/next button navigation (actually the default view)</li>
                               </ul>
                               <span class="card-title center bold indigo-text">Screenshots</span>
                               <br>
@@ -167,13 +134,6 @@
                               </p>
                               <br>
                               <span class="card-title center bold indigo-text">Gradle Setup</span>
-<pre><code class="gradle">
-repositories {
-    maven {
-        url "https://jitpack.io"
-    }
-}</code>
-</pre>
                               <br>
                               <span class="card-title center bold indigo-text">Maven Setup</span>
                               <br>
@@ -224,24 +184,12 @@ repositories {
           </div>
       </footer>
 
-      <script type="text/javascript">
-          $('.dropdown-button').dropdown({
-                      inDuration: 300,
-                      outDuration: 225,
-                      constrain_width: false, // Does not change width of dropdown to that of the activator
-                      hover: true, // Activate on hover
-                      gutter: 0, // Spacing from edge
-                      belowOrigin: false, // Displays dropdown below the button
-                      alignment: 'left' // Displays dropdown with edge aligned to the left of button
-                  }
-          );
-      </script>
-      <script type="text/javascript">
-          $(document).ready(function() {
-              $('pre code').each(function(i, block) {
-                  hljs.highlightBlock(block);
-              });
-          });
-      </script>
+      <!-- Import materialize js -->
+      <script rel="script" type="text/javascript" src="js/jquery.min.js"></script>
+      <script rel="script" type="text/javascript" src="js/materialize.min.js"></script>
+      <script rel="script" type="text/javascript" src="js/init.js"></script>
+
+      <!-- Import Prism js -->
+      <script type="text/javascript" src="js/prism.js"></script>
   </body>
 </html>
