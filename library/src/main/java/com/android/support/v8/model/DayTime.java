@@ -37,138 +37,74 @@ public class DayTime {
 
     public DayTime() { }
 
-    /**
-     *
-     * @param day
-     */
     public DayTime setDay(int day) {
         this.day = day;
         return this;
     }
 
-    /**
-     *
-     * @param month
-     */
     public DayTime setMonth(int month) {
         this.month = month;
         return this;
     }
 
-    /**
-     *
-     * @param year
-     */
     public DayTime setYear(int year) {
         this.year = year;
         return this;
     }
 
-    /**
-     *
-     * @param isCurrentDay
-     */
     public DayTime setIsCurrentDay(boolean isCurrentDay) {
         this.isCurrentDay = isCurrentDay;
         return this;
     }
 
-    /**
-     *
-     * @param isCurrentMonth
-     */
     public DayTime setIsCurrentMonth(boolean isCurrentMonth) {
         this.isCurrentMonth = isCurrentMonth;
         return this;
     }
 
-    /**
-     *
-     * @param isCurrentYear
-     */
     public DayTime setIsCurrentYear(boolean isCurrentYear) {
         this.isCurrentYear = isCurrentYear;
         return this;
     }
 
-    /**
-     *
-     * @param isWeekend
-     */
     public DayTime setIsWeekend(boolean isWeekend) {
         this.isWeekend = isWeekend;
         return this;
     }
 
-    /**
-     *
-     * @param eventList
-     */
     public DayTime setEventList(@Nullable List<Event> eventList) {
         this.eventList = eventList;
         return this;
     }
 
-    /**
-     *
-     * @return
-     */
     public int getDay() {
         return day;
     }
 
-    /**
-     *
-     * @return
-     */
     public int getMonth() {
         return month;
     }
 
-    /**
-     *
-     * @return
-     */
     public int getYear() {
         return year;
     }
 
-    /**
-     *
-     * @return
-     */
     public boolean isCurrentDay() {
         return isCurrentDay;
     }
 
-    /**
-     *
-     * @return
-     */
     public boolean isCurrentMonth() {
         return isCurrentMonth;
     }
 
-    /**
-     *
-     * @return
-     */
     public boolean isCurrentYear() {
         return isCurrentYear;
     }
 
-    /**
-     *
-     * @return
-     */
     public boolean isWeekend() {
         return isWeekend;
     }
 
-    /**
-     *
-     * @return
-     */
     @Nullable
     public List<Event> getEventList() {
         return eventList;

@@ -20,9 +20,6 @@ import android.support.annotation.NonNull;
 import java.util.Calendar;
 import java.util.Locale;
 
-/**
- * @author jonatan.salas
- */
 public class Event {
     @NonNull
     private Calendar eventDate = Calendar.getInstance(Locale.getDefault());
@@ -32,28 +29,16 @@ public class Event {
 
     public Event() { }
 
-    /**
-     *
-     * @param eventDate
-     */
     public Event setEventDate(@NonNull Calendar eventDate) {
         this.eventDate = eventDate;
         return this;
     }
 
-    /**
-     *
-     * @param description
-     */
     public Event setDescription(@NonNull String description) {
         this.description = description;
         return this;
     }
 
-    /**
-     *
-     * @param duration
-     */
     public Event setDuration(int duration) {
         this.duration = duration;
         return this;
