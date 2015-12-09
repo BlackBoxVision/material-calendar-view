@@ -82,7 +82,6 @@ import com.android.support.v8.util.CalendarUtil;
  */
 public class CalendarView extends FrameLayout {
     private static final int SPAN_COUNT = 7;
-    private static final int SIZE = 42;
 
     private LayoutInflater mInflater;
     private Context mContext;
@@ -135,7 +134,7 @@ public class CalendarView extends FrameLayout {
 //    private int mSelectedTextColor;
 
     //Weekend day background and text color variables
-    private int mWeekendBackgroundColor;
+//    private int mWeekendBackgroundColor;
     private int mWeekendTextColor;
 
 //    //Holiday background and text color variables
@@ -286,7 +285,7 @@ public class CalendarView extends FrameLayout {
             mAdapterViewBackgroundColor = a.getColor(R.styleable.CalendarView_adapterViewBackgroundColor, colorPrimary);
             mDisabledBackgroundColor = a.getColor(R.styleable.CalendarView_disabledBackgroundColor, colorPrimary);
 //            mSelectedBackgroundColor = a.getColor(R.styleable.CalendarView_selectedBackgroundColor, colorAccent);
-            mWeekendBackgroundColor = a.getColor(R.styleable.CalendarView_weekViewBackgroundColor, colorPrimary);
+//            mWeekendBackgroundColor = a.getColor(R.styleable.CalendarView_weekViewBackgroundColor, colorPrimary);
 //            mHolidayBackgroundColor = a.getColor(R.styleable.CalendarView_holidayBackgroundColor, colorPrimary);
             mCurrentBackgroundColor = a.getColor(R.styleable.CalendarView_currentBackgroundColor, colorAccent);
 
@@ -362,7 +361,7 @@ public class CalendarView extends FrameLayout {
                 }
 
                 if (null != mOnMonthChangeListener) {
-                    mOnMonthChangeListener.onMonthChanged(mAdapterView, mCurrentCalendar.get(Calendar.YEAR), mCurrentCalendar.get(Calendar.MONTH));
+                    mOnMonthChangeListener.onMonthChanged(mAdapterView, mCurrentCalendar.get(Calendar.YEAR), mCurrentCalendar.get(Calendar.MONTH) + 1);
                 }
             }
         });
@@ -392,7 +391,7 @@ public class CalendarView extends FrameLayout {
                 }
 
                 if (null != mOnMonthChangeListener) {
-                    mOnMonthChangeListener.onMonthChanged(mAdapterView, mCurrentCalendar.get(Calendar.YEAR), mCurrentCalendar.get(Calendar.MONTH));
+                    mOnMonthChangeListener.onMonthChanged(mAdapterView, mCurrentCalendar.get(Calendar.YEAR), mCurrentCalendar.get(Calendar.MONTH) + 1);
                 }
             }
         });
@@ -423,8 +422,7 @@ public class CalendarView extends FrameLayout {
     }
 
     private void initAdapterView() {
-        List<DayTime> days = getDayTimeList(mCurrentCalendar);
-        mDayTimeAdapter = new DayTimeAdapter(days);
+        mDayTimeAdapter = new DayTimeAdapter(getDayTimeList(mCurrentCalendar));
 
         mAdapterView = (RecyclerView) mRootView.findViewById(R.id.recycler_view);
         mAdapterView.setLayoutManager(new GridLayoutManager(mContext, SPAN_COUNT));
@@ -440,7 +438,7 @@ public class CalendarView extends FrameLayout {
 
     private List<DayTime> getDayTimeList(Calendar currentCalendar) {
         MonthDisplayHelper helper = new MonthDisplayHelper(currentCalendar.get(Calendar.YEAR), currentCalendar.get(Calendar.MONTH), currentCalendar.getFirstDayOfWeek());
-        List<DayTime> days = new ArrayList<>(SIZE);
+        List<DayTime> days = new ArrayList<>(42);
 
         for (int i = 0; i < 6; i++) {
             int n[] = helper.getDigitsForRow(i);
@@ -449,11 +447,12 @@ public class CalendarView extends FrameLayout {
                 if (helper.isWithinCurrentMonth(i, d)) {
                     Calendar calendar = Calendar.getInstance(Locale.getDefault());
                     calendar.set(Calendar.DAY_OF_MONTH, n[d]);
+                    calendar.add(Calendar.MONTH, mCurrentMonthIndex);
 
-                    if (n[d] == currentCalendar.get(Calendar.DAY_OF_MONTH) && CalendarUtil.isWeekend(calendar)) {
+                    if (n[d] == currentCalendar.get(Calendar.DAY_OF_MONTH) && CalendarUtil.isWeekend(calendar) && mCurrentMonthIndex == 0) {
                         final DayTime dayTime = new DayTime()
                                 .setDay(n[d])
-                                .setMonth(currentCalendar.get(Calendar.MONTH))
+                                .setMonth(currentCalendar.get(Calendar.MONTH) + 1)
                                 .setYear(currentCalendar.get(Calendar.YEAR))
                                 .setCurrentDay(true)
                                 .setCurrentMonth(true)
@@ -462,10 +461,10 @@ public class CalendarView extends FrameLayout {
                                 .setEventList(null);
 
                         days.add(dayTime);
-                    } else if (n[d] == currentCalendar.get(Calendar.DAY_OF_MONTH)) {
+                    } else if (n[d] == currentCalendar.get(Calendar.DAY_OF_MONTH) && mCurrentMonthIndex == 0) {
                         final DayTime dayTime = new DayTime()
                                 .setDay(n[d])
-                                .setMonth(currentCalendar.get(Calendar.MONTH))
+                                .setMonth(currentCalendar.get(Calendar.MONTH) + 1)
                                 .setYear(currentCalendar.get(Calendar.YEAR))
                                 .setCurrentDay(true)
                                 .setCurrentMonth(true)
@@ -477,7 +476,7 @@ public class CalendarView extends FrameLayout {
                     } else if (CalendarUtil.isWeekend(calendar)) {
                         final DayTime dayTime = new DayTime()
                                 .setDay(n[d])
-                                .setMonth(currentCalendar.get(Calendar.MONTH))
+                                .setMonth(currentCalendar.get(Calendar.MONTH) + 1)
                                 .setYear(currentCalendar.get(Calendar.YEAR))
                                 .setCurrentDay(false)
                                 .setCurrentMonth(true)
@@ -489,7 +488,7 @@ public class CalendarView extends FrameLayout {
                     } else {
                         final DayTime dayTime = new DayTime()
                                 .setDay(n[d])
-                                .setMonth(currentCalendar.get(Calendar.MONTH))
+                                .setMonth(currentCalendar.get(Calendar.MONTH) + 1)
                                 .setYear(currentCalendar.get(Calendar.YEAR))
                                 .setCurrentDay(false)
                                 .setCurrentMonth(true)
@@ -501,30 +500,14 @@ public class CalendarView extends FrameLayout {
                     }
 
                 } else {
-                    int month = getMonth();
-                    int year = getYear();
-
-                    if (d == 0) {
-                        Calendar calendar = Calendar.getInstance(Locale.getDefault());
-                        calendar.set(Calendar.DAY_OF_MONTH, n[d]);
-                        calendar.set(Calendar.MONTH, -1);
-
-                        month = calendar.get(Calendar.MONTH);
-                        year = calendar.get(Calendar.YEAR);
-
-                    } else if (d == 6) {
-                        Calendar calendar = Calendar.getInstance(Locale.getDefault());
-                        calendar.set(Calendar.DAY_OF_MONTH, n[d]);
-                        calendar.set(Calendar.MONTH, 1);
-
-                        month = calendar.get(Calendar.MONTH);
-                        year = calendar.get(Calendar.YEAR);
-                    }
+                    Calendar calendar = Calendar.getInstance(Locale.getDefault());
+                    calendar.set(Calendar.DAY_OF_MONTH, n[d]);
+                    calendar.add(Calendar.MONTH, mCurrentMonthIndex);
 
                     final DayTime dayTime = new DayTime()
                             .setDay(n[d])
-                            .setMonth(month)
-                            .setYear(year)
+                            .setMonth(calendar.get(Calendar.MONTH) + 1)
+                            .setYear(calendar.get(Calendar.YEAR))
                             .setCurrentDay(false)
                             .setCurrentMonth(false)
                             .setCurrentYear(true)
@@ -636,7 +619,7 @@ public class CalendarView extends FrameLayout {
             }
 
             if (dayTime.isWeekend() && dayTime.isCurrentMonth()) {
-                holder.mDayView.setBackgroundColor(mWeekendBackgroundColor);
+//                holder.mDayView.setBackgroundColor(mWeekendBackgroundColor);
                 holder.mDayView.setTextColor(mWeekendTextColor);
                 holder.mDayView.setTypeface(Typeface.DEFAULT_BOLD);
                 holder.mDayView.setEnabled(true);
