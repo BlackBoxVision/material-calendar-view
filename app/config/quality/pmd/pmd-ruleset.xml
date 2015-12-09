@@ -25,12 +25,12 @@
     <exclude-pattern>.*/R.java</exclude-pattern>
     <exclude-pattern>.*/gen/.*</exclude-pattern>
 
-    <rule ref="rulesets/java/android.xml">
-        <!-- Config.LOGD deprecated in API level 4 !-->
-        <exclude name="ProtectLogD" />
-        <!-- Config.LOGV deprecated in API level 4 !-->
-        <exclude name="ProtectLogV" />
-    </rule>
+    <!--<rule ref="rulesets/java/android.xml">-->
+        <!--&lt;!&ndash;&lt;!&ndash; Config.LOGD deprecated in API level 4 !&ndash;&gt;&ndash;&gt;-->
+        <!--&lt;!&ndash;<exclude name="ProtectLogD" />&ndash;&gt;-->
+        <!--&lt;!&ndash;&lt;!&ndash; Config.LOGV deprecated in API level 4 !&ndash;&gt;&ndash;&gt;-->
+        <!--&lt;!&ndash;<exclude name="ProtectLogV" />&ndash;&gt;-->
+    <!--</rule>-->
     <rule ref="rulesets/java/clone.xml" />
     <rule ref="rulesets/java/finalizers.xml" />
     <rule ref="rulesets/java/imports.xml">
@@ -44,7 +44,7 @@
     <rule ref="rulesets/java/naming.xml">
         <exclude name="AbstractNaming" />
         <exclude name="LongVariable" />
-        <exclude name="LongMethodName" />
+        <!--<exclude name="LongMethodName" />-->
         <exclude name="ShortMethodName" />
         <exclude name="ShortVariable" />
         <exclude name="VariableNamingConventions" />

@@ -50,33 +50,33 @@ import com.android.support.v8.util.CalendarUtil;
  * This class is a calendar widget for displaying dates, selecting, adding and associating event for a
  * specific day.
  *
- * @attr ref R.styleable#CalendarView_scrollEnable
- * @attr ref R.styleable#CalendarView_headerViewEnable
- * @attr ref R.styleable#CalendarView_weekendEnable
- * @attr ref R.styleable#CalendarView_holidayEnable
- * @attr ref R.styleable#CalendarView_calendarViewBackgroundColor
- * @attr ref R.styleable#CalendarView_headerViewBackgroundColor
- * @attr ref R.styleable#CalendarView_headerViewTextColor
- * @attr ref R.styleable#CalendarView_headerViewFontSize
- * @attr ref R.styleable#CalendarView_weekViewBackgroundColor
- * @attr ref R.styleable#CalendarView_weekViewTextColor
- * @attr ref R.styleable#CalendarView_weekViewFontSize
- * @attr ref R.styleable#CalendarView_adapterViewBackgroundColor
- * @attr ref R.styleable#CalendarView_adapterViewTextColor
- * @attr ref R.styleable#CalendarView_adapterViewFontSize
- * @attr ref R.styleable#CalendarView_disabledBackgroundColor
- * @attr ref R.styleable#CalendarView_disabledTextColor
- * @attr ref R.styleable#CalendarView_selectedBackgroundColor
- * @attr ref R.styleable#CalendarView_selectedTextColor
- * @attr ref R.styleable#CalendarView_weekendBackgroundColor
- * @attr ref R.styleable#CalendarView_weekendTextColor
- * @attr ref R.styleable#CalendarView_holidayBackgroundColor
- * @attr ref R.styleable#CalendarView_holidayTextColor
- * @attr ref R.styleable#CalendarView_currentBackgroundColor
- * @attr ref R.styleable#CalendarView_currentTextColor
- * @attr ref R.styleable#CalendarView_drawableColor
- * @attr ref R.styleable#CalendarView_leftArrowDrawable
- * @attr ref R.styleable#CalendarView_rightArrowDrawable
+// * @attr ref R.styleable#CalendarView_scrollEnable
+// * @attr ref R.styleable#CalendarView_headerViewEnable
+// * @attr ref R.styleable#CalendarView_weekendEnable
+// * @attr ref R.styleable#CalendarView_holidayEnable
+// * @attr ref R.styleable#CalendarView_calendarViewBackgroundColor
+// * @attr ref R.styleable#CalendarView_headerViewBackgroundColor
+// * @attr ref R.styleable#CalendarView_headerViewTextColor
+// * @attr ref R.styleable#CalendarView_headerViewFontSize
+// * @attr ref R.styleable#CalendarView_weekViewBackgroundColor
+// * @attr ref R.styleable#CalendarView_weekViewTextColor
+// * @attr ref R.styleable#CalendarView_weekViewFontSize
+// * @attr ref R.styleable#CalendarView_adapterViewBackgroundColor
+// * @attr ref R.styleable#CalendarView_adapterViewTextColor
+// * @attr ref R.styleable#CalendarView_adapterViewFontSize
+// * @attr ref R.styleable#CalendarView_disabledBackgroundColor
+// * @attr ref R.styleable#CalendarView_disabledTextColor
+// * @attr ref R.styleable#CalendarView_selectedBackgroundColor
+// * @attr ref R.styleable#CalendarView_selectedTextColor
+// * @attr ref R.styleable#CalendarView_weekendBackgroundColor
+// * @attr ref R.styleable#CalendarView_weekendTextColor
+// * @attr ref R.styleable#CalendarView_holidayBackgroundColor
+// * @attr ref R.styleable#CalendarView_holidayTextColor
+// * @attr ref R.styleable#CalendarView_currentBackgroundColor
+// * @attr ref R.styleable#CalendarView_currentTextColor
+// * @attr ref R.styleable#CalendarView_drawableColor
+// * @attr ref R.styleable#CalendarView_leftArrowDrawable
+// * @attr ref R.styleable#CalendarView_rightArrowDrawable
  *
  * @author jonatan.salas
  */
@@ -101,12 +101,12 @@ public class CalendarView extends FrameLayout {
     private OnDateSelectedListener mOnDateSelectedListener;
 
     private Boolean mScrollEnabled = true;
-    private Boolean mHeaderViewEnabled = true;
-    private Boolean mWeekendEnabled = true;
-    private Boolean mHolidayEnabled = true;
+//    private Boolean mHeaderViewEnabled = true;
+//    private Boolean mWeekendEnabled = true;
+//    private Boolean mHolidayEnabled = true;
 
-    //Variable for custom typeface
-    private Typeface mTypeface;
+//    //Variable for custom typeface
+//    private Typeface mTypeface;
 
     //General background color
     private int mCalendarViewBackgroundColor;
@@ -130,17 +130,17 @@ public class CalendarView extends FrameLayout {
     private int mDisabledBackgroundColor;
     private int mDisabledTextColor;
 
-    //Selected day background and text color variables
-    private int mSelectedBackgroundColor;
-    private int mSelectedTextColor;
+//    //Selected day background and text color variables
+//    private int mSelectedBackgroundColor;
+//    private int mSelectedTextColor;
 
     //Weekend day background and text color variables
     private int mWeekendBackgroundColor;
     private int mWeekendTextColor;
 
-    //Holiday background and text color variables
-    private int mHolidayBackgroundColor;
-    private int mHolidayTextColor;
+//    //Holiday background and text color variables
+//    private int mHolidayBackgroundColor;
+//    private int mHolidayTextColor;
 
     //Current day background and text color
     private int mCurrentBackgroundColor;
@@ -170,6 +170,7 @@ public class CalendarView extends FrameLayout {
          * @param year The year that was set.
          * @param month The month that was set [0-11].
          * @param dayOfMonth The day of the month that was set.
+         * @param eventList The list of events associated to this date selected.
          */
         void onDateSelected(@NonNull View view, int year, int month, int dayOfMonth, @Nullable List<Event> eventList);
     }
@@ -200,8 +201,9 @@ public class CalendarView extends FrameLayout {
     public CalendarView(@NonNull Context context) {
         super(context);
 
-        if(isInEditMode())
+        if (isInEditMode()) {
             return;
+        }
 
         saveValues(context);
         init();
@@ -218,8 +220,9 @@ public class CalendarView extends FrameLayout {
     public CalendarView(@NonNull Context context, @NonNull AttributeSet attrs) {
         super(context, attrs);
 
-        if(isInEditMode())
+        if (isInEditMode()) {
             return;
+        }
 
         saveValues(context);
         style(context, attrs);
@@ -238,8 +241,9 @@ public class CalendarView extends FrameLayout {
     public CalendarView(@NonNull Context context, @NonNull AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        if(isInEditMode())
+        if (isInEditMode()) {
             return;
+        }
 
         saveValues(context);
         style(context, attrs);
@@ -266,9 +270,9 @@ public class CalendarView extends FrameLayout {
         try {
             //Boolean values..
             mScrollEnabled = a.getBoolean(R.styleable.CalendarView_scrollEnable, true);
-            mHeaderViewEnabled = a.getBoolean(R.styleable.CalendarView_headerViewEnable, true);
-            mWeekendEnabled = a.getBoolean(R.styleable.CalendarView_weekendEnable, true);
-            mHolidayEnabled = a.getBoolean(R.styleable.CalendarView_holidayEnable, true);
+//            mHeaderViewEnabled = a.getBoolean(R.styleable.CalendarView_headerViewEnable, true);
+//            mWeekendEnabled = a.getBoolean(R.styleable.CalendarView_weekendEnable, true);
+//            mHolidayEnabled = a.getBoolean(R.styleable.CalendarView_holidayEnable, true);
 
             //Font size values..
             mHeaderViewFontSize = a.getFloat(R.styleable.CalendarView_headerViewFontSize, titleFontSize);
@@ -281,9 +285,9 @@ public class CalendarView extends FrameLayout {
             mWeekViewBackgroundColor = a.getColor(R.styleable.CalendarView_weekViewBackgroundColor, colorPrimary);
             mAdapterViewBackgroundColor = a.getColor(R.styleable.CalendarView_adapterViewBackgroundColor, colorPrimary);
             mDisabledBackgroundColor = a.getColor(R.styleable.CalendarView_disabledBackgroundColor, colorPrimary);
-            mSelectedBackgroundColor = a.getColor(R.styleable.CalendarView_selectedBackgroundColor, colorAccent);
+//            mSelectedBackgroundColor = a.getColor(R.styleable.CalendarView_selectedBackgroundColor, colorAccent);
             mWeekendBackgroundColor = a.getColor(R.styleable.CalendarView_weekViewBackgroundColor, colorPrimary);
-            mHolidayBackgroundColor = a.getColor(R.styleable.CalendarView_holidayBackgroundColor, colorPrimary);
+//            mHolidayBackgroundColor = a.getColor(R.styleable.CalendarView_holidayBackgroundColor, colorPrimary);
             mCurrentBackgroundColor = a.getColor(R.styleable.CalendarView_currentBackgroundColor, colorAccent);
 
             //Text Color values..
@@ -291,9 +295,9 @@ public class CalendarView extends FrameLayout {
             mWeekViewTextColor = a.getColor(R.styleable.CalendarView_weekViewTextColor, white);
             mAdapterViewTextColor = a.getColor(R.styleable.CalendarView_adapterViewTextColor, white);
             mDisabledTextColor = a.getColor(R.styleable.CalendarView_disabledTextColor, darkerGray);
-            mSelectedTextColor = a.getColor(R.styleable.CalendarView_selectedTextColor, white);
+//            mSelectedTextColor = a.getColor(R.styleable.CalendarView_selectedTextColor, white);
             mWeekendTextColor = a.getColor(R.styleable.CalendarView_weekendTextColor, colorAccent);
-            mHolidayTextColor = a.getColor(R.styleable.CalendarView_holidayTextColor, colorAccent);
+//            mHolidayTextColor = a.getColor(R.styleable.CalendarView_holidayTextColor, colorAccent);
             mCurrentTextColor = a.getColor(R.styleable.CalendarView_currentTextColor, white);
 
             //Drawable Color values..
@@ -337,8 +341,9 @@ public class CalendarView extends FrameLayout {
         nextButton.setEnabled(true);
         nextButton.setClickable(true);
 
-        if(null != mRightArrowDrawable)
+        if (null != mRightArrowDrawable) {
             nextButton.setImageDrawable(mRightArrowDrawable);
+        }
 
         nextButton.setColorFilter(mDrawableColor, PorterDuff.Mode.SRC_ATOP);
         nextButton.setOnClickListener(new OnClickListener() {
@@ -350,14 +355,15 @@ public class CalendarView extends FrameLayout {
                 mDayTimeAdapter = new DayTimeAdapter(getDayTimeList(mCurrentCalendar));
                 mMonthTitleView.setText(getHeaderTitle(mCurrentCalendar));
 
-                if(null != mAdapterView) {
+                if (null != mAdapterView) {
                     mAdapterView.setAdapter(null);
                     mAdapterView.setAdapter(mDayTimeAdapter);
                     mDayTimeAdapter.notifyDataSetChanged();
                 }
 
-                if(null != mOnMonthChangeListener)
+                if (null != mOnMonthChangeListener) {
                     mOnMonthChangeListener.onMonthChanged(mAdapterView, mCurrentCalendar.get(Calendar.YEAR), mCurrentCalendar.get(Calendar.MONTH));
+                }
             }
         });
 
@@ -365,8 +371,9 @@ public class CalendarView extends FrameLayout {
         backButton.setEnabled(true);
         backButton.setClickable(true);
 
-        if(null != mLeftArrowDrawable)
+        if (null != mLeftArrowDrawable) {
             nextButton.setImageDrawable(mLeftArrowDrawable);
+        }
 
         backButton.setColorFilter(mDrawableColor, PorterDuff.Mode.SRC_ATOP);
         backButton.setOnClickListener(new OnClickListener() {
@@ -378,14 +385,15 @@ public class CalendarView extends FrameLayout {
                 mDayTimeAdapter = new DayTimeAdapter(getDayTimeList(mCurrentCalendar));
                 mMonthTitleView.setText(getHeaderTitle(mCurrentCalendar));
 
-                if(null != mAdapterView) {
+                if (null != mAdapterView) {
                     mAdapterView.setAdapter(null);
                     mAdapterView.setAdapter(mDayTimeAdapter);
                     mDayTimeAdapter.notifyDataSetChanged();
                 }
 
-                if(null != mOnMonthChangeListener)
+                if (null != mOnMonthChangeListener) {
                     mOnMonthChangeListener.onMonthChanged(mAdapterView, mCurrentCalendar.get(Calendar.YEAR), mCurrentCalendar.get(Calendar.MONTH));
+                }
             }
         });
 
@@ -398,10 +406,10 @@ public class CalendarView extends FrameLayout {
         String dayName;
         TextView dayOfWeek;
 
-        for(int i = 1; i < getShortWeekDays().length; i++) {
+        for (int i = 1; i < getShortWeekDays().length; i++) {
             dayName = getShortWeekDay(i);
-            int length = (dayName.length() < 3)? dayName.length() : 3;
-            dayName = dayName.substring(0, length).toUpperCase();
+            int length = (dayName.length() < 3) ? dayName.length() : 3;
+            dayName = dayName.substring(0, length).toUpperCase(Locale.getDefault());
 
             final String tag = String.valueOf(CalendarUtil.calculateWeekIndex(i, getCurrentCalendar()));
 
@@ -423,7 +431,6 @@ public class CalendarView extends FrameLayout {
         mAdapterView.setHasFixedSize(true);
         mAdapterView.setAdapter(mDayTimeAdapter);
         mAdapterView.setItemAnimator(new DefaultItemAnimator());
-        mAdapterView.setNestedScrollingEnabled(mScrollEnabled);
         mAdapterView.setBackgroundColor(mAdapterViewBackgroundColor);
 
         mDayTimeAdapter.notifyDataSetChanged();
@@ -431,123 +438,51 @@ public class CalendarView extends FrameLayout {
         mAdapterView.invalidate();
     }
 
-    private class DayTimeAdapter extends RecyclerView.Adapter<DayTimeAdapter.DayViewHolder> {
-        private final List<DayTime> mItems;
-
-        protected class DayViewHolder extends RecyclerView.ViewHolder {
-            protected final TextView mDayView;
-
-            public DayViewHolder(@NonNull View view) {
-                super(view);
-                mDayView = (TextView) view.findViewById(R.id.day_view);
-            }
-        }
-
-        public DayTimeAdapter(@NonNull List<DayTime> items) {
-            mItems = items;
-        }
-
-        @Override
-        public DayViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            final View v = mInflater.inflate(R.layout.day_view, parent, false);
-            return new DayViewHolder(v);
-        }
-
-        @Override
-        public void onBindViewHolder(DayViewHolder holder, int position) {
-            final DayTime dayTime = mItems.get(position);
-
-            holder.mDayView.setClickable(true);
-            holder.mDayView.setText(String.valueOf(dayTime.getDay()));
-            holder.mDayView.setTextSize(mAdapterViewFontSize);
-            holder.mDayView.setTextColor(mAdapterViewTextColor);
-
-            if (!dayTime.isCurrentMonth()) {
-                holder.mDayView.setTypeface(Typeface.DEFAULT_BOLD);
-                holder.mDayView.setBackgroundColor(mDisabledBackgroundColor);
-                holder.mDayView.setTextColor(mDisabledTextColor);
-                holder.mDayView.setEnabled(false);
-                holder.mDayView.setClickable(false);
-            }
-
-            if(dayTime.isWeekend() && dayTime.isCurrentMonth()) {
-                holder.mDayView.setBackgroundColor(mWeekendBackgroundColor);
-                holder.mDayView.setTextColor(mWeekendTextColor);
-                holder.mDayView.setTypeface(Typeface.DEFAULT_BOLD);
-                holder.mDayView.setEnabled(true);
-                holder.mDayView.setClickable(true);
-            }
-
-            if(dayTime.isCurrentDay() && dayTime.isCurrentMonth()) {
-                holder.mDayView.setBackgroundColor(mCurrentBackgroundColor);
-                holder.mDayView.setTextColor(mCurrentTextColor);
-                holder.mDayView.setEnabled(true);
-                holder.mDayView.setClickable(true);
-            }
-
-            holder.mDayView.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(null != mOnDateSelectedListener) {
-                        mOnDateSelectedListener.onDateSelected(v, dayTime.getYear(), dayTime.getMonth(), dayTime.getDay(), dayTime.getEventList());
-                    }
-                }
-            });
-
-            holder.mDayView.invalidate();
-        }
-
-        @Override
-        public int getItemCount() {
-            return mItems.size();
-        }
-    }
-
     private List<DayTime> getDayTimeList(Calendar currentCalendar) {
         MonthDisplayHelper helper = new MonthDisplayHelper(currentCalendar.get(Calendar.YEAR), currentCalendar.get(Calendar.MONTH), currentCalendar.getFirstDayOfWeek());
         List<DayTime> days = new ArrayList<>(SIZE);
 
-        for(int i = 0; i < 6; i++) {
+        for (int i = 0; i < 6; i++) {
             int n[] = helper.getDigitsForRow(i);
 
-            for(int d = 0; d < 7; d++) {
-                if(helper.isWithinCurrentMonth(i, d)) {
+            for (int d = 0; d < 7; d++) {
+                if (helper.isWithinCurrentMonth(i, d)) {
                     Calendar calendar = Calendar.getInstance(Locale.getDefault());
                     calendar.set(Calendar.DAY_OF_MONTH, n[d]);
 
-                    if(n[d] == currentCalendar.get(Calendar.DAY_OF_MONTH) && CalendarUtil.isWeekend(calendar)) {
+                    if (n[d] == currentCalendar.get(Calendar.DAY_OF_MONTH) && CalendarUtil.isWeekend(calendar)) {
                         final DayTime dayTime = new DayTime()
                                 .setDay(n[d])
                                 .setMonth(currentCalendar.get(Calendar.MONTH))
                                 .setYear(currentCalendar.get(Calendar.YEAR))
-                                .setIsCurrentDay(true)
-                                .setIsCurrentMonth(true)
-                                .setIsCurrentYear(true)
-                                .setIsWeekend(true)
+                                .setCurrentDay(true)
+                                .setCurrentMonth(true)
+                                .setCurrentYear(true)
+                                .setWeekend(true)
                                 .setEventList(null);
 
                         days.add(dayTime);
-                    } else if(n[d] == currentCalendar.get(Calendar.DAY_OF_MONTH)) {
+                    } else if (n[d] == currentCalendar.get(Calendar.DAY_OF_MONTH)) {
                         final DayTime dayTime = new DayTime()
                                 .setDay(n[d])
                                 .setMonth(currentCalendar.get(Calendar.MONTH))
                                 .setYear(currentCalendar.get(Calendar.YEAR))
-                                .setIsCurrentDay(true)
-                                .setIsCurrentMonth(true)
-                                .setIsCurrentYear(true)
-                                .setIsWeekend(false)
+                                .setCurrentDay(true)
+                                .setCurrentMonth(true)
+                                .setCurrentYear(true)
+                                .setWeekend(false)
                                 .setEventList(null);
 
                         days.add(dayTime);
-                    } else if(CalendarUtil.isWeekend(calendar)) {
+                    } else if (CalendarUtil.isWeekend(calendar)) {
                         final DayTime dayTime = new DayTime()
                                 .setDay(n[d])
                                 .setMonth(currentCalendar.get(Calendar.MONTH))
                                 .setYear(currentCalendar.get(Calendar.YEAR))
-                                .setIsCurrentDay(false)
-                                .setIsCurrentMonth(true)
-                                .setIsCurrentYear(true)
-                                .setIsWeekend(true)
+                                .setCurrentDay(false)
+                                .setCurrentMonth(true)
+                                .setCurrentYear(true)
+                                .setWeekend(true)
                                 .setEventList(null);
 
                         days.add(dayTime);
@@ -556,10 +491,10 @@ public class CalendarView extends FrameLayout {
                                 .setDay(n[d])
                                 .setMonth(currentCalendar.get(Calendar.MONTH))
                                 .setYear(currentCalendar.get(Calendar.YEAR))
-                                .setIsCurrentDay(false)
-                                .setIsCurrentMonth(true)
-                                .setIsCurrentYear(true)
-                                .setIsWeekend(false)
+                                .setCurrentDay(false)
+                                .setCurrentMonth(true)
+                                .setCurrentYear(true)
+                                .setWeekend(false)
                                 .setEventList(null);
 
                         days.add(dayTime);
@@ -569,7 +504,7 @@ public class CalendarView extends FrameLayout {
                     int month = getMonth();
                     int year = getYear();
 
-                    if(d == 0) {
+                    if (d == 0) {
                         Calendar calendar = Calendar.getInstance(Locale.getDefault());
                         calendar.set(Calendar.DAY_OF_MONTH, n[d]);
                         calendar.set(Calendar.MONTH, -1);
@@ -577,7 +512,7 @@ public class CalendarView extends FrameLayout {
                         month = calendar.get(Calendar.MONTH);
                         year = calendar.get(Calendar.YEAR);
 
-                    } else if(d == 6) {
+                    } else if (d == 6) {
                         Calendar calendar = Calendar.getInstance(Locale.getDefault());
                         calendar.set(Calendar.DAY_OF_MONTH, n[d]);
                         calendar.set(Calendar.MONTH, 1);
@@ -590,10 +525,10 @@ public class CalendarView extends FrameLayout {
                             .setDay(n[d])
                             .setMonth(month)
                             .setYear(year)
-                            .setIsCurrentDay(false)
-                            .setIsCurrentMonth(false)
-                            .setIsCurrentYear(true)
-                            .setIsWeekend(false)
+                            .setCurrentDay(false)
+                            .setCurrentMonth(false)
+                            .setCurrentYear(true)
+                            .setWeekend(false)
                             .setEventList(null);
 
                     days.add(dayTime);
@@ -654,10 +589,82 @@ public class CalendarView extends FrameLayout {
 
     private String getHeaderTitle(Calendar calendar) {
         final String month = new DateFormatSymbols(Locale.getDefault()).getMonths()[calendar.get(Calendar.MONTH)];
-        return month.toUpperCase(Locale.getDefault()) + " " + String.valueOf(getYear());
+        return month.toUpperCase(Locale.getDefault()) + " " + getYear();
     }
 
     private Calendar getCurrentCalendar() {
         return mCurrentCalendar;
+    }
+
+    private class DayTimeAdapter extends RecyclerView.Adapter<DayTimeAdapter.DayViewHolder> {
+        private final List<DayTime> mItems;
+
+        protected class DayViewHolder extends RecyclerView.ViewHolder {
+            private final TextView mDayView;
+
+            public DayViewHolder(@NonNull View view) {
+                super(view);
+                mDayView = (TextView) view.findViewById(R.id.day_view);
+            }
+        }
+
+        public DayTimeAdapter(@NonNull List<DayTime> items) {
+            mItems = items;
+        }
+
+        @Override
+        public DayViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            final View v = mInflater.inflate(R.layout.day_view, parent, false);
+            return new DayViewHolder(v);
+        }
+
+        @Override
+        public void onBindViewHolder(DayViewHolder holder, int position) {
+            final DayTime dayTime = mItems.get(position);
+
+            holder.mDayView.setClickable(true);
+            holder.mDayView.setText(String.valueOf(dayTime.getDay()));
+            holder.mDayView.setTextSize(mAdapterViewFontSize);
+            holder.mDayView.setTextColor(mAdapterViewTextColor);
+
+            if (!dayTime.isCurrentMonth()) {
+                holder.mDayView.setTypeface(Typeface.DEFAULT_BOLD);
+                holder.mDayView.setBackgroundColor(mDisabledBackgroundColor);
+                holder.mDayView.setTextColor(mDisabledTextColor);
+                holder.mDayView.setEnabled(false);
+                holder.mDayView.setClickable(false);
+            }
+
+            if (dayTime.isWeekend() && dayTime.isCurrentMonth()) {
+                holder.mDayView.setBackgroundColor(mWeekendBackgroundColor);
+                holder.mDayView.setTextColor(mWeekendTextColor);
+                holder.mDayView.setTypeface(Typeface.DEFAULT_BOLD);
+                holder.mDayView.setEnabled(true);
+                holder.mDayView.setClickable(true);
+            }
+
+            if (dayTime.isCurrentDay() && dayTime.isCurrentMonth()) {
+                holder.mDayView.setBackgroundColor(mCurrentBackgroundColor);
+                holder.mDayView.setTextColor(mCurrentTextColor);
+                holder.mDayView.setEnabled(true);
+                holder.mDayView.setClickable(true);
+            }
+
+            holder.mDayView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (null != mOnDateSelectedListener) {
+                        mOnDateSelectedListener.onDateSelected(v, dayTime.getYear(), dayTime.getMonth(), dayTime.getDay(), dayTime.getEventList());
+                    }
+                }
+            });
+
+            holder.mDayView.invalidate();
+        }
+
+        @Override
+        public int getItemCount() {
+            return mItems.size();
+        }
     }
 }

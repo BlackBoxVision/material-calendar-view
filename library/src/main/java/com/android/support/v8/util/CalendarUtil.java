@@ -19,7 +19,9 @@ import android.support.annotation.NonNull;
 
 import java.util.Calendar;
 
-public class CalendarUtil {
+public final class CalendarUtil {
+
+    private CalendarUtil() { }
 
     public static boolean isWeekend(Calendar calendar) {
         int position = calendar.get(Calendar.DAY_OF_WEEK);
@@ -27,20 +29,20 @@ public class CalendarUtil {
     }
 
     public static boolean isSameYear(@NonNull Calendar c1, @NonNull Calendar c2) {
-        return (c1.get(Calendar.ERA) == c2.get(Calendar.ERA) &&
-               (c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR)));
+        return (c1.get(Calendar.ERA) == c2.get(Calendar.ERA)
+                && (c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR)));
     }
 
     public static boolean isSameMonth(@NonNull Calendar c1, @NonNull Calendar c2) {
-        return (c1.get(Calendar.ERA) == c2.get(Calendar.ERA) &&
-               (c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR)) &&
-               (c1.get(Calendar.MONTH) == c2.get(Calendar.MONTH)));
+        return (c1.get(Calendar.ERA) == c2.get(Calendar.ERA)
+               && (c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR))
+               && (c1.get(Calendar.MONTH) == c2.get(Calendar.MONTH)));
     }
 
     public static boolean isSameDay(@NonNull Calendar cal1, @NonNull Calendar cal2) {
-        return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) &&
-               (cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)) &&
-               (cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)));
+        return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA)
+                && (cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR))
+                && (cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)));
     }
 
     public static int calculateWeekIndex(int weekIndex, Calendar calendar) {

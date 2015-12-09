@@ -10,7 +10,9 @@ import android.support.annotation.StringRes;
  *
  * @author jonatan.salas
  */
-public class TypefaceUtil {
+public final class TypefaceUtil {
+
+    private TypefaceUtil() { }
 
     /**
      * Method that gets a Typeface from a directory.

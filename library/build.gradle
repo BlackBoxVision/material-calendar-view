@@ -19,51 +19,57 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    lintOptions {
+        abortOnError true
+        xmlReport false
+        htmlReport true
+        lintConfig file("${project.rootDir}/config/quality/lint/lint.xml")
+        htmlOutput file("$project.buildDir/reports/lint/lint-result.html")
+        xmlOutput file("$project.buildDir/reports/lint/lint-result.xml")
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.google.doclava:doclava:1.0.6'
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:recyclerview-v7:23.1.1'
 }
 
 task findbugs(type: FindBugs) {
-    description 'Run findbugs'
-    group 'verification'
-    classes = fileTree('build/intermediates/classes/debug/')
-    source = fileTree('src/main/java')
-    classpath = files()
-    effort = 'max'
+    ignoreFailures = false
+    effort = "max"
     reportLevel = "high"
-    ignoreFailures = true
-    excludeFilter = file("config/quality/findbugs/findbugs-filter.xml")
-    reports {
-        xml.enabled = false
-        html.enabled = true
-        html {
-            destination "$project.buildDir/reports/findbugs/findbugs-output.html"
-        }
-    }
-}
+    excludeFilter = new File("${project.rootDir}/library/config/quality/findbugs/findbugs-filter.xml")
+    classes = files("${project.rootDir}/library/build/intermediates/classes")
 
-task pmd(type: Pmd) {
-    ignoreFailures = true
-    ruleSetFiles = files("config/quality/pmd/pmd-ruleset.xml")
-    ruleSets = []
-
-    //source 'src'
-    source = fileTree('src/main/java')
+    source 'src'
     include '**/*.java'
     exclude '**/gen/**'
 
     reports {
-        //xml.enabled = false
+        xml.enabled = false
         html.enabled = true
-//        xml {
-//            destination "$project.buildDir/reports/pmd/pmd.xml"
-//        }
+        html {
+            destination "$project.buildDir/reports/findbugs/findbugs.html"
+        }
+    }
+
+    classpath = files()
+}
+
+task pmd(type: Pmd) {
+    ignoreFailures = false
+    ruleSetFiles = files("${project.rootDir}/library/config/quality/pmd/pmd-ruleset.xml")
+    ruleSets = []
+
+    source 'src'
+    include '**/*.java'
+    exclude '**/gen/**'
+
+    reports {
+        xml.enabled = false
+        html.enabled = true
         html {
             destination "$project.buildDir/reports/pmd/pmd.html"
         }
@@ -71,23 +77,12 @@ task pmd(type: Pmd) {
 }
 
 task checkstyle(type: Checkstyle) {
-    ignoreFailures = true
-    configFile file("config/quality/checkstyle/checkstyle.xml")
-    configProperties.checkstyleSuppressionsPath = file("config/quality/checkstyle/suppressions.xml").absolutePath
-    source = fileTree('src/main/java')
+    configFile file("${project.rootDir}/library/config/quality/checkstyle/checkstyle.xml")
+    configProperties.checkstyleSuppressionsPath = file("${project.rootDir}/library/config/quality/checkstyle/suppressions.xml").absolutePath
+    source 'src'
     include '**/*.java'
     exclude '**/gen/**'
     classpath = files()
-    reports {
-        xml.enabled = true
-        //  html.enabled = true
-        xml {
-            destination "$project.buildDir/reports/checkstyle/checkstyle.xml"
-        }
-//        html {
-//            destination "$project.buildDir/reports/checkstyle/checkstyle.html"
-//        }
-    }
 }
 check.doLast {
     project.tasks.getByName("findbugs").execute()

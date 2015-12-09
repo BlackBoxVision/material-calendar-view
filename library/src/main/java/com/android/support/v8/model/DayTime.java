@@ -27,10 +27,10 @@ public class DayTime {
     private int month;
     private int year;
 
-    private boolean isCurrentDay;
-    private boolean isCurrentMonth;
-    private boolean isCurrentYear;
-    private boolean isWeekend;
+    private boolean currentDay;
+    private boolean currentMonth;
+    private boolean currentYear;
+    private boolean weekend;
 
     @Nullable
     private List<Event> eventList;
@@ -52,23 +52,23 @@ public class DayTime {
         return this;
     }
 
-    public DayTime setIsCurrentDay(boolean isCurrentDay) {
-        this.isCurrentDay = isCurrentDay;
+    public DayTime setCurrentDay(boolean isCurrentDay) {
+        this.currentDay = isCurrentDay;
         return this;
     }
 
-    public DayTime setIsCurrentMonth(boolean isCurrentMonth) {
-        this.isCurrentMonth = isCurrentMonth;
+    public DayTime setCurrentMonth(boolean isCurrentMonth) {
+        this.currentMonth = isCurrentMonth;
         return this;
     }
 
-    public DayTime setIsCurrentYear(boolean isCurrentYear) {
-        this.isCurrentYear = isCurrentYear;
+    public DayTime setCurrentYear(boolean isCurrentYear) {
+        this.currentYear = isCurrentYear;
         return this;
     }
 
-    public DayTime setIsWeekend(boolean isWeekend) {
-        this.isWeekend = isWeekend;
+    public DayTime setWeekend(boolean isWeekend) {
+        this.weekend = isWeekend;
         return this;
     }
 
@@ -90,19 +90,19 @@ public class DayTime {
     }
 
     public boolean isCurrentDay() {
-        return isCurrentDay;
+        return currentDay;
     }
 
     public boolean isCurrentMonth() {
-        return isCurrentMonth;
+        return currentMonth;
     }
 
     public boolean isCurrentYear() {
-        return isCurrentYear;
+        return currentYear;
     }
 
     public boolean isWeekend() {
-        return isWeekend;
+        return weekend;
     }
 
     @Nullable
