@@ -1,4 +1,4 @@
-package com.samsistemas.materialcalendar;
+package com.materialcalendarview.sample;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         calendarView.setOnDateSelectedListener(new CalendarView.OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull View view, int year, int month, int dayOfMonth, @Nullable List<Event> eventList) {
-                Snackbar.make(view, getString(R.string.selected_date) + dayOfMonth + "/" + month + "/" + year, Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(view, getString(R.string.selected_date) + " " + dayOfMonth + "/" + month + "/" + year, Snackbar.LENGTH_SHORT).show();
             }
         });
 

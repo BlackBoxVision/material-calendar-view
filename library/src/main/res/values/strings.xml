@@ -1,8 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="selected_date">You have selected this date: </string>
-    <string name="today">Today is </string>
-    <string name="not_actual_month">This is not the actual month now.</string>
-    <string name="month_display">The month displayed is</string>
-    <string name="year_is"> and the year is </string>
 </resources>
