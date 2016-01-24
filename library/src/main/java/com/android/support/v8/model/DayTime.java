@@ -17,6 +17,7 @@ package com.android.support.v8.model;
 
 import android.support.annotation.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**

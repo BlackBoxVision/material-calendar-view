@@ -20,6 +20,7 @@ import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -27,7 +28,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.MonthDisplayHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +36,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.DateFormatSymbols;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -44,7 +43,7 @@ import java.util.Locale;
 import com.android.support.v8.R;
 import com.android.support.v8.model.DayTime;
 import com.android.support.v8.model.Event;
-import com.android.support.v8.util.CalendarUtil;
+import com.android.support.v8.util.CalendarUtility;
 
 /**
  * This class is a calendar widget for displaying dates, selecting, adding and associating event for a
@@ -154,6 +153,50 @@ public class CalendarView extends FrameLayout {
     private int mCurrentMonthIndex = 0;
 
     private TextView mMonthTitleView;
+    private ImageView mNextButton;
+    private ImageView mBackButton;
+
+    private final OnClickListener mNextButtonClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            mCurrentMonthIndex++;
+            mCurrentCalendar = Calendar.getInstance(Locale.getDefault());
+            mCurrentCalendar.add(Calendar.MONTH, mCurrentMonthIndex);
+            mDayTimeAdapter = new DayTimeAdapter(CalendarUtility.obtainDayTimes(mCurrentCalendar, mCurrentMonthIndex));
+            mMonthTitleView.setText(getHeaderTitle(mCurrentCalendar));
+
+            if (null != mAdapterView) {
+                mAdapterView.setAdapter(null);
+                mAdapterView.setAdapter(mDayTimeAdapter);
+                mDayTimeAdapter.notifyDataSetChanged();
+            }
+
+            if (null != mOnMonthChangeListener) {
+                mOnMonthChangeListener.onMonthChanged(mAdapterView, mCurrentCalendar.get(Calendar.YEAR), mCurrentCalendar.get(Calendar.MONTH));
+            }
+        }
+    };
+
+    private final OnClickListener mBackButtonClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            mCurrentMonthIndex--;
+            mCurrentCalendar = Calendar.getInstance(Locale.getDefault());
+            mCurrentCalendar.add(Calendar.MONTH, mCurrentMonthIndex);
+            mDayTimeAdapter = new DayTimeAdapter(CalendarUtility.obtainDayTimes(mCurrentCalendar, mCurrentMonthIndex));
+            mMonthTitleView.setText(getHeaderTitle(mCurrentCalendar));
+
+            if (null != mAdapterView) {
+                mAdapterView.setAdapter(null);
+                mAdapterView.setAdapter(mDayTimeAdapter);
+                mDayTimeAdapter.notifyDataSetChanged();
+            }
+
+            if (null != mOnMonthChangeListener) {
+                mOnMonthChangeListener.onMonthChanged(mAdapterView, mCurrentCalendar.get(Calendar.YEAR), mCurrentCalendar.get(Calendar.MONTH));
+            }
+        }
+    };
 
     /**
      * The callback used to indicate the user changes the date.
@@ -336,67 +379,31 @@ public class CalendarView extends FrameLayout {
         //TODO JS: Add custom typeface..
         mMonthTitleView.setTypeface(Typeface.DEFAULT_BOLD);
 
-        final ImageView nextButton = (ImageView) findViewById(R.id.next_button);
-        nextButton.setEnabled(true);
-        nextButton.setClickable(true);
-
-        if (null != mRightArrowDrawable) {
-            nextButton.setImageDrawable(mRightArrowDrawable);
-        }
-
-        nextButton.setColorFilter(mDrawableColor, PorterDuff.Mode.SRC_ATOP);
-        nextButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCurrentMonthIndex++;
-                mCurrentCalendar = Calendar.getInstance(Locale.getDefault());
-                mCurrentCalendar.add(Calendar.MONTH, mCurrentMonthIndex);
-                mDayTimeAdapter = new DayTimeAdapter(getDayTimeList(mCurrentCalendar));
-                mMonthTitleView.setText(getHeaderTitle(mCurrentCalendar));
-
-                if (null != mAdapterView) {
-                    mAdapterView.setAdapter(null);
-                    mAdapterView.setAdapter(mDayTimeAdapter);
-                    mDayTimeAdapter.notifyDataSetChanged();
-                }
-
-                if (null != mOnMonthChangeListener) {
-                    mOnMonthChangeListener.onMonthChanged(mAdapterView, mCurrentCalendar.get(Calendar.YEAR), mCurrentCalendar.get(Calendar.MONTH) + 1);
-                }
-            }
-        });
-
-        final ImageView backButton = (ImageView) findViewById(R.id.back_button);
-        backButton.setEnabled(true);
-        backButton.setClickable(true);
-
-        if (null != mLeftArrowDrawable) {
-            nextButton.setImageDrawable(mLeftArrowDrawable);
-        }
-
-        backButton.setColorFilter(mDrawableColor, PorterDuff.Mode.SRC_ATOP);
-        backButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCurrentMonthIndex--;
-                mCurrentCalendar = Calendar.getInstance(Locale.getDefault());
-                mCurrentCalendar.add(Calendar.MONTH, mCurrentMonthIndex);
-                mDayTimeAdapter = new DayTimeAdapter(getDayTimeList(mCurrentCalendar));
-                mMonthTitleView.setText(getHeaderTitle(mCurrentCalendar));
-
-                if (null != mAdapterView) {
-                    mAdapterView.setAdapter(null);
-                    mAdapterView.setAdapter(mDayTimeAdapter);
-                    mDayTimeAdapter.notifyDataSetChanged();
-                }
-
-                if (null != mOnMonthChangeListener) {
-                    mOnMonthChangeListener.onMonthChanged(mAdapterView, mCurrentCalendar.get(Calendar.YEAR), mCurrentCalendar.get(Calendar.MONTH) + 1);
-                }
-            }
-        });
-
+        initNextButton();
+        initBackButton();
         headerView.invalidate();
+    }
+
+    private void initNextButton() {
+        mNextButton = (ImageView) findViewById(R.id.next_button);
+        mNextButton.setEnabled(true);
+        mNextButton.setClickable(true);
+
+        setNextButtonDrawable(mRightArrowDrawable);
+        setNextButtonColor(mDrawableColor);
+
+        mNextButton.setOnClickListener(mNextButtonClickListener);
+    }
+
+    private void initBackButton() {
+        mBackButton = (ImageView) findViewById(R.id.back_button);
+        mBackButton.setEnabled(true);
+        mBackButton.setClickable(true);
+
+        setBackButtonDrawable(mRightArrowDrawable);
+        setBackButtonColor(mDrawableColor);
+
+        mBackButton.setOnClickListener(mBackButtonClickListener);
     }
 
     private void initWeekView() {
@@ -406,11 +413,11 @@ public class CalendarView extends FrameLayout {
         TextView dayOfWeek;
 
         for (int i = 1; i < getShortWeekDays().length; i++) {
-            dayName = getShortWeekDay(i);
+            dayName = getShortWeekDays()[i].trim().toUpperCase(Locale.getDefault());
             int length = (dayName.length() < 3) ? dayName.length() : 3;
             dayName = dayName.substring(0, length).toUpperCase(Locale.getDefault());
 
-            final String tag = String.valueOf(CalendarUtil.calculateWeekIndex(i, getCurrentCalendar()));
+            final String tag = String.valueOf(CalendarUtility.calculateWeekIndex(i, getCurrentCalendar()));
 
             dayOfWeek = (TextView) findViewWithTag(tag);
             dayOfWeek.setText(dayName);
@@ -422,7 +429,8 @@ public class CalendarView extends FrameLayout {
     }
 
     private void initAdapterView() {
-        mDayTimeAdapter = new DayTimeAdapter(getDayTimeList(mCurrentCalendar));
+        final List<DayTime> dayTimeList = CalendarUtility.obtainDayTimes(mCurrentCalendar, mCurrentMonthIndex);
+        mDayTimeAdapter = new DayTimeAdapter(dayTimeList);
 
         mAdapterView = (RecyclerView) mRootView.findViewById(R.id.recycler_view);
         mAdapterView.setLayoutManager(new GridLayoutManager(mContext, SPAN_COUNT));
@@ -436,98 +444,52 @@ public class CalendarView extends FrameLayout {
         mAdapterView.invalidate();
     }
 
-    private List<DayTime> getDayTimeList(Calendar currentCalendar) {
-        MonthDisplayHelper helper = new MonthDisplayHelper(currentCalendar.get(Calendar.YEAR), currentCalendar.get(Calendar.MONTH), currentCalendar.getFirstDayOfWeek());
-        List<DayTime> days = new ArrayList<>(42);
-
-        for (int i = 0; i < 6; i++) {
-            int n[] = helper.getDigitsForRow(i);
-
-            for (int d = 0; d < 7; d++) {
-                if (helper.isWithinCurrentMonth(i, d)) {
-                    Calendar calendar = Calendar.getInstance(Locale.getDefault());
-                    calendar.set(Calendar.DAY_OF_MONTH, n[d]);
-                    calendar.add(Calendar.MONTH, mCurrentMonthIndex);
-
-                    if (n[d] == currentCalendar.get(Calendar.DAY_OF_MONTH) && CalendarUtil.isWeekend(calendar) && mCurrentMonthIndex == 0) {
-                        final DayTime dayTime = new DayTime()
-                                .setDay(n[d])
-                                .setMonth(currentCalendar.get(Calendar.MONTH) + 1)
-                                .setYear(currentCalendar.get(Calendar.YEAR))
-                                .setCurrentDay(true)
-                                .setCurrentMonth(true)
-                                .setCurrentYear(true)
-                                .setWeekend(true)
-                                .setEventList(null);
-
-                        days.add(dayTime);
-                    } else if (n[d] == currentCalendar.get(Calendar.DAY_OF_MONTH) && mCurrentMonthIndex == 0) {
-                        final DayTime dayTime = new DayTime()
-                                .setDay(n[d])
-                                .setMonth(currentCalendar.get(Calendar.MONTH) + 1)
-                                .setYear(currentCalendar.get(Calendar.YEAR))
-                                .setCurrentDay(true)
-                                .setCurrentMonth(true)
-                                .setCurrentYear(true)
-                                .setWeekend(false)
-                                .setEventList(null);
-
-                        days.add(dayTime);
-                    } else if (CalendarUtil.isWeekend(calendar)) {
-                        final DayTime dayTime = new DayTime()
-                                .setDay(n[d])
-                                .setMonth(currentCalendar.get(Calendar.MONTH) + 1)
-                                .setYear(currentCalendar.get(Calendar.YEAR))
-                                .setCurrentDay(false)
-                                .setCurrentMonth(true)
-                                .setCurrentYear(true)
-                                .setWeekend(true)
-                                .setEventList(null);
-
-                        days.add(dayTime);
-                    } else {
-                        final DayTime dayTime = new DayTime()
-                                .setDay(n[d])
-                                .setMonth(currentCalendar.get(Calendar.MONTH) + 1)
-                                .setYear(currentCalendar.get(Calendar.YEAR))
-                                .setCurrentDay(false)
-                                .setCurrentMonth(true)
-                                .setCurrentYear(true)
-                                .setWeekend(false)
-                                .setEventList(null);
-
-                        days.add(dayTime);
-                    }
-
-                } else {
-                    Calendar calendar = Calendar.getInstance(Locale.getDefault());
-                    calendar.set(Calendar.DAY_OF_MONTH, n[d]);
-                    calendar.add(Calendar.MONTH, mCurrentMonthIndex);
-
-                    final DayTime dayTime = new DayTime()
-                            .setDay(n[d])
-                            .setMonth(calendar.get(Calendar.MONTH) + 1)
-                            .setYear(calendar.get(Calendar.YEAR))
-                            .setCurrentDay(false)
-                            .setCurrentMonth(false)
-                            .setCurrentYear(true)
-                            .setWeekend(false)
-                            .setEventList(null);
-
-                    days.add(dayTime);
-                }
-            }
-        }
-
-        return days;
-    }
-
     public void setOnMonthChangeListener(@Nullable OnMonthChangeListener onMonthChangeListener) {
         this.mOnMonthChangeListener = onMonthChangeListener;
     }
 
     public void setOnDateSelectedListener(@Nullable OnDateSelectedListener onDateSelectedListener) {
         this.mOnDateSelectedListener = onDateSelectedListener;
+    }
+
+    public void setNextButtonDrawable(@DrawableRes int drawableId) {
+        final Drawable drawable = ContextCompat.getDrawable(mContext, drawableId);
+
+        if (null != drawable) {
+            mNextButton.setImageDrawable(drawable);
+        }
+    }
+
+    public void setBackButtonDrawable(@DrawableRes int drawableId) {
+        final Drawable drawable = ContextCompat.getDrawable(mContext, drawableId);
+
+        if (null != drawable) {
+            mBackButton.setImageDrawable(drawable);
+        }
+    }
+
+    public void setNextButtonDrawable(@Nullable Drawable drawable) {
+        if (null != drawable) {
+            mNextButton.setImageDrawable(drawable);
+        }
+    }
+
+    public void setBackButtonDrawable(@Nullable Drawable drawable) {
+        if (null != drawable) {
+            mBackButton.setImageDrawable(drawable);
+        }
+    }
+
+    public void setNextButtonColor(Integer color) {
+        if (color != null) {
+            mNextButton.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+        }
+    }
+
+    public void setBackButtonColor(Integer color) {
+        if (color != null) {
+            mBackButton.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+        }
     }
 
     public void setScrollEnabled(Boolean scrollEnabled) {
@@ -562,10 +524,6 @@ public class CalendarView extends FrameLayout {
         return mCurrentCalendar.get(Calendar.DAY_OF_MONTH);
     }
 
-    private String getShortWeekDay(int position) {
-        return getShortWeekDays()[position].trim().toUpperCase(Locale.getDefault());
-    }
-
     private String[] getShortWeekDays() {
         return new DateFormatSymbols(Locale.getDefault()).getShortWeekdays();
     }
@@ -579,30 +537,30 @@ public class CalendarView extends FrameLayout {
         return mCurrentCalendar;
     }
 
-    private class DayTimeAdapter extends RecyclerView.Adapter<DayTimeAdapter.DayViewHolder> {
+    private class DayTimeAdapter extends RecyclerView.Adapter<DayTimeAdapter.DayTimeViewHolder> {
         private final List<DayTime> mItems;
 
-        protected class DayViewHolder extends RecyclerView.ViewHolder {
+        protected class DayTimeViewHolder extends RecyclerView.ViewHolder {
             private final TextView mDayView;
 
-            public DayViewHolder(@NonNull View view) {
+            public DayTimeViewHolder(@NonNull View view) {
                 super(view);
-                mDayView = (TextView) view.findViewById(R.id.day_view);
+                this.mDayView = (TextView) view.findViewById(R.id.day_view);
             }
         }
 
         public DayTimeAdapter(@NonNull List<DayTime> items) {
-            mItems = items;
+            this.mItems = items;
         }
 
         @Override
-        public DayViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public DayTimeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             final View v = mInflater.inflate(R.layout.day_view, parent, false);
-            return new DayViewHolder(v);
+            return new DayTimeViewHolder(v);
         }
 
         @Override
-        public void onBindViewHolder(DayViewHolder holder, int position) {
+        public void onBindViewHolder(DayTimeViewHolder holder, int position) {
             final DayTime dayTime = mItems.get(position);
 
             holder.mDayView.setClickable(true);
