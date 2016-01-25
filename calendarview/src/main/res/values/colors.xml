@@ -6,4 +6,5 @@
     <color name="day_disabled_text_color">#DEDEDE</color>
     <color name="selected_day_background">#03A7E9</color>
     <color name="current_day_of_month">#03A7E9</color>
+    <color name="weekend_color">#FF0000</color>
 </resources>

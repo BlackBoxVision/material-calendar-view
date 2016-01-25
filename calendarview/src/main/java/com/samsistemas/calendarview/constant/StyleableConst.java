@@ -16,4 +16,6 @@ public interface StyleableConst {
     int SELECTED_DAY_BACKGROUND_COLOR = R.styleable.CustomCalendarView_selectedDayBackgroundColor;
     int SELECTED_DAY_TEXT_COLOR = R.styleable.CustomCalendarView_selectedDayTextColor;
     int CURRENT_DAY_COLOR = R.styleable.CustomCalendarView_currentDayOfMonthColor;
+    int WEEKEND_COLOR = R.styleable.CustomCalendarView_weekendColor;
+    int WEEKEND = R.styleable.CustomCalendarView_weekend;
 }

@@ -4,7 +4,6 @@
     <declare-styleable name="CustomCalendarView">
         <attr name="calendarTitleTextColor" format="color" />
         <attr name="dayOfWeekTextColor" format="color" />
-        <attr name="dayOfMonthTextColor" format="color" />
         <attr name="calendarBackgroundColor" format="color" />
         <attr name="disabledDayBackgroundColor" format="color" />
         <attr name="disabledDayTextColor" format="color" />
@@ -13,5 +12,15 @@
         <attr name="weekLayoutBackgroundColor" format="color" />
         <attr name="titleLayoutBackgroundColor" format="color" />
         <attr name="currentDayOfMonthColor" format="color" />
+        <attr name="weekendColor" format="color"/>
+        <attr name="weekend">
+            <flag name="sunday" value="1"/>
+            <flag name="monday" value="2"/>
+            <flag name="tuesday" value="4"/>
+            <flag name="wednesday" value="8"/>
+            <flag name="thursday" value="16"/>
+            <flag name="friday" value="32"/>
+            <flag name="saturday" value="64"/>
+        </attr>
     </declare-styleable>
 </resources>

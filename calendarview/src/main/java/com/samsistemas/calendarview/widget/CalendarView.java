@@ -127,11 +127,19 @@ public class CalendarView extends LinearLayout implements ScrollableConst, Touch
     private int mCalendarTitleTextColor;
     private int mDayOfWeekTextColor;
     private int mCurrentDayOfMonth;
+    private int mWeekendColor;
+    private int mWeekend;
 
     private List<DayDecorator> mDecoratorsList = null;
     private boolean mIsOverflowDateVisible = true;
     private int mFirstDayOfWeek = Calendar.SUNDAY;
     private int mCurrentMonthIndex = 0;
+
+    // Day of weekend
+    private int[] mTotalDayOfWeekend;
+
+    // true for ordinary day, false for a weekend.
+    private boolean mIsCommonDay;
 
     /**
      * Constructor with arguments. It receives a
@@ -188,6 +196,8 @@ public class CalendarView extends LinearLayout implements ScrollableConst, Touch
         mSelectedDayBackground = stylesArray[7];
         mSelectedDayTextColor = stylesArray[8];
         mCurrentDayOfMonth = stylesArray[9];
+        mWeekendColor = stylesArray[10];
+        mWeekend = stylesArray[11];
     }
 
     /**
@@ -283,7 +293,19 @@ public class CalendarView extends LinearLayout implements ScrollableConst, Touch
             dayOfTheWeekString = dayOfTheWeekString.substring(0, length).toUpperCase();
             dayOfWeek = (TextView) mView.findViewWithTag(mContext.getString(R.string.day_of_week) + CalendarUtil.getWeekIndex(i, mCalendar));
             dayOfWeek.setText(dayOfTheWeekString);
-            dayOfWeek.setTextColor(mDayOfWeekTextColor);
+            mIsCommonDay = true;
+            if(totalDayOfWeekend().length != 0) {
+                for (int weekend : totalDayOfWeekend()) {
+                    if (i == weekend) {
+                        dayOfWeek.setTextColor(mWeekendColor);
+                        mIsCommonDay = false;
+                    }
+                }
+            }
+
+            if(mIsCommonDay) {
+                dayOfWeek.setTextColor(mDayOfWeekTextColor);
+            }
 
             if (null != getTypeface()) {
                 dayOfWeek.setTypeface(getTypeface());
@@ -330,7 +352,19 @@ public class CalendarView extends LinearLayout implements ScrollableConst, Touch
             if (CalendarUtil.isSameMonth(calendar, startCalendar)) {
                 dayOfMonthContainer.setOnClickListener(onDayOfMonthClickListener);
                 dayView.setBackgroundColor(mCalendarBackgroundColor);
-                dayView.setTextColor(mDayOfWeekTextColor);
+                mIsCommonDay = true;
+                if(totalDayOfWeekend().length != 0) {
+                    for (int weekend : totalDayOfWeekend()) {
+                        if (startCalendar.get(Calendar.DAY_OF_WEEK) == weekend) {
+                            dayView.setTextColor(mWeekendColor);
+                            mIsCommonDay = false;
+                        }
+                    }
+                }
+
+                if(mIsCommonDay) {
+                    dayView.setTextColor(mDayOfWeekTextColor);
+                }
             } else {
                 dayView.setBackgroundColor(mDisabledDayBackgroundColor);
                 dayView.setTextColor(mDisabledDayTextColor);
@@ -369,7 +403,19 @@ public class CalendarView extends LinearLayout implements ScrollableConst, Touch
 
             final DayView dayView = findViewByCalendar(calendar);
             dayView.setBackgroundColor(mCalendarBackgroundColor);
-            dayView.setTextColor(mDayOfWeekTextColor);
+            mIsCommonDay = true;
+            if(totalDayOfWeekend().length != 0) {
+                for (int weekend : totalDayOfWeekend()) {
+                    if (calendar.get(Calendar.DAY_OF_WEEK) == weekend) {
+                        dayView.setTextColor(mWeekendColor);
+                        mIsCommonDay = false;
+                    }
+                }
+            }
+
+            if(mIsCommonDay) {
+                dayView.setTextColor(mDayOfWeekTextColor);
+            }
         }
     }
 
@@ -400,9 +446,30 @@ public class CalendarView extends LinearLayout implements ScrollableConst, Touch
         mCalendar.setFirstDayOfWeek(mFirstDayOfWeek);
 
         initTitleLayout();
+        setTotalDayOfWeekend();
         initWeekLayout();
 
         setDaysInCalendar();
+    }
+
+    private void setTotalDayOfWeekend() {
+        int[] weekendDay = new int[Integer.bitCount(mWeekend)];
+        char days[]= Integer.toBinaryString(mWeekend).toCharArray();
+        int day = 1;
+        int index = 0;
+        for(int i = days.length - 1; i >= 0; i--) {
+            if(days[i] == '1') {
+                weekendDay[index] = day;
+                android.util.Log.d("Weekend day", "day = " + day);
+                index++;
+            }
+            day++;
+        }
+        mTotalDayOfWeekend = weekendDay;
+    }
+
+    private int[] totalDayOfWeekend() {
+        return mTotalDayOfWeekend;
     }
 
     public void setCurrentDay(@NonNull Date todayDate) {
@@ -860,6 +927,14 @@ public class CalendarView extends LinearLayout implements ScrollableConst, Touch
 
     public void setCurrentDayOfMonth(int currentDayOfMonth) {
         this.mCurrentDayOfMonth = currentDayOfMonth;
+    }
+
+    public void setWeekendColor(int weekendColor) {
+        this.mWeekendColor = weekendColor;
+    }
+
+    public void setWeekend(int weekend) {
+        this.mWeekend = weekend;
     }
 
     public void setBackButtonColor(@ColorRes int colorId) {

@@ -35,13 +35,14 @@
                         app:calendarBackgroundColor="@color/colorPrimary"
                         app:calendarTitleTextColor="@color/colorAccent"
                         app:currentDayOfMonthColor="@color/white"
-                        app:dayOfMonthTextColor="@color/white"
                         app:dayOfWeekTextColor="@android:color/white"
                         app:disabledDayBackgroundColor="@color/colorPrimary"
                         app:disabledDayTextColor="@color/colorAccent"
                         app:selectedDayBackgroundColor="@color/colorAccent"
                         app:titleLayoutBackgroundColor="@color/colorPrimary"
-                        app:weekLayoutBackgroundColor="@color/colorPrimary">
+                        app:weekLayoutBackgroundColor="@color/colorPrimary"
+                        app:weekendColor="@color/red"
+                        app:weekend="saturday|sunday">
                     </com.samsistemas.calendarview.widget.CalendarView>
 
                 </FrameLayout>

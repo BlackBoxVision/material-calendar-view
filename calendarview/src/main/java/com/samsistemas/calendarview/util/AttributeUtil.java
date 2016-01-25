@@ -74,6 +74,12 @@ public class AttributeUtil implements StyleableConst {
                     ContextCompat.getColor(context, R.color.current_day_of_month)
             );
 
+          final int weekendColor = typedArray.getColor(WEEKEND_COLOR,
+              ContextCompat.getColor(context, R.color.weekend_color)
+          );
+
+          final int weekend = typedArray.getInteger(WEEKEND, 0); // 0 means no weekend selected
+
             return new int[] {
                     calendarBackgroundColor,
                     calendarTitleBackgroundColor,
@@ -84,7 +90,9 @@ public class AttributeUtil implements StyleableConst {
                     disabledDayTextColor,
                     selectedDayBackground,
                     selectedDayTextColor,
-                    currentDayOfMonth
+                    currentDayOfMonth,
+                    weekendColor,
+                    weekend
             };
 
         } finally {
