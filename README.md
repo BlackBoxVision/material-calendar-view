@@ -153,7 +153,9 @@ The above code snippet will show the simple Calendar View on the default layout.
     app:disabledDayTextColor="@color/colorAccent"
     app:selectedDayBackgroundColor="@color/colorAccent"
     app:titleLayoutBackgroundColor="@color/colorPrimary"
-    app:weekLayoutBackgroundColor="@color/colorPrimary">
+    app:weekLayoutBackgroundColor="@color/colorPrimary"
+    app:weekendColor="@color/red"
+    app:weekend="saturday|sunday">
 </com.samsistemas.calendarview.widget.CalendarView>
 ```
 The next step is initialize the Calendar View to change the appearance and behavior of calendar using the following methods:
