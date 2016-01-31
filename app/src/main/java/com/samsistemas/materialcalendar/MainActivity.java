@@ -68,13 +68,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         calendarView.setBackButtonColor(R.color.colorAccent);
         calendarView.setNextButtonColor(R.color.colorAccent);
         calendarView.refreshCalendar(Calendar.getInstance(Locale.getDefault()));
-        calendarView.setOnDateSelectedListener(new CalendarView.OnDateSelectedListener() {
+        calendarView.setOnDateLongClickListener(new CalendarView.OnDateLongClickListener() {
             @Override
-            public void onDateSelected(@NonNull Date selectedDate) {
+            public void onDateLongClick(@NonNull Date selectedDate) {
                 SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
                 textView.setText(df.format(selectedDate));
             }
         });
+
 
         calendarView.setOnMonthChangedListener(new CalendarView.OnMonthChangedListener() {
             @Override

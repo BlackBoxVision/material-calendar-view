@@ -109,7 +109,8 @@ public class CalendarView extends LinearLayout implements ScrollableConst, Touch
     private ImageView mBackButton;
 
     //Listeners used by the Calendar...
-    private OnDateSelectedListener mOnDateSelectedListener;
+    private OnDateClickListener mOnDateClickListener;
+    private OnDateLongClickListener mOnDateLongClickListener;
     private OnMonthChangedListener mOnMonthChangedListener;
 
     private Calendar mCalendar;
@@ -351,6 +352,7 @@ public class CalendarView extends LinearLayout implements ScrollableConst, Touch
 
             if (CalendarUtil.isSameMonth(calendar, startCalendar)) {
                 dayOfMonthContainer.setOnClickListener(onDayOfMonthClickListener);
+                dayOfMonthContainer.setOnLongClickListener(onDayOfMonthLongClickListener);
                 dayView.setBackgroundColor(mCalendarBackgroundColor);
                 mIsCommonDay = true;
                 if(totalDayOfWeekend().length != 0) {
@@ -464,6 +466,7 @@ public class CalendarView extends LinearLayout implements ScrollableConst, Touch
             }
             day++;
         }
+
         mTotalDayOfWeekend = weekendDay;
     }
 
@@ -500,6 +503,33 @@ public class CalendarView extends LinearLayout implements ScrollableConst, Touch
         view.setTextColor(mSelectedDayTextColor);
     }
 
+    private OnLongClickListener onDayOfMonthLongClickListener = new OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View view) {
+            // Extract day selected
+            ViewGroup dayOfMonthContainer = (ViewGroup) view;
+            String tagId = (String) dayOfMonthContainer.getTag();
+            tagId = tagId.substring(mContext.getString(R.string.day_of_month_container).length(), tagId.length());
+            final TextView dayOfMonthText = (TextView) view.findViewWithTag(mContext.getString(R.string.day_of_month_text) + tagId);
+
+            // Fire event
+            final Calendar calendar = Calendar.getInstance();
+            calendar.setFirstDayOfWeek(mFirstDayOfWeek);
+            calendar.setTime(mCalendar.getTime());
+            calendar.set(Calendar.DAY_OF_MONTH, Integer.valueOf(dayOfMonthText.getText().toString()));
+            setDateAsSelected(calendar.getTime());
+
+            //Set the current day color
+            setCurrentDay(mCalendar.getTime());
+
+            if (mOnDateLongClickListener != null) {
+                mOnDateLongClickListener.onDateLongClick(calendar.getTime());
+            }
+
+            return false;
+        }
+    };
+
     private OnClickListener onDayOfMonthClickListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -519,8 +549,9 @@ public class CalendarView extends LinearLayout implements ScrollableConst, Touch
             //Set the current day color
             setCurrentDay(mCalendar.getTime());
 
-            if (mOnDateSelectedListener != null)
-                mOnDateSelectedListener.onDateSelected(calendar.getTime());
+            if (mOnDateClickListener != null) {
+                mOnDateClickListener.onDateClick(calendar.getTime());
+            }
         }
     };
 
@@ -828,7 +859,7 @@ public class CalendarView extends LinearLayout implements ScrollableConst, Touch
      *
      * @author jonatan.salas
      */
-    public interface OnDateSelectedListener {
+    public interface OnDateClickListener {
 
         /**
          * Method that lets you handle
@@ -836,8 +867,26 @@ public class CalendarView extends LinearLayout implements ScrollableConst, Touch
          *
          * @param selectedDate - the date selected by the user.
          */
-        void onDateSelected(@NonNull Date selectedDate);
+        void onDateClick(@NonNull Date selectedDate);
     }
+
+    /**
+     * Interface that define a method to
+     * implement to handle a selected date event,
+     *
+     * @author jonatan.salas
+     */
+    public interface OnDateLongClickListener {
+
+        /**
+         * Method that lets you handle
+         * when a user touches a particular date.
+         *
+         * @param selectedDate - the date selected by the user.
+         */
+        void onDateLongClick(@NonNull Date selectedDate);
+    }
+
 
     /**
      * Interface that define a method to implement to handle
@@ -860,8 +909,12 @@ public class CalendarView extends LinearLayout implements ScrollableConst, Touch
     /**
      *  Attributes setters and getters.
      */
-    public void setOnDateSelectedListener(OnDateSelectedListener onDateSelectedListener) {
-        this.mOnDateSelectedListener = onDateSelectedListener;
+    public void setOnDateClickListener(OnDateClickListener onDateClickListener) {
+        this.mOnDateClickListener = onDateClickListener;
+    }
+
+    public void setOnDateLongClickListener(OnDateLongClickListener onDateLongClickListener) {
+        this.mOnDateLongClickListener = onDateLongClickListener;
     }
 
     public void setOnMonthChangedListener(OnMonthChangedListener onMonthChangedListener) {
