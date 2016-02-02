@@ -28,6 +28,7 @@ env:
 
 android:
   components:
+    - tools
     - build-tools-23.0.2
     - extra
     - extra-google-google_play_services
