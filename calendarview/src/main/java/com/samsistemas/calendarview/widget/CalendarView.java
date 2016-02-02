@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2015 ImanoWeb 	   {link: http://imanoweb.com}.
- * Copyright (C) 2015 SAMSistemas  {link: http://www.samsistemas.com.ar}
- * Copyright (C) 2015 Jonisaa  	   {link: http://the-android-developer.blogspot.com.ar}.
+ * Copyright (C) 2015 Jonatan Ezequiel Salas
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +16,7 @@
 package com.samsistemas.calendarview.widget;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -44,11 +43,8 @@ import android.widget.Scroller;
 import android.widget.TextView;
 
 import com.samsistemas.calendarview.R;
-import com.samsistemas.calendarview.constant.ScrollableConst;
-import com.samsistemas.calendarview.constant.TouchableConst;
 import com.samsistemas.calendarview.decor.DayDecorator;
-import com.samsistemas.calendarview.util.AttributeUtil;
-import com.samsistemas.calendarview.util.CalendarUtil;
+import com.samsistemas.calendarview.utility.CalendarUtility;
 
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
@@ -61,7 +57,39 @@ import java.util.Locale;
  *
  * @author jonatan.salas
  */
-public class CalendarView extends LinearLayout implements ScrollableConst, TouchableConst {
+public class CalendarView extends LinearLayout {
+
+    /**
+     * Indicates that the CalendarView is in an idle, settled state. The current page
+     * is fully in view and no animation is in progress.
+     */
+    int SCROLL_STATE_IDLE = 0;
+
+    /**
+     * Indicates that the CalendarView is currently being dragged by the user.
+     */
+    int SCROLL_STATE_DRAGGING = 1;
+
+    /**
+     * Indicates that the CalendarView is in the process of settling to a final position.
+     */
+    int SCROLL_STATE_SETTLING = 2;
+
+    boolean USE_CACHE = false;
+    int MIN_DISTANCE_FOR_FLING = 25; // dips
+    int DEFAULT_GUTTER_SIZE = 16; // dips
+    int MIN_FLING_VELOCITY = 400; // dips
+
+    /**
+     * Sentinel value for no current active pointer.
+     */
+    int INVALID_POINTER = -1;
+
+    // If the CalendarView is at least this close to its final position, complete the scroll
+    // on touch down and let the user interact with the content inside instead of
+    // "catching" the flinging Calendar.
+    int CLOSE_ENOUGH = 2; // dp
+
     private boolean mScrollingCacheEnabled;
     private boolean mIsBeingDragged;
     private boolean mIsUnableToDrag;
@@ -170,8 +198,9 @@ public class CalendarView extends LinearLayout implements ScrollableConst, Touch
         mGestureDetector = new GestureDetectorCompat(context, new CalendarGestureDetector());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.CUPCAKE) {
-            if (isInEditMode())
+            if (isInEditMode()) {
                 return;
+            }
         }
 
         getAttributes(attrs);
@@ -184,21 +213,34 @@ public class CalendarView extends LinearLayout implements ScrollableConst, Touch
      * @param attrs - Attribute set object with custom values to be setted
      */
     private void getAttributes(AttributeSet attrs) {
-        //Use this method to simplify and clarify the code..
-        final int[] stylesArray = AttributeUtil.getAttributes(mContext, attrs);
+        final TypedArray a = mContext.obtainStyledAttributes(attrs, R.styleable.MaterialCalendarView, 0, 0);
 
-        mCalendarBackgroundColor = stylesArray[0];
-        mCalendarTitleBackgroundColor = stylesArray[1];
-        mCalendarTitleTextColor = stylesArray[2];
-        mWeekLayoutBackgroundColor = stylesArray[3];
-        mDayOfWeekTextColor = stylesArray[4];
-        mDisabledDayBackgroundColor = stylesArray[5];
-        mDisabledDayTextColor = stylesArray[6];
-        mSelectedDayBackground = stylesArray[7];
-        mSelectedDayTextColor = stylesArray[8];
-        mCurrentDayOfMonth = stylesArray[9];
-        mWeekendColor = stylesArray[10];
-        mWeekend = stylesArray[11];
+        final int white = ContextCompat.getColor(mContext, android.R.color.white);
+        final int black = ContextCompat.getColor(mContext, android.R.color.black);
+        final int dayDisableBackground = ContextCompat.getColor(mContext, R.color.day_disabled_background_color);
+        final int dayDisableTextColor = ContextCompat.getColor(mContext, R.color.day_disabled_text_color);
+        final int daySelectedBackground = ContextCompat.getColor(mContext, R.color.selected_day_background);
+        final int dayCurrent = ContextCompat.getColor(mContext, R.color.current_day_of_month);
+        final int weekendColor = ContextCompat.getColor(mContext, R.color.weekend_color);
+
+        try {
+            mCalendarBackgroundColor = a.getColor(R.styleable.MaterialCalendarView_calendarBackgroundColor, white);
+            mCalendarTitleBackgroundColor = a.getColor(R.styleable.MaterialCalendarView_titleLayoutBackgroundColor, white);
+            mCalendarTitleTextColor = a.getColor(R.styleable.MaterialCalendarView_calendarTitleTextColor, black);
+            mWeekLayoutBackgroundColor = a.getColor(R.styleable.MaterialCalendarView_weekLayoutBackgroundColor, white);
+            mDayOfWeekTextColor = a.getColor(R.styleable.MaterialCalendarView_dayOfWeekTextColor, black);
+            mDisabledDayBackgroundColor = a.getColor(R.styleable.MaterialCalendarView_disabledDayBackgroundColor, dayDisableBackground);
+            mDisabledDayTextColor = a.getColor(R.styleable.MaterialCalendarView_disabledDayTextColor, dayDisableTextColor);
+            mSelectedDayBackground = a.getColor(R.styleable.MaterialCalendarView_selectedDayBackgroundColor, daySelectedBackground);
+            mSelectedDayTextColor = a.getColor(R.styleable.MaterialCalendarView_selectedDayTextColor, white);
+            mCurrentDayOfMonth = a.getColor(R.styleable.MaterialCalendarView_currentDayOfMonthColor, dayCurrent);
+            mWeekendColor = a.getColor(R.styleable.MaterialCalendarView_weekendColor, weekendColor);
+            mWeekend = a.getInteger(R.styleable.MaterialCalendarView_weekend, 0);
+        } finally {
+            if (null != a) {
+                a.recycle();
+            }
+        }
     }
 
     /**
@@ -292,7 +334,7 @@ public class CalendarView extends LinearLayout implements ScrollableConst, Touch
             dayOfTheWeekString = weekDaysArray[i];
             int length = dayOfTheWeekString.length() < 3 ? dayOfTheWeekString.length() : 3;
             dayOfTheWeekString = dayOfTheWeekString.substring(0, length).toUpperCase();
-            dayOfWeek = (TextView) mView.findViewWithTag(mContext.getString(R.string.day_of_week) + CalendarUtil.getWeekIndex(i, mCalendar));
+            dayOfWeek = (TextView) mView.findViewWithTag(mContext.getString(R.string.day_of_week) + CalendarUtility.getWeekIndex(i, mCalendar));
             dayOfWeek.setText(dayOfTheWeekString);
             mIsCommonDay = true;
             if(totalDayOfWeekend().length != 0) {
@@ -325,7 +367,7 @@ public class CalendarView extends LinearLayout implements ScrollableConst, Touch
         int firstDayOfMonth = calendar.get(Calendar.DAY_OF_WEEK);
 
         // Calculate dayOfMonthIndex
-        int dayOfMonthIndex = CalendarUtil.getWeekIndex(firstDayOfMonth, calendar);
+        int dayOfMonthIndex = CalendarUtility.getWeekIndex(firstDayOfMonth, calendar);
         int actualMaximum = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
         final Calendar startCalendar = (Calendar) calendar.clone();
@@ -350,7 +392,7 @@ public class CalendarView extends LinearLayout implements ScrollableConst, Touch
                 dayView.setTypeface(getTypeface());
             }
 
-            if (CalendarUtil.isSameMonth(calendar, startCalendar)) {
+            if (CalendarUtility.isSameMonth(calendar, startCalendar)) {
                 dayOfMonthContainer.setOnClickListener(onDayOfMonthClickListener);
                 dayOfMonthContainer.setOnLongClickListener(onDayOfMonthLongClickListener);
                 dayView.setBackgroundColor(mCalendarBackgroundColor);
@@ -399,7 +441,7 @@ public class CalendarView extends LinearLayout implements ScrollableConst, Touch
 
     private void clearDayOfTheMonthStyle(Date currentDate) {
         if (currentDate != null) {
-            final Calendar calendar = CalendarUtil.getTodayCalendar(mContext, mFirstDayOfWeek);
+            final Calendar calendar = CalendarUtility.getTodayCalendar(mContext, mFirstDayOfWeek);
             calendar.setFirstDayOfWeek(mFirstDayOfWeek);
             calendar.setTime(currentDate);
 
@@ -432,7 +474,7 @@ public class CalendarView extends LinearLayout implements ScrollableConst, Touch
     }
 
     private int getDayIndexByDate(Calendar calendar) {
-        int monthOffset = CalendarUtil.getMonthOffset(calendar, mFirstDayOfWeek);
+        int monthOffset = CalendarUtility.getMonthOffset(calendar, mFirstDayOfWeek);
         int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
 
         return currentDay + monthOffset;
@@ -478,7 +520,7 @@ public class CalendarView extends LinearLayout implements ScrollableConst, Touch
         final Calendar calendar = Calendar.getInstance(getLocale());
         calendar.setTime(todayDate);
 
-        if (CalendarUtil.isToday(calendar)) {
+        if (CalendarUtility.isToday(calendar)) {
             final DayView dayOfMonth = findViewByCalendar(calendar);
 
             dayOfMonth.setTextColor(mCurrentDayOfMonth);
@@ -487,7 +529,7 @@ public class CalendarView extends LinearLayout implements ScrollableConst, Touch
     }
 
     public void setDateAsSelected(Date currentDate) {
-        final Calendar currentCalendar = CalendarUtil.getTodayCalendar(mContext, mFirstDayOfWeek);
+        final Calendar currentCalendar = CalendarUtility.getTodayCalendar(mContext, mFirstDayOfWeek);
         currentCalendar.setFirstDayOfWeek(mFirstDayOfWeek);
         currentCalendar.setTime(currentDate);
 
