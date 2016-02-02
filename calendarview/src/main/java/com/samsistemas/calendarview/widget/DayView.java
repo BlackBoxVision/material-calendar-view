@@ -27,8 +27,9 @@ public class DayView extends TextView {
     public DayView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.CUPCAKE) {
-            if (isInEditMode())
+            if (isInEditMode()) {
                 return;
+            }
         }
     }
 

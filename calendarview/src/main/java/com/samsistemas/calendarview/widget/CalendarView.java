@@ -309,7 +309,7 @@ public class CalendarView extends LinearLayout {
 
         TextView dateTitle = (TextView) mView.findViewById(R.id.dateTitle);
 
-        String dateText = getCurrentMonth() + " " + getCurrentYear();
+        String dateText = CalendarUtility.getCurrentMonth(mCurrentMonthIndex).toUpperCase(Locale.getDefault()) + " " + getCurrentYear();
         dateTitle.setText(dateText);
         dateTitle.setTextColor(mCalendarTitleTextColor);
 
@@ -1047,7 +1047,6 @@ public class CalendarView extends LinearLayout {
         this.mNextButton.setImageDrawable(ContextCompat.getDrawable(mContext, drawableId));
     }
 
-
     public Typeface getTypeface() {
         return mTypeface;
     }
@@ -1061,7 +1060,7 @@ public class CalendarView extends LinearLayout {
     }
 
     public String getCurrentMonth() {
-        return new DateFormatSymbols(getLocale()).getMonths()[mCalendar.get(Calendar.MONTH)].toUpperCase();
+        return CalendarUtility.getCurrentMonth(mCurrentMonthIndex);
     }
 
     public String getCurrentYear() {

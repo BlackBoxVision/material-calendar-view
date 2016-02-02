@@ -2,7 +2,9 @@ package com.samsistemas.calendarview.utility;
 
 import android.content.Context;
 
+import java.text.DateFormatSymbols;
 import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * @author jonatan.salas
@@ -102,4 +104,13 @@ public class CalendarUtility {
             }
         }
     }
+
+    public static String getCurrentMonth(int monthIndex) {
+        final Calendar calendar = Calendar.getInstance(Locale.getDefault());
+        final DateFormatSymbols dateFormat = new DateFormatSymbols(Locale.getDefault());
+        calendar.add(Calendar.MONTH, monthIndex);
+
+        return dateFormat.getMonths()[calendar.get(Calendar.MONTH)];
+    }
+
 }
