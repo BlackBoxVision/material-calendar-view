@@ -88,47 +88,46 @@ public class CalendarTitleLayout extends BaseLinearLayout {
      */
     public CalendarTitleLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+
+        if (!isInEditMode()) {
+            init();
+        }
     }
 
     /**
      *
      */
     private void init() {
-        if (!isInEditMode()) {
-            final LayoutInflater inflater = LayoutInflater.from(getContext());
-            view = inflater.inflate(R.layout.header_view, this, false);
+        final LayoutInflater inflater = LayoutInflater.from(getContext());
+        view = inflater.inflate(R.layout.header_view, this, false);
 
-            backButton = (ImageView) view.findViewById(R.id.back_button);
-            nextButton = (ImageView) view.findViewById(R.id.next_button);
-            dateTitle = (TextView) view.findViewById(R.id.date_title);
+        backButton = (ImageView) view.findViewById(R.id.back_button);
+        nextButton = (ImageView) view.findViewById(R.id.next_button);
+        dateTitle = (TextView) view.findViewById(R.id.date_title);
 
-            setDateTitleText();
+        setDateTitleText();
 
-            dateTitle.setEnabled(true);
+        dateTitle.setEnabled(true);
 
-            backButton.setEnabled(true);
-            backButton.setClickable(true);
-            backButton.setOnClickListener(new OnClickListener() {
+        backButton.setEnabled(true);
+        backButton.setClickable(true);
+        backButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     monthIndex--;
                     prepareListeners(view);
                 }
-            });
+        });
 
-            nextButton.setEnabled(true);
-            nextButton.setClickable(true);
-            nextButton.setOnClickListener(new OnClickListener() {
+        nextButton.setEnabled(true);
+        nextButton.setClickable(true);
+        nextButton.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     monthIndex++;
                     prepareListeners(view);
                 }
-            });
-        } else {
-            return;
-        }
+        });
     }
 
     /**

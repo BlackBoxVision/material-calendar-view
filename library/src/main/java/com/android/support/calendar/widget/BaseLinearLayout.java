@@ -24,50 +24,48 @@ import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
 /**
+ * Extended LinearLayout class that we are going to use in all
+ * the CalendarView related classes.
+ *
  * @author jonatan.salas
  */
 public class BaseLinearLayout extends LinearLayout {
 
     /**
+     * Constructor with arguments. It only takes the Context as param.
      *
-     * @param context
+     * @param context the context used to inflate or get resources
      */
     public BaseLinearLayout(Context context) {
-        super(context);
+        this(context, null, 0);
     }
 
     /**
+     * Constructor with arguments. It takes the Context as main param
+     * and as second param an AttributeSet.
      *
-     * @param context
-     * @param attrs
+     * @param context the context used to inflate or get resources
+     * @param attrs the attributes styled from a XML file
      */
     public BaseLinearLayout(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
     }
 
     /**
+     * Constructor with arguments. It takes the Context as main param
+     * and as second param an AttributeSet, and as third param the defStyleAttr.
      *
-     * @param context
-     * @param attrs
-     * @param defStyleAttr
+     * @param context the context used to inflate or get resources
+     * @param attrs the attributes styled from a XML file
+     * @param defStyleAttr int resource used to get the Styles array
      */
     public BaseLinearLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
     /**
-     *
-     * @param context
-     * @param attrs
-     * @param defStyleAttr
-     * @param defStyleRes
-     */
-    public BaseLinearLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
-
-    /**
-     *
+     * Method that invalidates a View, and request a layout change after layout edition or a custom
+     * attribute modification.
      */
     protected void updateLayout() {
         invalidate();
@@ -75,18 +73,20 @@ public class BaseLinearLayout extends LinearLayout {
     }
 
     /**
+     * Method that gets a Drawable object by its resource id.
      *
-     * @param resId
-     * @return
+     * @param resId int value representing the resource id of the drawable to get.
+     * @return a Drawable object ready to use.
      */
     protected Drawable getDrawable(@DrawableRes int resId) {
         return ContextCompat.getDrawable(getContext(), resId);
     }
 
     /**
+     * Method that gets an int color representation by its resource id.
      *
-     * @param resId
-     * @return
+     * @param resId int value that represents the resource id of the color to get.
+     * @return an int value that represents a color.
      */
     protected int getColor(@ColorRes int resId) {
         return ContextCompat.getColor(getContext(), resId);
