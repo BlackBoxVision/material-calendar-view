@@ -70,29 +70,35 @@ public class HeaderView extends LinearLayout {
         void onButtonClicked(@NonNull View view, int monthIndex);
     }
 
+
     /**
+     * Constructor with arguments. It only takes the Context as param.
      *
-     *
-     * @param context
+     * @param context the context used to inflate or get resources
      */
     public HeaderView(Context context) {
         this(context, null, 0);
     }
 
     /**
+     * Constructor with arguments. It takes the Context as main param
+     * and as second param an AttributeSet.
      *
-     * @param context
-     * @param attrs
+     * @param context the context used to inflate or get resources
+     * @param attrs the attributes styled from a XML file
      */
     public HeaderView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
+
     /**
+     * Constructor with arguments. It takes the Context as main param
+     * and as second param an AttributeSet, and as third param the defStyleAttr.
      *
-     * @param context
-     * @param attrs
-     * @param defStyleAttr
+     * @param context the context used to inflate or get resources
+     * @param attrs the attributes styled from a XML file
+     * @param defStyleAttr int resource used to get the Styles array
      */
     public HeaderView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -100,7 +106,7 @@ public class HeaderView extends LinearLayout {
     }
 
     /**
-     *
+     * Method that init all components that are part of the HeaderView.
      */
     private void init() {
         final LayoutInflater inflater = LayoutInflater.from(getContext());
@@ -136,7 +142,8 @@ public class HeaderView extends LinearLayout {
     }
 
     /**
-     *
+     * Method that sets the text in the centered TextView, the text showed is in the following format
+     * "Month + Year".
      */
     private void setDateTitleText() {
         final String title = CalendarUtility.getDateTitle(monthIndex);
@@ -147,7 +154,9 @@ public class HeaderView extends LinearLayout {
     }
 
     /**
+     * Method that changes the title and takes a view to call the Listener associated to this view.
      *
+     * @param view the view to associate with the listener.
      */
     private void prepareListeners(View view) {
         setDateTitleText();
@@ -160,17 +169,20 @@ public class HeaderView extends LinearLayout {
     }
 
     /**
+     * Method that sets a Typeface object in the Title view.
      *
-     * @param typeface
+     * @param typeface a custom Typeface object create from a font file.
      */
     public void setTitleTextTypeface(Typeface typeface) {
         setTitleTextTypeface(typeface, Typeface.NORMAL);
     }
 
     /**
+     * Method that sets a Typeface object in the Title view and applies a particular style to the
+     * font.That means the font could be NORMAL, BOLD, ITALIC.
      *
-     * @param typeface
-     * @param style
+     * @param typeface a custom Typeface object create from a font file.
+     * @param style the style of the font.
      */
     public void setTitleTextTypeface(Typeface typeface, int style) {
         if (null != typeface) {
@@ -182,8 +194,9 @@ public class HeaderView extends LinearLayout {
     }
 
     /**
+     * Method that sets the size of the text to show in the TitleView.
      *
-     * @param size
+     * @param size the size of the Typeface as a float value
      */
     public void setTitleTextSize(Float size) {
         if (null != size) {
@@ -195,8 +208,9 @@ public class HeaderView extends LinearLayout {
     }
 
     /**
+     * Method that sets the TitleView text color from a color resource id
      *
-     * @param colorId
+     * @param colorId the color resource id
      */
     public void setTitleTextColor(@ColorRes int colorId) {
         if (0 != colorId) {
@@ -208,8 +222,9 @@ public class HeaderView extends LinearLayout {
     }
 
     /**
+     * Method that sets the TitleView text color from a color Integer value.
      *
-     * @param color
+     * @param color the color as an Integer value
      */
     public void setTitleTextColor(Integer color) {
         if (null != color) {
@@ -221,11 +236,12 @@ public class HeaderView extends LinearLayout {
     }
 
     /**
+     * Method that sets the next Button drawable from a drawable resource id.
      *
-     * @param drawableId
+     * @param drawableId the resource id of the drawable we want to set
      */
-    public void setNextButtonDrawable(@DrawableRes Integer drawableId) {
-        if (null != drawableId) {
+    public void setNextButtonDrawable(@DrawableRes int drawableId) {
+        if (0 != drawableId) {
             final Drawable drawable = getDrawable(drawableId);
             setNextButtonDrawable(drawable);
         } else {
@@ -234,11 +250,12 @@ public class HeaderView extends LinearLayout {
     }
 
     /**
+     * Method that sets the back Button drawable from a drawable resource id.
      *
-     * @param drawableId
+     * @param drawableId the resource id of the drawable we want to set
      */
-    public void setBackButtonDrawable(@DrawableRes Integer drawableId) {
-        if (null != drawableId) {
+    public void setBackButtonDrawable(@DrawableRes int drawableId) {
+        if (0 != drawableId) {
             final Drawable drawable = getDrawable(drawableId);
             setBackButtonDrawable(drawable);
         } else {
@@ -247,8 +264,9 @@ public class HeaderView extends LinearLayout {
     }
 
     /**
+     * Method that sets the next Button drawable from a drawable object.
      *
-     * @param drawable
+     * @param drawable the drawable we want to set
      */
     public void setNextButtonDrawable(Drawable drawable) {
         if (null != drawable) {
@@ -260,8 +278,9 @@ public class HeaderView extends LinearLayout {
     }
 
     /**
+     * Method that sets the back Button drawable from a drawable object.
      *
-     * @param drawable
+     * @param drawable the drawable we want to set
      */
     public void setBackButtonDrawable(Drawable drawable) {
         if (null != drawable) {
@@ -273,8 +292,9 @@ public class HeaderView extends LinearLayout {
     }
 
     /**
+     * Method that changes the next button drawable color from a color resource id int value.
      *
-     * @param colorId
+     * @param colorId the resource id value of the color to be applied to the drawable
      */
     public void setNextButtonDrawableColor(@ColorRes int colorId) {
         if (0 != colorId) {
@@ -286,8 +306,9 @@ public class HeaderView extends LinearLayout {
     }
 
     /**
+     * Method that changes the back button drawable color from a color resource id int value.
      *
-     * @param colorId
+     * @param colorId the resource id value of the color to be applied to the drawable
      */
     public void setBackButtonDrawableColor(@ColorRes int colorId) {
         if (0 != colorId) {
@@ -299,8 +320,9 @@ public class HeaderView extends LinearLayout {
     }
 
     /**
+     * Method that changes the next button drawable color from a color int value.
      *
-     * @param color
+     * @param color the value of the color to be applied to the drawable
      */
     public void setNextButtonDrawableColor(Integer color) {
         if (null != color) {
@@ -312,8 +334,9 @@ public class HeaderView extends LinearLayout {
     }
 
     /**
+     * Method that changes the back button drawable color from a color int value.
      *
-     * @param color
+     * @param color the value of the color to be applied to the drawable
      */
     public void setBackButtonDrawableColor(Integer color) {
         if (null != color) {
@@ -325,8 +348,9 @@ public class HeaderView extends LinearLayout {
     }
 
     /**
+     * Method that sets a background to the HeaderView from a color id resource int value.
      *
-     * @param colorId
+     * @param colorId an int value representing the resource id of the color to be set.
      */
     public void setBackgroundColorResource(@ColorRes int colorId) {
         if (0 != colorId) {
@@ -338,8 +362,9 @@ public class HeaderView extends LinearLayout {
     }
 
     /**
+     * Method that sets a background to the HeaderView from a color id int value.
      *
-     * @param color
+     * @param color an int value representing the color to be set.
      */
     public void setBackgroundColor(Integer color) {
         if (null != color) {
@@ -351,8 +376,9 @@ public class HeaderView extends LinearLayout {
     }
 
     /**
+     * Method that sets a background from a drawable resource id.
      *
-     * @param drawableId
+     * @param drawableId the resource id of the drawable to be set.
      */
     public void setBackgroundColorDrawable(@DrawableRes int drawableId) {
         if (0 != drawableId) {
@@ -364,8 +390,9 @@ public class HeaderView extends LinearLayout {
     }
 
     /**
+     * Method that sets a background from a drawable object.
      *
-     * @param drawable
+     * @param drawable the drawable to be set as background
      */
     public void setBackgroundColorDrawable(Drawable drawable) {
         if (null != drawable) {
@@ -378,8 +405,9 @@ public class HeaderView extends LinearLayout {
     }
 
     /**
+     * Method that sets the OnButtonClicked callback.
      *
-     * @param onButtonClicked
+     * @param onButtonClicked the interface as an anonymous class.
      */
     public void setOnButtonClicked(@NonNull OnButtonClickedListener onButtonClicked) {
         this.onButtonClicked = onButtonClicked;
