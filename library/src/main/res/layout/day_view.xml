@@ -6,6 +6,5 @@
     android:textSize="@dimen/item_default_font_size"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
     android:gravity="center|center_vertical|center_horizontal"
     tools:text="1" />

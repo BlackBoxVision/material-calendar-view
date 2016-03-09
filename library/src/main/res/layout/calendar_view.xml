@@ -5,7 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/header_view"/>
+    <com.android.support.calendar.widget.HeaderView
+        android:id="@+id/calendar_title_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <include layout="@layout/week_view"/>
 
     <android.support.v7.widget.RecyclerView

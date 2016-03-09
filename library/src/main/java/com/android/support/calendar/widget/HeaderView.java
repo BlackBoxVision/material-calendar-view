@@ -22,10 +22,12 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.support.calendar.exception.IllegalViewArgumentException;
@@ -41,7 +43,7 @@ import java.util.Locale;
  *
  * @author jonatan.salas
  */
-public class CalendarTitleLayout extends BaseLinearLayout {
+public class HeaderView extends LinearLayout {
     private OnButtonClickedListener onButtonClicked;
     private ImageView nextButton;
     private ImageView backButton;
@@ -51,23 +53,29 @@ public class CalendarTitleLayout extends BaseLinearLayout {
     private int monthIndex = 0;
 
     /**
+     * Callback interface used to handle a Button clicked.
+     *
      * @author jonatan.salas
      */
     public interface OnButtonClickedListener {
 
         /**
+         * Method that handles a button clicked by the user. This callback receives a param the
+         * view touched and the int month index which represent the actual month value saved in the
+         * class CalendarTitleLayout.
          *
-         * @param view
-         * @param monthIndex
+         * @param view the view touched
+         * @param monthIndex the actual month index
          */
         void onButtonClicked(@NonNull View view, int monthIndex);
     }
 
     /**
      *
+     *
      * @param context
      */
-    public CalendarTitleLayout(Context context) {
+    public HeaderView(Context context) {
         this(context, null, 0);
     }
 
@@ -76,7 +84,7 @@ public class CalendarTitleLayout extends BaseLinearLayout {
      * @param context
      * @param attrs
      */
-    public CalendarTitleLayout(Context context, AttributeSet attrs) {
+    public HeaderView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
@@ -86,12 +94,9 @@ public class CalendarTitleLayout extends BaseLinearLayout {
      * @param attrs
      * @param defStyleAttr
      */
-    public CalendarTitleLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public HeaderView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
-        if (!isInEditMode()) {
-            init();
-        }
+        init();
     }
 
     /**
@@ -99,7 +104,7 @@ public class CalendarTitleLayout extends BaseLinearLayout {
      */
     private void init() {
         final LayoutInflater inflater = LayoutInflater.from(getContext());
-        view = inflater.inflate(R.layout.header_view, this, false);
+        view = inflater.inflate(R.layout.header_view, this, true);
 
         backButton = (ImageView) view.findViewById(R.id.back_button);
         nextButton = (ImageView) view.findViewById(R.id.next_button);
@@ -138,7 +143,7 @@ public class CalendarTitleLayout extends BaseLinearLayout {
         final String upperCaseTitle = title.toUpperCase(Locale.getDefault());
 
         dateTitle.setText(upperCaseTitle);
-        updateLayout();
+        invalidate();
     }
 
     /**
@@ -170,7 +175,7 @@ public class CalendarTitleLayout extends BaseLinearLayout {
     public void setTitleTextTypeface(Typeface typeface, int style) {
         if (null != typeface) {
             dateTitle.setTypeface(typeface, style);
-            updateLayout();
+            invalidate();
         } else {
             throw new IllegalViewArgumentException(TYPEFACE_NOT_NULL_MESSAGE);
         }
@@ -183,7 +188,7 @@ public class CalendarTitleLayout extends BaseLinearLayout {
     public void setTitleTextSize(Float size) {
         if (null != size) {
             dateTitle.setTextSize(size);
-            updateLayout();
+            invalidate();
         } else {
             throw new IllegalViewArgumentException(SIZE_NOT_NULL_MESSAGE);
         }
@@ -209,7 +214,7 @@ public class CalendarTitleLayout extends BaseLinearLayout {
     public void setTitleTextColor(Integer color) {
         if (null != color) {
             dateTitle.setTextColor(color);
-            updateLayout();
+            invalidate();
         } else {
             throw new IllegalViewArgumentException(COLOR_NOT_NULL_MESSAGE);
         }
@@ -248,7 +253,7 @@ public class CalendarTitleLayout extends BaseLinearLayout {
     public void setNextButtonDrawable(Drawable drawable) {
         if (null != drawable) {
             nextButton.setImageDrawable(drawable);
-            updateLayout();
+            invalidate();
         } else {
             throw new IllegalViewArgumentException(DRAWABLE_NOT_NULL_MESSAGE);
         }
@@ -261,7 +266,7 @@ public class CalendarTitleLayout extends BaseLinearLayout {
     public void setBackButtonDrawable(Drawable drawable) {
         if (null != drawable) {
             backButton.setImageDrawable(drawable);
-            updateLayout();
+            invalidate();
         } else {
             throw new IllegalViewArgumentException(DRAWABLE_NOT_NULL_MESSAGE);
         }
@@ -300,7 +305,7 @@ public class CalendarTitleLayout extends BaseLinearLayout {
     public void setNextButtonDrawableColor(Integer color) {
         if (null != color) {
             backButton.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
-            updateLayout();
+            invalidate();
         } else {
             throw new IllegalViewArgumentException(COLOR_NOT_NULL_MESSAGE);
         }
@@ -313,7 +318,7 @@ public class CalendarTitleLayout extends BaseLinearLayout {
     public void setBackButtonDrawableColor(Integer color) {
         if (null != color) {
             backButton.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
-            updateLayout();
+            invalidate();
         } else {
             throw new IllegalViewArgumentException(COLOR_NOT_NULL_MESSAGE);
         }
@@ -326,7 +331,7 @@ public class CalendarTitleLayout extends BaseLinearLayout {
     public void setBackgroundColorResource(@ColorRes int colorId) {
         if (0 != colorId) {
             view.setBackgroundResource(colorId);
-            updateLayout();
+            invalidate();
         } else {
             throw new IllegalViewArgumentException(COLOR_ID_NOT_ZERO_VALUE);
         }
@@ -339,7 +344,7 @@ public class CalendarTitleLayout extends BaseLinearLayout {
     public void setBackgroundColor(Integer color) {
         if (null != color) {
             view.setBackgroundColor(color);
-            updateLayout();
+            invalidate();
         } else {
             throw new IllegalViewArgumentException(COLOR_NOT_NULL_MESSAGE);
         }
@@ -366,7 +371,7 @@ public class CalendarTitleLayout extends BaseLinearLayout {
         if (null != drawable) {
             //TODO JS: Investigate how to this without a deprecated method.
             view.setBackgroundDrawable(drawable);
-            updateLayout();
+            invalidate();
         } else {
             throw new IllegalViewArgumentException(DRAWABLE_NOT_NULL_MESSAGE);
         }
@@ -378,5 +383,25 @@ public class CalendarTitleLayout extends BaseLinearLayout {
      */
     public void setOnButtonClicked(@NonNull OnButtonClickedListener onButtonClicked) {
         this.onButtonClicked = onButtonClicked;
+    }
+
+    /**
+     * Method that gets a Drawable object by its resource id.
+     *
+     * @param resId int value representing the resource id of the drawable to get.
+     * @return a Drawable object ready to use.
+     */
+    protected Drawable getDrawable(@DrawableRes int resId) {
+        return ContextCompat.getDrawable(getContext(), resId);
+    }
+
+    /**
+     * Method that gets an int color representation by its resource id.
+     *
+     * @param resId int value that represents the resource id of the color to get.
+     * @return an int value that represents a color.
+     */
+    protected int getColor(@ColorRes int resId) {
+        return ContextCompat.getColor(getContext(), resId);
     }
 }
