@@ -42,17 +42,25 @@ import java.util.Locale;
  * @author jonatan.salas
  */
 public class CalendarTitleLayout extends BaseLinearLayout {
+    private OnButtonClickedListener onButtonClicked;
     private ImageView nextButton;
     private ImageView backButton;
     private TextView dateTitle;
     private View view;
 
-    private OnButtonClicked onButtonClicked;
     private int monthIndex = 0;
 
-    public interface OnButtonClicked {
+    /**
+     * @author jonatan.salas
+     */
+    public interface OnButtonClickedListener {
 
-        void onButtonClick(@NonNull View view, int monthIndex);
+        /**
+         *
+         * @param view
+         * @param monthIndex
+         */
+        void onButtonClicked(@NonNull View view, int monthIndex);
     }
 
     /**
@@ -60,8 +68,7 @@ public class CalendarTitleLayout extends BaseLinearLayout {
      * @param context
      */
     public CalendarTitleLayout(Context context) {
-        super(context);
-        init();
+        this(context, null, 0);
     }
 
     /**
@@ -70,8 +77,7 @@ public class CalendarTitleLayout extends BaseLinearLayout {
      * @param attrs
      */
     public CalendarTitleLayout(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
+        this(context, attrs, 0);
     }
 
     /**
@@ -87,72 +93,66 @@ public class CalendarTitleLayout extends BaseLinearLayout {
 
     /**
      *
-     * @param context
-     * @param attrs
-     * @param defStyleAttr
-     * @param defStyleRes
-     */
-    public CalendarTitleLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        init();
-    }
-
-    /**
-     *
      */
     private void init() {
-        if (isInEditMode()) {
+        if (!isInEditMode()) {
+            final LayoutInflater inflater = LayoutInflater.from(getContext());
+            view = inflater.inflate(R.layout.header_view, this, false);
+
+            backButton = (ImageView) view.findViewById(R.id.back_button);
+            nextButton = (ImageView) view.findViewById(R.id.next_button);
+            dateTitle = (TextView) view.findViewById(R.id.date_title);
+
+            setDateTitleText();
+
+            dateTitle.setEnabled(true);
+
+            backButton.setEnabled(true);
+            backButton.setClickable(true);
+            backButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    monthIndex--;
+                    prepareListeners(view);
+                }
+            });
+
+            nextButton.setEnabled(true);
+            nextButton.setClickable(true);
+            nextButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    monthIndex++;
+                    prepareListeners(view);
+                }
+            });
+        } else {
             return;
         }
-
-        final LayoutInflater inflater = LayoutInflater.from(getContext());
-        view = inflater.inflate(R.layout.header_view, this, false);
-
-        backButton = (ImageView) view.findViewById(R.id.back_button);
-        nextButton = (ImageView) view.findViewById(R.id.next_button);
-        dateTitle = (TextView) view.findViewById(R.id.date_title);
-
-        setDateTitleText(monthIndex);
-
-        dateTitle.setEnabled(true);
-
-        backButton.setEnabled(true);
-        backButton.setClickable(true);
-        backButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setDateTitleText(monthIndex--);
-
-                if (null != onButtonClicked) {
-                    onButtonClicked.onButtonClick(v, monthIndex);
-                }
-            }
-        });
-
-        nextButton.setEnabled(true);
-        nextButton.setClickable(true);
-        nextButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setDateTitleText(monthIndex++);
-
-                if (null != onButtonClicked) {
-                    onButtonClicked.onButtonClick(v, monthIndex);
-                }
-            }
-        });
     }
 
     /**
      *
-     * @param monthIndex
      */
-    private void setDateTitleText(int monthIndex) {
+    private void setDateTitleText() {
         final String title = CalendarUtility.getDateTitle(monthIndex);
         final String upperCaseTitle = title.toUpperCase(Locale.getDefault());
 
         dateTitle.setText(upperCaseTitle);
         updateLayout();
+    }
+
+    /**
+     *
+     */
+    private void prepareListeners(View view) {
+        setDateTitleText();
+
+        if (null != onButtonClicked) {
+            onButtonClicked.onButtonClicked(view, monthIndex);
+        } else {
+            throw new IllegalViewArgumentException(BUTTON_CLICK_LISTENER_NOT_NULL_MESSAGE);
+        }
     }
 
     /**
@@ -377,7 +377,7 @@ public class CalendarTitleLayout extends BaseLinearLayout {
      *
      * @param onButtonClicked
      */
-    public void setOnButtonClicked(@NonNull OnButtonClicked onButtonClicked) {
+    public void setOnButtonClicked(@NonNull OnButtonClickedListener onButtonClicked) {
         this.onButtonClicked = onButtonClicked;
     }
 }
