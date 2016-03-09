@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.android.support.v8.widget.BaseLinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/header_view"
     android:orientation="horizontal"
@@ -33,4 +34,4 @@
         android:layout_weight="0.20"
         tools:ignore="contentDescription"/>
 
-</LinearLayout>
+</com.android.support.v8.widget.BaseLinearLayout>

@@ -20,6 +20,7 @@ import android.util.MonthDisplayHelper;
 
 import com.android.support.v8.model.DayTime;
 
+import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -151,5 +152,14 @@ public final class CalendarUtility {
         }
 
         return dayTimeList;
+    }
+
+    public static String getDateTitle(int monthIndex) {
+        final DateFormatSymbols dfs = new DateFormatSymbols(Locale.getDefault());
+        final Calendar calendar = Calendar.getInstance(Locale.getDefault());
+
+        calendar.add(Calendar.MONTH, monthIndex);
+
+        return dfs.getMonths()[monthIndex] + " " + calendar.get(Calendar.YEAR);
     }
 }
