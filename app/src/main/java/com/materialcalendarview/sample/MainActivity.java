@@ -16,9 +16,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.android.support.v8.model.Event;
-import com.android.support.v8.util.CalendarUtility;
-import com.android.support.v8.widget.CalendarView;
+import com.android.support.calendar.model.Event;
+import com.android.support.calendar.util.CalendarUtility;
+import com.android.support.calendar.widget.CalendarView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

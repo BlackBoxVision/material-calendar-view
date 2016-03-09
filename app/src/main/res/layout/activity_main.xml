@@ -22,7 +22,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <com.android.support.v8.widget.CalendarView
+                    <com.android.support.calendar.widget.CalendarView
                         android:id="@+id/calendar_view"
                         android:layout_marginTop="56dp"
                         android:layout_marginEnd="2dp"
@@ -32,7 +32,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@color/colorPrimary">
-                    </com.android.support.v8.widget.CalendarView>
+                    </com.android.support.calendar.widget.CalendarView>
 
                 </FrameLayout>
 

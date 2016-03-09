@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.android.support.v8.widget.BaseLinearLayout
+<com.android.support.calendar.widget.BaseLinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/header_view"
@@ -34,4 +34,4 @@
         android:layout_weight="0.20"
         tools:ignore="contentDescription"/>
 
-</com.android.support.v8.widget.BaseLinearLayout>
+</com.android.support.calendar.widget.BaseLinearLayout>
