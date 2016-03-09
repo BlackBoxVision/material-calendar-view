@@ -21,6 +21,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,10 +45,15 @@ public class CalendarTitleLayout extends BaseLinearLayout {
     private ImageView nextButton;
     private ImageView backButton;
     private TextView dateTitle;
-
     private View view;
 
+    private OnButtonClicked onButtonClicked;
     private int monthIndex = 0;
+
+    public interface OnButtonClicked {
+
+        void onButtonClick(@NonNull View view, int monthIndex);
+    }
 
     /**
      *
@@ -116,7 +122,10 @@ public class CalendarTitleLayout extends BaseLinearLayout {
             @Override
             public void onClick(View v) {
                 setDateTitleText(monthIndex--);
-                //TODO JS: add interface..
+
+                if (null != onButtonClicked) {
+                    onButtonClicked.onButtonClick(v, monthIndex);
+                }
             }
         });
 
@@ -126,7 +135,10 @@ public class CalendarTitleLayout extends BaseLinearLayout {
             @Override
             public void onClick(View v) {
                 setDateTitleText(monthIndex++);
-                //TODO JS: add interface..
+
+                if (null != onButtonClicked) {
+                    onButtonClicked.onButtonClick(v, monthIndex);
+                }
             }
         });
     }
@@ -359,5 +371,13 @@ public class CalendarTitleLayout extends BaseLinearLayout {
         } else {
             throw new IllegalViewArgumentException(DRAWABLE_NOT_NULL_MESSAGE);
         }
+    }
+
+    /**
+     *
+     * @param onButtonClicked
+     */
+    public void setOnButtonClicked(@NonNull OnButtonClicked onButtonClicked) {
+        this.onButtonClicked = onButtonClicked;
     }
 }
