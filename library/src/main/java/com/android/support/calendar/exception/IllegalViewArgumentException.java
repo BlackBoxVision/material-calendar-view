@@ -16,6 +16,8 @@
 package com.android.support.calendar.exception;
 
 /**
+ * Exception to be thrown when a related View method receives a bad argument.
+ *
  * @author jonatan.salas
  */
 public class IllegalViewArgumentException extends IllegalArgumentException {
@@ -28,6 +30,12 @@ public class IllegalViewArgumentException extends IllegalArgumentException {
     public static final String COLOR_NOT_NULL_MESSAGE = "color argument can't be null!";
     public static final String COLOR_ID_NOT_ZERO_VALUE = "colorId argument can't be zero value";
 
+    /**
+     * Default constructor with detail message param, the message is a String representation of the
+     * error to propagate.
+     *
+     * @param detailMessage the error message
+     */
     public IllegalViewArgumentException(String detailMessage) {
         super(detailMessage);
     }
