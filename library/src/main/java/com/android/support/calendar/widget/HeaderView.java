@@ -132,6 +132,10 @@ public class HeaderView extends LinearLayout {
 
         dateTitle.setText(upperCaseTitle);
         invalidate();
+
+        if (!isInLayout()) {
+            requestLayout();
+        }
     }
 
     /**
@@ -146,6 +150,18 @@ public class HeaderView extends LinearLayout {
             onButtonClicked.onButtonClicked(view, monthIndex);
         } else {
             throw new IllegalViewArgumentException(BUTTON_CLICK_LISTENER_NOT_NULL_MESSAGE);
+        }
+    }
+
+    /**
+     * This method should be called after setting a custom attribute, in order to request a new
+     * layout pass.
+     */
+    private void updateLayout() {
+        invalidate();
+
+        if (!isInLayout()) {
+            requestLayout();
         }
     }
 
@@ -168,7 +184,7 @@ public class HeaderView extends LinearLayout {
     public void setTitleTextTypeface(Typeface typeface, int style) {
         if (null != typeface) {
             dateTitle.setTypeface(typeface, style);
-            invalidate();
+            updateLayout();
         } else {
             throw new IllegalViewArgumentException(TYPEFACE_NOT_NULL_MESSAGE);
         }
@@ -182,7 +198,7 @@ public class HeaderView extends LinearLayout {
     public void setTitleTextSize(Float size) {
         if (null != size) {
             dateTitle.setTextSize(size);
-            invalidate();
+            updateLayout();
         } else {
             throw new IllegalViewArgumentException(SIZE_NOT_NULL_MESSAGE);
         }
@@ -210,7 +226,7 @@ public class HeaderView extends LinearLayout {
     public void setTitleTextColor(Integer color) {
         if (null != color) {
             dateTitle.setTextColor(color);
-            invalidate();
+            updateLayout();
         } else {
             throw new IllegalViewArgumentException(COLOR_NOT_NULL_MESSAGE);
         }
@@ -252,7 +268,7 @@ public class HeaderView extends LinearLayout {
     public void setNextButtonDrawable(Drawable drawable) {
         if (null != drawable) {
             nextButton.setImageDrawable(drawable);
-            invalidate();
+            updateLayout();
         } else {
             throw new IllegalViewArgumentException(DRAWABLE_NOT_NULL_MESSAGE);
         }
@@ -266,7 +282,7 @@ public class HeaderView extends LinearLayout {
     public void setBackButtonDrawable(Drawable drawable) {
         if (null != drawable) {
             backButton.setImageDrawable(drawable);
-            invalidate();
+            updateLayout();
         } else {
             throw new IllegalViewArgumentException(DRAWABLE_NOT_NULL_MESSAGE);
         }
@@ -308,7 +324,7 @@ public class HeaderView extends LinearLayout {
     public void setNextButtonDrawableColor(Integer color) {
         if (null != color) {
             backButton.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
-            invalidate();
+            updateLayout();
         } else {
             throw new IllegalViewArgumentException(COLOR_NOT_NULL_MESSAGE);
         }
@@ -322,7 +338,7 @@ public class HeaderView extends LinearLayout {
     public void setBackButtonDrawableColor(Integer color) {
         if (null != color) {
             backButton.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
-            invalidate();
+            updateLayout();
         } else {
             throw new IllegalViewArgumentException(COLOR_NOT_NULL_MESSAGE);
         }
@@ -336,7 +352,7 @@ public class HeaderView extends LinearLayout {
     public void setBackgroundColorResource(@ColorRes int colorId) {
         if (0 != colorId) {
             view.setBackgroundResource(colorId);
-            invalidate();
+            updateLayout();
         } else {
             throw new IllegalViewArgumentException(COLOR_ID_NOT_ZERO_VALUE);
         }
@@ -350,7 +366,7 @@ public class HeaderView extends LinearLayout {
     public void setBackgroundColor(Integer color) {
         if (null != color) {
             view.setBackgroundColor(color);
-            invalidate();
+            updateLayout();
         } else {
             throw new IllegalViewArgumentException(COLOR_NOT_NULL_MESSAGE);
         }
@@ -379,7 +395,7 @@ public class HeaderView extends LinearLayout {
         if (null != drawable) {
             //TODO JS: Investigate how to this without a deprecated method.
             view.setBackgroundDrawable(drawable);
-            invalidate();
+            updateLayout();
         } else {
             throw new IllegalViewArgumentException(DRAWABLE_NOT_NULL_MESSAGE);
         }
