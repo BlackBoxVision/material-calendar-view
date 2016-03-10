@@ -53,25 +53,6 @@ public class HeaderView extends LinearLayout {
     private int monthIndex = 0;
 
     /**
-     * Callback interface used to handle a Button clicked.
-     *
-     * @author jonatan.salas
-     */
-    public interface OnButtonClickedListener {
-
-        /**
-         * Method that handles a button clicked by the user. This callback receives a param the
-         * view touched and the int month index which represent the actual month value saved in the
-         * class CalendarTitleLayout.
-         *
-         * @param view the view touched
-         * @param monthIndex the actual month index
-         */
-        void onButtonClicked(@NonNull View view, int monthIndex);
-    }
-
-
-    /**
      * Constructor with arguments. It only takes the Context as param.
      *
      * @param context the context used to inflate or get resources
@@ -414,6 +395,15 @@ public class HeaderView extends LinearLayout {
     }
 
     /**
+     * MonthIndex field getter
+     *
+     * @return int value representing the current month index
+     */
+    public int getMonthIndex() {
+        return monthIndex;
+    }
+
+    /**
      * Method that gets a Drawable object by its resource id.
      *
      * @param resId int value representing the resource id of the drawable to get.
@@ -431,5 +421,23 @@ public class HeaderView extends LinearLayout {
      */
     protected int getColor(@ColorRes int resId) {
         return ContextCompat.getColor(getContext(), resId);
+    }
+
+    /**
+     * Callback interface used to handle a Button clicked.
+     *
+     * @author jonatan.salas
+     */
+    public interface OnButtonClickedListener {
+
+        /**
+         * Method that handles a button clicked by the user. This callback receives a param the
+         * view touched and the int month index which represent the actual month value saved in the
+         * class CalendarTitleLayout.
+         *
+         * @param view the view touched
+         * @param monthIndex the actual month index
+         */
+        void onButtonClicked(@NonNull View view, int monthIndex);
     }
 }
