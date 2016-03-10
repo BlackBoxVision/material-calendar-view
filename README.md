@@ -1,6 +1,8 @@
 
 #Material Calendar View ![Build Status](https://travis-ci.org/jonisaa/MaterialCalendarView.svg?branch=master) [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Material%20Calendar%20View-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/2715)   
 
+[![Join the chat at https://gitter.im/jonisaa/material-calendar-view](https://badges.gitter.im/jonisaa/material-calendar-view.svg)](https://gitter.im/jonisaa/material-calendar-view?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Material Calendar View is a Library based on the GitHub project: [Custom Calendar View](https://github.com/npanigrahy/Custom-Calendar-View)
 
 I found [Custom Calendar View](https://github.com/npanigrahy/Custom-Calendar-View) as a really interesting project. But when I started using Custom Calendar View I’ve found that it needed some modifications in order to work as I expected. 
