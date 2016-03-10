@@ -24,7 +24,6 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -88,8 +87,7 @@ public class HeaderView extends LinearLayout {
      * Method that init all components that are part of the HeaderView.
      */
     private void init() {
-        final LayoutInflater inflater = LayoutInflater.from(getContext());
-        view = inflater.inflate(R.layout.header_view, this, true);
+        view = View.inflate(getContext(), R.layout.header_view, this);
 
         backButton = (ImageView) view.findViewById(R.id.back_button);
         nextButton = (ImageView) view.findViewById(R.id.next_button);

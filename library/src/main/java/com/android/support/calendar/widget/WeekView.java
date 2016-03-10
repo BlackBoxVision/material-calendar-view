@@ -2,7 +2,6 @@ package com.android.support.calendar.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -48,7 +47,6 @@ public class WeekView extends LinearLayout {
     }
 
     private void init() {
-        final LayoutInflater inflater = LayoutInflater.from(getContext());
-        view = inflater.inflate(R.layout.week_view, this, true);
+        view = View.inflate(getContext(), R.layout.week_view, this);
     }
 }

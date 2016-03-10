@@ -1,9 +1,10 @@
 package com.android.support.calendar.widget;
 
 import android.content.Context;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -50,9 +51,13 @@ public class AdapterView extends LinearLayout {
     }
 
     private void init() {
-        final LayoutInflater inflater = LayoutInflater.from(getContext());
-        view = inflater.inflate(R.layout.adapter_view, this, true);
+        view = View.inflate(getContext(), R.layout.adapter_view, this);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 7));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setNestedScrollingEnabled(true);
     }
 }
