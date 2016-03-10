@@ -33,6 +33,9 @@ import com.android.support.calendar.exception.IllegalViewArgumentException;
 import com.android.support.calendar.R;
 import com.android.support.calendar.util.CalendarUtility;
 
+//import java.util.Calendar;
+//import java.util.Locale;
+
 import static com.android.support.calendar.exception.IllegalViewArgumentException.*;
 
 /**
@@ -41,6 +44,7 @@ import static com.android.support.calendar.exception.IllegalViewArgumentExceptio
  * @author jonatan.salas
  */
 public class HeaderView extends LinearLayout {
+//    private CalendarView.OnMonthChangeListener onMonthChangeListener;
     private OnButtonClickedListener onButtonClicked;
     private ImageView nextButton;
     private ImageView backButton;
@@ -138,6 +142,13 @@ public class HeaderView extends LinearLayout {
      */
     private void prepareListeners(View view) {
         setDateTitleText();
+
+//        if (null != onMonthChangeListener) {
+//            final Calendar calendar = Calendar.getInstance(Locale.getDefault());
+//            calendar.add(Calendar.MONTH, monthIndex);
+//            onMonthChangeListener.onMonthChanged(view, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH));
+//        }
+
 
         if (null != onButtonClicked) {
             onButtonClicked.onButtonClicked(view, monthIndex);
