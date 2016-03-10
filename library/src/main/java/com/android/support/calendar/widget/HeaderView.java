@@ -36,8 +36,6 @@ import com.android.support.calendar.util.CalendarUtility;
 
 import static com.android.support.calendar.exception.IllegalViewArgumentException.*;
 
-import java.util.Locale;
-
 /**
  * LinearLayout class that provides the Calendar Title View.
  *
@@ -127,10 +125,7 @@ public class HeaderView extends LinearLayout {
      * "Month + Year".
      */
     private void setDateTitleText() {
-        final String title = CalendarUtility.getDateTitle(monthIndex);
-        final String upperCaseTitle = title.toUpperCase(Locale.getDefault());
-
-        dateTitle.setText(upperCaseTitle);
+        dateTitle.setText(CalendarUtility.getDateTitle(monthIndex));
         invalidate();
 
         if (!isInLayout()) {
@@ -211,8 +206,7 @@ public class HeaderView extends LinearLayout {
      */
     public void setTitleTextColor(@ColorRes int colorId) {
         if (0 != colorId) {
-            final Integer textColor = getColor(colorId);
-            setTitleTextColor(textColor);
+            setTitleTextColor(getColor(colorId));
         } else {
             throw new IllegalViewArgumentException(COLOR_ID_NOT_ZERO_VALUE);
         }
@@ -239,8 +233,7 @@ public class HeaderView extends LinearLayout {
      */
     public void setNextButtonDrawable(@DrawableRes int drawableId) {
         if (0 != drawableId) {
-            final Drawable drawable = getDrawable(drawableId);
-            setNextButtonDrawable(drawable);
+            setNextButtonDrawable(getDrawable(drawableId));
         } else {
             throw new IllegalViewArgumentException(DRAWABLE_ID_NOT_ZERO_VALUE);
         }
@@ -253,8 +246,7 @@ public class HeaderView extends LinearLayout {
      */
     public void setBackButtonDrawable(@DrawableRes int drawableId) {
         if (0 != drawableId) {
-            final Drawable drawable = getDrawable(drawableId);
-            setBackButtonDrawable(drawable);
+            setBackButtonDrawable(getDrawable(drawableId));
         } else {
             throw new IllegalViewArgumentException(DRAWABLE_ID_NOT_ZERO_VALUE);
         }
@@ -295,8 +287,7 @@ public class HeaderView extends LinearLayout {
      */
     public void setNextButtonDrawableColor(@ColorRes int colorId) {
         if (0 != colorId) {
-            final Integer color = getColor(colorId);
-            setNextButtonDrawableColor(color);
+            setNextButtonDrawableColor(getColor(colorId));
         } else {
             throw new IllegalViewArgumentException(COLOR_ID_NOT_ZERO_VALUE);
         }
@@ -309,8 +300,7 @@ public class HeaderView extends LinearLayout {
      */
     public void setBackButtonDrawableColor(@ColorRes int colorId) {
         if (0 != colorId) {
-            final Integer color = getColor(colorId);
-            setBackButtonDrawableColor(color);
+            setBackButtonDrawableColor(getColor(colorId));
         } else {
             throw new IllegalViewArgumentException(COLOR_ID_NOT_ZERO_VALUE);
         }
@@ -379,8 +369,7 @@ public class HeaderView extends LinearLayout {
      */
     public void setBackgroundColorDrawable(@DrawableRes int drawableId) {
         if (0 != drawableId) {
-            final Drawable drawable = getDrawable(drawableId);
-            setBackgroundColorDrawable(drawable);
+            setBackgroundColorDrawable(getDrawable(drawableId));
         } else {
             throw new IllegalViewArgumentException(DRAWABLE_ID_NOT_ZERO_VALUE);
         }
@@ -408,6 +397,7 @@ public class HeaderView extends LinearLayout {
      */
     public void setOnButtonClicked(@NonNull OnButtonClickedListener onButtonClicked) {
         this.onButtonClicked = onButtonClicked;
+        invalidate();
     }
 
     /**
@@ -425,7 +415,7 @@ public class HeaderView extends LinearLayout {
      * @param resId int value representing the resource id of the drawable to get.
      * @return a Drawable object ready to use.
      */
-    protected Drawable getDrawable(@DrawableRes int resId) {
+    private Drawable getDrawable(@DrawableRes int resId) {
         return ContextCompat.getDrawable(getContext(), resId);
     }
 
@@ -435,7 +425,7 @@ public class HeaderView extends LinearLayout {
      * @param resId int value that represents the resource id of the color to get.
      * @return an int value that represents a color.
      */
-    protected int getColor(@ColorRes int resId) {
+    private int getColor(@ColorRes int resId) {
         return ContextCompat.getColor(getContext(), resId);
     }
 

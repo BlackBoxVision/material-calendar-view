@@ -31,8 +31,8 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.text.DateFormatSymbols;
@@ -79,7 +79,7 @@ import com.android.support.calendar.util.CalendarUtility;
  *
  * @author jonatan.salas
  */
-public class CalendarView extends FrameLayout {
+public class CalendarView extends LinearLayout {
     private static final int SPAN_COUNT = 7;
 
     private LayoutInflater mInflater;

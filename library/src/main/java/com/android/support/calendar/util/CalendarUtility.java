@@ -160,6 +160,8 @@ public final class CalendarUtility {
 
         calendar.add(Calendar.MONTH, monthIndex);
 
-        return dfs.getMonths()[monthIndex] + " " + calendar.get(Calendar.YEAR);
+        final String title = dfs.getMonths()[monthIndex] + " " + calendar.get(Calendar.YEAR);
+
+        return title.toUpperCase(Locale.getDefault());
     }
 }
