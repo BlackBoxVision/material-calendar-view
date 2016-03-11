@@ -55,6 +55,9 @@ public final class CalendarUtility {
                 && (cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)));
     }
 
+    public static String[] getShortWeekDays() {
+        return new DateFormatSymbols(Locale.getDefault()).getShortWeekdays();
+    }
     public static int calculateWeekIndex(int weekIndex, Calendar calendar) {
         int firstDayWeekPosition = calendar.getFirstDayOfWeek();
         if (firstDayWeekPosition == 1) {

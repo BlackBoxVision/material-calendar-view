@@ -10,10 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <com.android.support.calendar.widget.WeekView
-        android:id="@+id/calendar_week_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+    <include android:id="@+id/week_view" layout="@layout/week_view"/>
 
     <com.android.support.calendar.widget.AdapterView
         android:id="@+id/calendar_adapter_view"

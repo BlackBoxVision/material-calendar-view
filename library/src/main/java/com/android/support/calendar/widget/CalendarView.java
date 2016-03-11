@@ -198,6 +198,9 @@ public class CalendarView extends LinearLayout {
         }
     };
 
+    private AdapterView adapterView;
+    private HeaderView headerView;
+
     /**
      * The callback used to indicate the user changes the date.
      *
@@ -407,13 +410,14 @@ public class CalendarView extends LinearLayout {
     }
 
     private void initWeekView() {
+        final String[] shortWeekDays = CalendarUtility.getShortWeekDays();
         final View weekView = mRootView.findViewById(R.id.week_view);
         weekView.setBackgroundColor(mWeekViewBackgroundColor);
         String dayName;
         TextView dayOfWeek;
 
-        for (int i = 1; i < getShortWeekDays().length; i++) {
-            dayName = getShortWeekDays()[i].trim().toUpperCase(Locale.getDefault());
+        for (int i = 1; i < shortWeekDays.length; i++) {
+            dayName = shortWeekDays[i].trim().toUpperCase(Locale.getDefault());
             int length = (dayName.length() < 3) ? dayName.length() : 3;
             dayName = dayName.substring(0, length).toUpperCase(Locale.getDefault());
 
@@ -524,10 +528,6 @@ public class CalendarView extends LinearLayout {
         return mCurrentCalendar.get(Calendar.DAY_OF_MONTH);
     }
 
-    private String[] getShortWeekDays() {
-        return new DateFormatSymbols(Locale.getDefault()).getShortWeekdays();
-    }
-
     private String getHeaderTitle(Calendar calendar) {
         final String month = new DateFormatSymbols(Locale.getDefault()).getMonths()[calendar.get(Calendar.MONTH)];
         return month.toUpperCase(Locale.getDefault()) + " " + getYear();
@@ -537,6 +537,9 @@ public class CalendarView extends LinearLayout {
         return mCurrentCalendar;
     }
 
+    /**
+     * @author jonatan.salas
+     */
     private class DayTimeAdapter extends RecyclerView.Adapter<DayTimeAdapter.DayTimeViewHolder> {
         private final List<DayTime> mItems;
 
