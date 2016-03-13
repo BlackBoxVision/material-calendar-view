@@ -7,6 +7,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -27,7 +28,6 @@ import static com.android.support.calendar.exception.IllegalViewArgumentExceptio
  */
 public class AdapterView extends LinearLayout {
     private OnListItemSelectedListener onListItemSelectedListener;
-
     private DayTimeAdapter monthAdapter;
     private RecyclerView recyclerView;
     private View view;
@@ -66,17 +66,18 @@ public class AdapterView extends LinearLayout {
     }
 
     private void init() {
-        view = View.inflate(getContext(), R.layout.adapter_view, this);
+        view = LayoutInflater.from(getContext()).inflate(R.layout.adapter_view, this, true);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
 
-        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 7));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setNestedScrollingEnabled(true);
+
+        recyclerView.invalidate();
     }
 
-    public void updateMonthsAdapter(@NonNull final Calendar calendar, int monthIndex) {
+    public void updateMonthsAdapter(@NonNull Calendar calendar, int monthIndex) {
         final List<DayTime> list = CalendarUtility.obtainDayTimes(calendar, monthIndex);
 
         if (null != monthAdapter) {
@@ -87,6 +88,8 @@ public class AdapterView extends LinearLayout {
 
         recyclerView.setAdapter(monthAdapter);
         monthAdapter.notifyDataSetChanged();
+
+        recyclerView.invalidate();
     }
 
     public void setOnListItemSelectedListener(OnListItemSelectedListener onListItemSelected) {
@@ -105,7 +108,7 @@ public class AdapterView extends LinearLayout {
 
         @Override
         public DayTimeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            final View v = View.inflate(getContext(), R.layout.day_view, parent);
+            final View v = LayoutInflater.from(getContext()).inflate(R.layout.day_view, parent, false);
             return new DayTimeViewHolder(v);
         }
 
@@ -151,8 +154,6 @@ public class AdapterView extends LinearLayout {
                     }
                 }
             });
-
-            holder.textView.invalidate();
         }
 
         @Override
