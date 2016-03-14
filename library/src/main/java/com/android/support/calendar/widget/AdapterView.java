@@ -29,7 +29,8 @@ import static com.android.support.calendar.exception.IllegalViewArgumentExceptio
  * @author jonatan.salas
  */
 public class AdapterView extends LinearLayout {
-    private OnListItemSelectedListener onListItemSelectedListener;
+    private OnListItemLongClickListener onListItemLongClickListener;
+    private OnListItemClickListener onListItemClickListener;
     private DayTimeAdapter monthAdapter;
     private RecyclerView recyclerView;
     private View view;
@@ -94,8 +95,14 @@ public class AdapterView extends LinearLayout {
         recyclerView.invalidate();
     }
 
-    public void setOnListItemSelectedListener(OnListItemSelectedListener onListItemSelected) {
-        this.onListItemSelectedListener = onListItemSelected;
+    public void setOnListItemClickListener(OnListItemClickListener onListItemSelected) {
+        this.onListItemClickListener = onListItemSelected;
+        invalidate();
+    }
+
+    public void setOnListItemLongClickListener(OnListItemLongClickListener onListItemSelected) {
+        this.onListItemLongClickListener = onListItemSelected;
+        invalidate();
     }
 
     /**
@@ -140,7 +147,7 @@ public class AdapterView extends LinearLayout {
             }
 
             if (dayTime.isCurrentDay() && dayTime.isCurrentMonth()) {
-//                holder.textView.setBackgroundColor(mCurrentBackgroundColor);"onListItemSelectedListener can't be null!"
+//                holder.textView.setBackgroundColor(mCurrentBackgroundColor);"onListItemClickListener can't be null!"
 //                holder.textView.setTextColor(mCurrentTextColor);
                 holder.textView.setEnabled(true);
                 holder.textView.setClickable(true);
@@ -149,11 +156,26 @@ public class AdapterView extends LinearLayout {
             holder.textView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (null != onListItemSelectedListener) {
-                        onListItemSelectedListener.onItemSelected(v, dayTime);
+                    if (null != onListItemClickListener) {
+                        onListItemClickListener.onListItemClick(v, dayTime);
                     } else {
                         throw new IllegalViewArgumentException(ITEM_SELECTED_LISTENER_NOT_NULL_MESSAGE);
                     }
+                }
+            });
+
+            holder.textView.setOnLongClickListener(new OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    boolean result = (null != onListItemLongClickListener);
+
+                    if (result) {
+                        onListItemLongClickListener.onListItemLongClick(v, dayTime);
+                    } else {
+                        throw new IllegalViewArgumentException(ITEM_LONG_SELECTED_LISTENER_NOT_NULL_MESSAGE);
+                    }
+
+                    return result;
                 }
             });
         }
@@ -181,8 +203,16 @@ public class AdapterView extends LinearLayout {
     /**
      * @author jonatan.salas
      */
-    public interface OnListItemSelectedListener {
+    public interface OnListItemClickListener {
 
-        void onItemSelected(@NonNull View view, @NonNull DayTime dayTime);
+        void onListItemClick(@NonNull View view, @NonNull DayTime dayTime);
+    }
+
+    /**
+     * @author jonatan.salas
+     */
+    public interface OnListItemLongClickListener {
+
+        void onListItemLongClick(@NonNull View view, @NonNull DayTime dayTime);
     }
 }

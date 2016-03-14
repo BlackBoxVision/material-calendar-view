@@ -31,7 +31,9 @@ public class IllegalViewArgumentException extends IllegalArgumentException {
     public static final String COLOR_ID_NOT_ZERO_VALUE = "colorId argument can't be zero value";
 
     public static final String BUTTON_CLICK_LISTENER_NOT_NULL_MESSAGE = "onButtonClicked can't be null";
-    public static final String ITEM_SELECTED_LISTENER_NOT_NULL_MESSAGE = "onListItemSelectedListener can't be null";
+    public static final String ITEM_SELECTED_LISTENER_NOT_NULL_MESSAGE = "onListItemClickListener can't be null";
+    public static final String ITEM_LONG_SELECTED_LISTENER_NOT_NULL_MESSAGE = "onListItemLongClickListener can't be null";
+
 
     /**
      * Default constructor with detail message param, the message is a String representation of the

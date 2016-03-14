@@ -4,7 +4,7 @@
     android:id="@+id/day_view"
     android:padding="@dimen/item_default_padding"
     android:textSize="@dimen/item_default_font_size"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:gravity="center|center_vertical|center_horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal|center_vertical|center"
     tools:text="1" />

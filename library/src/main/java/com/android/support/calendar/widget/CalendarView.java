@@ -59,7 +59,10 @@ public class CalendarView extends LinearLayout {
     private OnMonthChangeListener onMonthChangeListener;
 
     @Nullable
-    private OnDateSelectedListener onDateSelectedListener;
+    private OnDayTimeClickListener onDayTimeClickListener;
+
+    @Nullable
+    private OnDayTimeLongClickListener onDayTimeLongClickListener;
 
     private int calendarViewBackgroundColor;
 
@@ -193,7 +196,7 @@ public class CalendarView extends LinearLayout {
                     final Calendar calendar = Calendar.getInstance(Locale.getDefault());
                     calendar.add(Calendar.MONTH, monthIndex);
 
-                    final int month = calendar.get(Calendar.MONTH);
+                    final int month = calendar.get(Calendar.MONTH) + 1;
                     final int year = calendar.get(Calendar.YEAR);
 
                     adapterView.init(calendar, monthIndex);
@@ -230,11 +233,25 @@ public class CalendarView extends LinearLayout {
         adapterView = (AdapterView) view.findViewById(R.id.calendar_adapter_view);
 
         adapterView.init(calendar, DEFAULT_MONTH_INDEX);
-        adapterView.setOnListItemSelectedListener(new AdapterView.OnListItemSelectedListener() {
+        adapterView.setOnListItemClickListener(new AdapterView.OnListItemClickListener() {
             @Override
-            public void onItemSelected(@NonNull View view, @NonNull DayTime dayTime) {
-                if (null != onDateSelectedListener) {
-                    onDateSelectedListener.onDateSelected(
+            public void onListItemClick(@NonNull View view, @NonNull DayTime dayTime) {
+                if (null != onDayTimeClickListener) {
+                    onDayTimeClickListener.onDayTimeClick(
+                            view,
+                            dayTime.getYear(),
+                            dayTime.getMonth(),
+                            dayTime.getDay(),
+                            dayTime.getEventList()
+                    );
+                }
+            }
+        });
+        adapterView.setOnListItemLongClickListener(new AdapterView.OnListItemLongClickListener() {
+            @Override
+            public void onListItemLongClick(@NonNull View view, @NonNull DayTime dayTime) {
+                if (null != onDayTimeLongClickListener) {
+                    onDayTimeLongClickListener.onDayTimeLongClick(
                             view,
                             dayTime.getYear(),
                             dayTime.getMonth(),
@@ -251,8 +268,13 @@ public class CalendarView extends LinearLayout {
         invalidate();
     }
 
-    public void setOnDateSelectedListener(@Nullable OnDateSelectedListener onDateSelectedListener) {
-        this.onDateSelectedListener = onDateSelectedListener;
+    public void setOnDayTimeClickListener(@Nullable OnDayTimeClickListener onDayTimeClickListener) {
+        this.onDayTimeClickListener = onDayTimeClickListener;
+        invalidate();
+    }
+
+    public void setOnDayTimeLongClickListener(@Nullable OnDayTimeLongClickListener onDayTimeLongClickListener) {
+        this.onDayTimeLongClickListener = onDayTimeLongClickListener;
         invalidate();
     }
 
@@ -261,7 +283,7 @@ public class CalendarView extends LinearLayout {
      *
      * @author jonatan.salas
      */
-    public interface OnDateSelectedListener {
+    public interface OnDayTimeClickListener {
 
         /**
          * Called upon change of the selected day.
@@ -272,7 +294,26 @@ public class CalendarView extends LinearLayout {
          * @param dayOfMonth The day of the month that was set.
          * @param eventList The list of events associated to this date selected.
          */
-        void onDateSelected(@NonNull View view, int year, int month, int dayOfMonth, @Nullable List<Event> eventList);
+        void onDayTimeClick(@NonNull View view, int year, int month, int dayOfMonth, @Nullable List<Event> eventList);
+    }
+
+    /**
+     * The callback used to indicate the user changes the date when keeping pressed during a time.
+     *
+     * @author jonatan.salas
+     */
+    public interface OnDayTimeLongClickListener {
+
+        /**
+         * Called upon change of the selected day.
+         *
+         * @param view The view associated with this listener.
+         * @param year The year that was set.
+         * @param month The month that was set [0-11].
+         * @param dayOfMonth The day of the month that was set.
+         * @param eventList The list of events associated to this date selected.
+         */
+        void onDayTimeLongClick(@NonNull View view, int year, int month, int dayOfMonth, @Nullable List<Event> eventList);
     }
 
     /**
@@ -291,5 +332,4 @@ public class CalendarView extends LinearLayout {
          */
         void onMonthChanged(@NonNull View view, int year, int month);
     }
-
 }

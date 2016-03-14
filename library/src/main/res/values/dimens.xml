@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="minDayCellHeight">40dp</dimen>
-
-
-
     <dimen name="item_default_padding">8dp</dimen>
     <dimen name="item_default_font_size">14sp</dimen>
     <dimen name="week_view_font_size">14sp</dimen>

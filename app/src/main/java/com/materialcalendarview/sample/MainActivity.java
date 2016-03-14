@@ -67,9 +67,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         final SimpleDateFormat formatter = new SimpleDateFormat(DATE_TEMPLATE, Locale.getDefault());
 
-        mCalendarView.setOnDateSelectedListener(new CalendarView.OnDateSelectedListener() {
+        mCalendarView.setOnDayTimeClickListener(new CalendarView.OnDayTimeClickListener() {
             @Override
-            public void onDateSelected(@NonNull View view, int year, int month, int dayOfMonth, @Nullable List<Event> eventList) {
+            public void onDayTimeClick(@NonNull View view, int year, int month, int dayOfMonth, @Nullable List<Event> eventList) {
                 final Calendar calendar = new GregorianCalendar(year, month, dayOfMonth);
                 final String dateString = formatter.format(calendar.getTime());
                 Snackbar.make(view, getString(R.string.selected_date) + " " + dateString, Snackbar.LENGTH_SHORT).show();
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mCalendarView.setOnMonthChangeListener(new CalendarView.OnMonthChangeListener() {
             @Override
             public void onMonthChanged(@NonNull View view, int year, int month) {
-                final Calendar calender = new GregorianCalendar(year, month, month);
+                final Calendar calender = new GregorianCalendar(year, month - 1, month);
                 final Calendar calendar = Calendar.getInstance(Locale.getDefault());
                 final String message = getString(R.string.month_display) + " " + month + " " + getString(R.string.year_is) + " " + year;
                 Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show();
