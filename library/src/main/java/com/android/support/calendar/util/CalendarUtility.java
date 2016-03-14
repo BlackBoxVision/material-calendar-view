@@ -16,12 +16,11 @@
 package com.android.support.calendar.util;
 
 import android.support.annotation.NonNull;
-import android.util.MonthDisplayHelper;
 
+import com.android.support.calendar.callback.FutureCallback;
 import com.android.support.calendar.model.DayTime;
 
 import java.text.DateFormatSymbols;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -71,100 +70,22 @@ public final class CalendarUtility {
         }
     }
 
-    public static List<DayTime> obtainDayTimes(Calendar currentCalendar, int monthIndex) {
-        MonthDisplayHelper displayHelper = new MonthDisplayHelper(currentCalendar.get(Calendar.YEAR), currentCalendar.get(Calendar.MONTH), currentCalendar.getFirstDayOfWeek());
-        final List<DayTime> dayTimeList = new ArrayList<>(42);
-
-        for (int i = 0; i < 6; i++) {
-            int n[] = displayHelper.getDigitsForRow(i);
-
-            for (int d = 0; d < 7; d++) {
-                if (displayHelper.isWithinCurrentMonth(i, d)) {
-                    Calendar calendar = Calendar.getInstance(Locale.getDefault());
-                    calendar.set(Calendar.DAY_OF_MONTH, n[d]);
-                    calendar.add(Calendar.MONTH, monthIndex);
-
-                    if (n[d] == currentCalendar.get(Calendar.DAY_OF_MONTH) && CalendarUtility.isWeekend(calendar) && monthIndex == 0) {
-                        final DayTime dayTime = new DayTime()
-                                .setDay(n[d])
-                                .setMonth(currentCalendar.get(Calendar.MONTH))
-                                .setYear(currentCalendar.get(Calendar.YEAR))
-                                .setCurrentDay(true)
-                                .setCurrentMonth(true)
-                                .setCurrentYear(true)
-                                .setWeekend(true)
-                                .setEventList(null);
-
-                        dayTimeList.add(dayTime);
-                    } else if (n[d] == currentCalendar.get(Calendar.DAY_OF_MONTH) && monthIndex == 0) {
-                        final DayTime dayTime = new DayTime()
-                                .setDay(n[d])
-                                .setMonth(currentCalendar.get(Calendar.MONTH))
-                                .setYear(currentCalendar.get(Calendar.YEAR))
-                                .setCurrentDay(true)
-                                .setCurrentMonth(true)
-                                .setCurrentYear(true)
-                                .setWeekend(false)
-                                .setEventList(null);
-
-                        dayTimeList.add(dayTime);
-                    } else if (CalendarUtility.isWeekend(calendar)) {
-                        final DayTime dayTime = new DayTime()
-                                .setDay(n[d])
-                                .setMonth(currentCalendar.get(Calendar.MONTH))
-                                .setYear(currentCalendar.get(Calendar.YEAR))
-                                .setCurrentDay(false)
-                                .setCurrentMonth(true)
-                                .setCurrentYear(true)
-                                .setWeekend(true)
-                                .setEventList(null);
-
-                        dayTimeList.add(dayTime);
-                    } else {
-                        final DayTime dayTime = new DayTime()
-                                .setDay(n[d])
-                                .setMonth(currentCalendar.get(Calendar.MONTH))
-                                .setYear(currentCalendar.get(Calendar.YEAR))
-                                .setCurrentDay(false)
-                                .setCurrentMonth(true)
-                                .setCurrentYear(true)
-                                .setWeekend(false)
-                                .setEventList(null);
-
-                        dayTimeList.add(dayTime);
-                    }
-
-                } else {
-                    Calendar calendar = Calendar.getInstance(Locale.getDefault());
-                    calendar.set(Calendar.DAY_OF_MONTH, n[d]);
-                    calendar.add(Calendar.MONTH, monthIndex);
-
-                    final DayTime dayTime = new DayTime()
-                            .setDay(n[d])
-                            .setMonth(calendar.get(Calendar.MONTH))
-                            .setYear(calendar.get(Calendar.YEAR))
-                            .setCurrentDay(false)
-                            .setCurrentMonth(false)
-                            .setCurrentYear(true)
-                            .setWeekend(false)
-                            .setEventList(null);
-
-                    dayTimeList.add(dayTime);
-                }
-            }
-        }
-
-        return dayTimeList;
+    public static List<DayTime> obtainDayTimes(final Calendar calendar, final int index) {
+        return ThreadUtility.runInBackground(new FutureCallback(calendar, index));
     }
 
     public static String getDateTitle(int index) {
-        final DateFormatSymbols dfs = new DateFormatSymbols(Locale.getDefault());
+        final String[] months = new DateFormatSymbols(Locale.getDefault()).getMonths();
         final Calendar calendar = Calendar.getInstance(Locale.getDefault());
 
         calendar.add(Calendar.MONTH, index);
 
-        final String title = dfs.getMonths()[calendar.get(Calendar.MONTH)] + " " + calendar.get(Calendar.YEAR);
+        final String title = months[calendar.get(Calendar.MONTH)] + " " + calendar.get(Calendar.YEAR);
 
         return title.toUpperCase(Locale.getDefault());
+    }
+
+    public static int getMonthIndex(int baseMonthIndex) {
+        return (baseMonthIndex < 0) ? 11 + baseMonthIndex : baseMonthIndex;
     }
 }

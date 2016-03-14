@@ -125,11 +125,7 @@ public class HeaderView extends LinearLayout {
      */
     private void setDateTitleText() {
         dateTitle.setText(CalendarUtility.getDateTitle(monthIndex));
-        invalidate();
-
-        if (!isInLayout()) {
-            requestLayout();
-        }
+        updateLayout();
     }
 
     /**

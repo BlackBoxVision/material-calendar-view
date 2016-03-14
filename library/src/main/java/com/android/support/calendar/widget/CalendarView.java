@@ -37,6 +37,8 @@ import com.android.support.calendar.model.DayTime;
 import com.android.support.calendar.model.Event;
 import com.android.support.calendar.util.CalendarUtility;
 
+import static com.android.support.calendar.R.styleable.*;
+
 /**
  * This class is a calendar widget for displaying dates, selecting, adding and associating event for a
  * specific day.
@@ -44,6 +46,8 @@ import com.android.support.calendar.util.CalendarUtility;
  * @author jonatan.salas
  */
 public class CalendarView extends LinearLayout {
+    private static final int DEFAULT_MONTH_INDEX = 0;
+    
     private AdapterView adapterView;
     private HeaderView headerView;
     private View weekView;
@@ -78,44 +82,7 @@ public class CalendarView extends LinearLayout {
     private Drawable rightArrowDrawable;
 
     private int drawableColor;
-    private int currentMonthIndex = 0;
-
-    /**
-     * The callback used to indicate the user changes the date.
-     *
-     * @author jonatan.salas
-     */
-    public interface OnDateSelectedListener {
-
-        /**
-         * Called upon change of the selected day.
-         *
-         * @param view The view associated with this listener.
-         * @param year The year that was set.
-         * @param month The month that was set [0-11].
-         * @param dayOfMonth The day of the month that was set.
-         * @param eventList The list of events associated to this date selected.
-         */
-        void onDateSelected(@NonNull View view, int year, int month, int dayOfMonth, @Nullable List<Event> eventList);
-    }
-
-    /**
-     * The callback used to indicate the user changes the month.
-     *
-     * @author jonatan.salas
-     */
-    public interface OnMonthChangeListener {
-
-        /**
-         * Called upon change of the current month.
-         *
-         * @param view The view associated with this listener.
-         * @param year The year that was set.
-         * @param month The month that was set [0-11].
-         */
-        void onMonthChanged(@NonNull View view, int year, int month);
-    }
-
+    
     /**
      * Constructor with params. It takes the context as param, and use to get the
      * resources that needs to inflate correctly. It requires a non null context object.
@@ -154,11 +121,11 @@ public class CalendarView extends LinearLayout {
     }
 
     private void style(AttributeSet attrs) {
-        final TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.CalendarView);
+        final TypedArray a = getContext().obtainStyledAttributes(attrs, CalendarView);
 
         final int white = ContextCompat.getColor(getContext(), R.color.white);
-        final int colorPrimary = ContextCompat.getColor(getContext(), R.color.colorPrimary);
-        final int colorAccent = ContextCompat.getColor(getContext(), R.color.colorAccent);
+        final int prim = ContextCompat.getColor(getContext(), R.color.colorPrimary);
+        final int accent = ContextCompat.getColor(getContext(), R.color.colorAccent);
         final int darkerGray = ContextCompat.getColor(getContext(), android.R.color.darker_gray);
 
         final float titleFontSize = 15f;
@@ -166,32 +133,32 @@ public class CalendarView extends LinearLayout {
 
         try {
             //Font size values..
-            headerViewFontSize = a.getFloat(R.styleable.CalendarView_headerViewFontSize, titleFontSize);
-            weekViewFontSize = a.getFloat(R.styleable.CalendarView_weekViewFontSize, titleFontSize);
-            adapterViewFontSize = a.getFloat(R.styleable.CalendarView_adapterViewFontSize, fontSize);
+            headerViewFontSize = a.getFloat(CalendarView_headerViewFontSize, titleFontSize);
+            weekViewFontSize = a.getFloat(CalendarView_weekViewFontSize, titleFontSize);
+            adapterViewFontSize = a.getFloat(CalendarView_adapterViewFontSize, fontSize);
 
             //Background color values..
-            calendarViewBackgroundColor = a.getColor(R.styleable.CalendarView_calendarViewBackgroundColor, colorPrimary);
-            headerViewBackgroundColor = a.getColor(R.styleable.CalendarView_headerViewBackgroundColor, colorPrimary);
-            weekViewBackgroundColor = a.getColor(R.styleable.CalendarView_weekViewBackgroundColor, colorPrimary);
-            adapterViewBackgroundColor = a.getColor(R.styleable.CalendarView_adapterViewBackgroundColor, colorPrimary);
-            disabledBackgroundColor = a.getColor(R.styleable.CalendarView_disabledBackgroundColor, colorPrimary);
-            currentBackgroundColor = a.getColor(R.styleable.CalendarView_currentBackgroundColor, colorAccent);
+            calendarViewBackgroundColor = a.getColor(CalendarView_calendarViewBackgroundColor, prim);
+            headerViewBackgroundColor = a.getColor(CalendarView_headerViewBackgroundColor, prim);
+            weekViewBackgroundColor = a.getColor(CalendarView_weekViewBackgroundColor, prim);
+            adapterViewBackgroundColor = a.getColor(CalendarView_adapterViewBackgroundColor, prim);
+            disabledBackgroundColor = a.getColor(CalendarView_disabledBackgroundColor, prim);
+            currentBackgroundColor = a.getColor(CalendarView_currentBackgroundColor, accent);
 
             //Text Color values..
-            headerViewTextColor = a.getColor(R.styleable.CalendarView_headerViewTextColor, colorAccent);
-            weekViewTextColor = a.getColor(R.styleable.CalendarView_weekViewTextColor, white);
-            adapterViewTextColor = a.getColor(R.styleable.CalendarView_adapterViewTextColor, white);
-            disabledTextColor = a.getColor(R.styleable.CalendarView_disabledTextColor, darkerGray);
-            weekendTextColor = a.getColor(R.styleable.CalendarView_weekendTextColor, colorAccent);
-            currentTextColor = a.getColor(R.styleable.CalendarView_currentTextColor, white);
+            headerViewTextColor = a.getColor(CalendarView_headerViewTextColor, accent);
+            weekViewTextColor = a.getColor(CalendarView_weekViewTextColor, white);
+            adapterViewTextColor = a.getColor(CalendarView_adapterViewTextColor, white);
+            disabledTextColor = a.getColor(CalendarView_disabledTextColor, darkerGray);
+            weekendTextColor = a.getColor(CalendarView_weekendTextColor, accent);
+            currentTextColor = a.getColor(CalendarView_currentTextColor, white);
 
             //Drawable Color values..
-            drawableColor = a.getColor(R.styleable.CalendarView_drawableColor, colorAccent);
+            drawableColor = a.getColor(CalendarView_drawableColor, accent);
 
             //Arrow drawables..
-            leftArrowDrawable = a.getDrawable(R.styleable.CalendarView_leftArrowDrawable);
-            rightArrowDrawable = a.getDrawable(R.styleable.CalendarView_rightArrowDrawable);
+            leftArrowDrawable = a.getDrawable(CalendarView_leftArrowDrawable);
+            rightArrowDrawable = a.getDrawable(CalendarView_rightArrowDrawable);
 
         } finally {
             a.recycle();
@@ -222,22 +189,14 @@ public class CalendarView extends LinearLayout {
         headerView.setOnButtonClicked(new HeaderView.OnButtonClickedListener() {
             @Override
             public void onButtonClicked(@NonNull View view, int monthIndex) {
-                final int id = view.getId();
-
-                if (id == R.id.back_button) {
-                    currentMonthIndex--;
-                } else if (id == R.id.next_button) {
-                    currentMonthIndex++;
-                }
-
                 if (null != onMonthChangeListener) {
                     final Calendar calendar = Calendar.getInstance(Locale.getDefault());
-                    calendar.add(Calendar.MONTH, currentMonthIndex);
+                    calendar.add(Calendar.MONTH, monthIndex);
 
                     final int month = calendar.get(Calendar.MONTH);
                     final int year = calendar.get(Calendar.YEAR);
 
-                    adapterView.updateMonthsAdapter(calendar, monthIndex);
+                    adapterView.init(calendar, monthIndex);
                     onMonthChangeListener.onMonthChanged(view, year, month);
                 }
             }
@@ -270,7 +229,7 @@ public class CalendarView extends LinearLayout {
     private void initAdapterView() {
         adapterView = (AdapterView) view.findViewById(R.id.calendar_adapter_view);
 
-        adapterView.updateMonthsAdapter(calendar, currentMonthIndex);
+        adapterView.init(calendar, DEFAULT_MONTH_INDEX);
         adapterView.setOnListItemSelectedListener(new AdapterView.OnListItemSelectedListener() {
             @Override
             public void onItemSelected(@NonNull View view, @NonNull DayTime dayTime) {
@@ -289,9 +248,48 @@ public class CalendarView extends LinearLayout {
 
     public void setOnMonthChangeListener(@Nullable OnMonthChangeListener onMonthChangeListener) {
         this.onMonthChangeListener = onMonthChangeListener;
+        invalidate();
     }
 
     public void setOnDateSelectedListener(@Nullable OnDateSelectedListener onDateSelectedListener) {
         this.onDateSelectedListener = onDateSelectedListener;
+        invalidate();
     }
+
+    /**
+     * The callback used to indicate the user changes the date.
+     *
+     * @author jonatan.salas
+     */
+    public interface OnDateSelectedListener {
+
+        /**
+         * Called upon change of the selected day.
+         *
+         * @param view The view associated with this listener.
+         * @param year The year that was set.
+         * @param month The month that was set [0-11].
+         * @param dayOfMonth The day of the month that was set.
+         * @param eventList The list of events associated to this date selected.
+         */
+        void onDateSelected(@NonNull View view, int year, int month, int dayOfMonth, @Nullable List<Event> eventList);
+    }
+
+    /**
+     * The callback used to indicate the user changes the month.
+     *
+     * @author jonatan.salas
+     */
+    public interface OnMonthChangeListener {
+
+        /**
+         * Called upon change of the current month.
+         *
+         * @param view The view associated with this listener.
+         * @param year The year that was set.
+         * @param month The month that was set [0-11].
+         */
+        void onMonthChanged(@NonNull View view, int year, int month);
+    }
+
 }

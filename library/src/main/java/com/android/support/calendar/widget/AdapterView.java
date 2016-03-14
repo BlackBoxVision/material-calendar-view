@@ -24,6 +24,8 @@ import java.util.List;
 import static com.android.support.calendar.exception.IllegalViewArgumentException.*;
 
 /**
+ * The View that contains the Adapter with the month data.
+ *
  * @author jonatan.salas
  */
 public class AdapterView extends LinearLayout {
@@ -77,7 +79,7 @@ public class AdapterView extends LinearLayout {
         recyclerView.invalidate();
     }
 
-    public void updateMonthsAdapter(@NonNull Calendar calendar, int monthIndex) {
+    public void init(@NonNull Calendar calendar, int monthIndex) {
         final List<DayTime> list = CalendarUtility.obtainDayTimes(calendar, monthIndex);
 
         if (null != monthAdapter) {
