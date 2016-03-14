@@ -157,13 +157,13 @@ public final class CalendarUtility {
         return dayTimeList;
     }
 
-    public static String getDateTitle(int monthIndex) {
+    public static String getDateTitle(int index) {
         final DateFormatSymbols dfs = new DateFormatSymbols(Locale.getDefault());
         final Calendar calendar = Calendar.getInstance(Locale.getDefault());
 
-        calendar.add(Calendar.MONTH, monthIndex);
+        calendar.add(Calendar.MONTH, index);
 
-        final String title = dfs.getMonths()[monthIndex] + " " + calendar.get(Calendar.YEAR);
+        final String title = dfs.getMonths()[calendar.get(Calendar.MONTH)] + " " + calendar.get(Calendar.YEAR);
 
         return title.toUpperCase(Locale.getDefault());
     }
