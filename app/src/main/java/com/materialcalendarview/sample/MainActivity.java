@@ -3,7 +3,6 @@ package com.materialcalendarview.sample;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
@@ -27,6 +26,8 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.Bind;
+
 /**
  * @author jonatan.salas
  */
@@ -34,40 +35,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final String DATE_TEMPLATE = "dd/MM/yyyy";
 
     //TODO Jonatan Salas: Añadir ButterKnife para inyectar las vistas
-    Toolbar mToolbar;
-    CollapsingToolbarLayout mToolbarLayout;
-    DrawerLayout mDrawerLayout;
-    NavigationView mNavigationView;
-    TextView mTextView;
-    CalendarView mCalendarView;
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+
+    @Bind(R.id.drawer_layout)
+    DrawerLayout drawerLayout;
+
+    @Bind(R.id.nav_view)
+    NavigationView navigationView;
+
+    @Bind(R.id.textview)
+    TextView textView;
+
+    @Bind(R.id.calendar_view)
+    CalendarView calendarView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setSupportActionBar(toolbar);
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-
-        mToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
-        mToolbarLayout.setTitleEnabled(false);
-
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
-                this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawerLayout.setDrawerListener(drawerToggle);
+                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.setDrawerListener(drawerToggle);
         drawerToggle.syncState();
 
-        mNavigationView = (NavigationView) findViewById(R.id.nav_view);
-        mNavigationView.setNavigationItemSelectedListener(this);
-
-        mTextView = (TextView) findViewById(R.id.textview);
-
-        mCalendarView = (CalendarView) findViewById(R.id.calendar_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
         final SimpleDateFormat formatter = new SimpleDateFormat(DATE_TEMPLATE, Locale.getDefault());
 
-        mCalendarView.setOnDayTimeClickListener(new CalendarView.OnDayTimeClickListener() {
+        calendarView.setOnDayTimeClickListener(new CalendarView.OnDayTimeClickListener() {
             @Override
             public void onDayTimeClick(@NonNull View view, int year, int month, int dayOfMonth, @Nullable List<Event> eventList) {
                 final Calendar calendar = new GregorianCalendar(year, month, dayOfMonth);
@@ -77,9 +75,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         final String todayDate = getString(R.string.today) + " " + formatter.format(new Date(System.currentTimeMillis()));
-        mTextView.setText(todayDate);
+        textView.setText(todayDate);
 
-        mCalendarView.setOnMonthChangeListener(new CalendarView.OnMonthChangeListener() {
+        calendarView.setOnMonthChangeListener(new CalendarView.OnMonthChangeListener() {
             @Override
             public void onMonthChanged(@NonNull View view, int year, int month) {
                 final Calendar calender = new GregorianCalendar(year, month - 1, month);
@@ -88,9 +86,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show();
 
                 if (!CalendarUtility.isSameMonth(calender, calendar)) {
-                    mTextView.setText(getString(R.string.not_actual_month));
+                    textView.setText(getString(R.string.not_actual_month));
                 } else {
-                    mTextView.setText(todayDate);
+                    textView.setText(todayDate);
                 }
             }
         });
@@ -98,8 +96,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
-        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -147,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
 
-        mDrawerLayout.closeDrawer(GravityCompat.START);
+        drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 }
