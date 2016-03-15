@@ -22,9 +22,12 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -32,10 +35,12 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import com.android.support.calendar.adapter.DayTimeAdapter;
 import com.android.support.calendar.R;
 import com.android.support.calendar.model.DayTime;
 import com.android.support.calendar.model.Event;
 import com.android.support.calendar.util.CalendarUtility;
+import com.android.support.calendar.util.ScreenUtility;
 
 import static com.android.support.calendar.R.styleable.*;
 
@@ -46,6 +51,8 @@ import static com.android.support.calendar.R.styleable.*;
  * @author jonatan.salas
  */
 public class CalendarView extends LinearLayout {
+    private static final Interpolator DEFAULT_ANIM_INTERPOLATOR = new DecelerateInterpolator(3.0f);
+    private static final long DEFAULT_ANIM_DURATION = 1500;
     private static final int DEFAULT_MONTH_INDEX = 0;
     
     private AdapterView adapterView;
@@ -64,27 +71,30 @@ public class CalendarView extends LinearLayout {
     @Nullable
     private OnDayTimeLongClickListener onDayTimeLongClickListener;
 
-    private int calendarViewBackgroundColor;
+    @Nullable
+    private OnDayTimeStyleChangeListener onDayTimeStyleChangeListener;
 
-    private int headerViewBackgroundColor;
-    private int headerViewTextColor;
-    private float headerViewFontSize;
-    private int weekViewBackgroundColor;
-    private int weekViewTextColor;
-    private float weekViewFontSize;
-    private int adapterViewBackgroundColor;
-    private int adapterViewTextColor;
-    private float adapterViewFontSize;
-    private int disabledBackgroundColor;
-    private int disabledTextColor;
-    private int weekendTextColor;
-    private int currentBackgroundColor;
-    private int currentTextColor;
+    private Integer calendarViewBackgroundColor;
+
+    private Integer headerViewBackgroundColor;
+    private Integer headerViewTextColor;
+    private Float headerViewFontSize;
+    private Integer weekViewBackgroundColor;
+    private Integer weekViewTextColor;
+    private Float weekViewFontSize;
+    private Integer adapterViewBackgroundColor;
+    private Integer adapterViewTextColor;
+    private Float adapterViewFontSize;
+    private Integer disabledBackgroundColor;
+    private Integer disabledTextColor;
+    private Integer weekendTextColor;
+    private Integer currentBackgroundColor;
+    private Integer currentTextColor;
 
     private Drawable leftArrowDrawable;
     private Drawable rightArrowDrawable;
 
-    private int drawableColor;
+    private Integer drawableColor;
     
     /**
      * Constructor with params. It takes the context as param, and use to get the
@@ -183,11 +193,11 @@ public class CalendarView extends LinearLayout {
         headerView = (HeaderView) view.findViewById(R.id.calendar_title_layout);
 
         headerView.setBackgroundColor(headerViewBackgroundColor);
-//        headerView.setTitleTextColor(headerViewTextColor);
+        headerView.setTitleTextColor(headerViewTextColor);
         headerView.setTitleTextSize(headerViewFontSize);
         headerView.setTitleTextTypeface(Typeface.DEFAULT);
-//        headerView.setNextButtonDrawableColor(drawableColor);
-//        headerView.setBackButtonDrawableColor(drawableColor);
+        headerView.setNextButtonDrawableColor(drawableColor);
+        headerView.setBackButtonDrawableColor(drawableColor);
 
         headerView.setOnButtonClicked(new HeaderView.OnButtonClickedListener() {
             @Override
@@ -232,8 +242,15 @@ public class CalendarView extends LinearLayout {
     private void initAdapterView() {
         adapterView = (AdapterView) view.findViewById(R.id.calendar_adapter_view);
 
-        adapterView.init(calendar, DEFAULT_MONTH_INDEX);
-        adapterView.setOnListItemClickListener(new AdapterView.OnListItemClickListener() {
+        adapterView.getAdapter().setOnStyleChangeListener(new DayTimeAdapter.OnStyleChangeListener() {
+            @Override
+            public void onStyleChange(@NonNull DayTimeAdapter.DayTimeViewHolder holder, @NonNull DayTime dayTime) {
+                if (null != onDayTimeStyleChangeListener) {
+                    onDayTimeStyleChangeListener.onDayTimeStyleChange(holder, dayTime);
+                }
+            }
+        });
+        adapterView.getAdapter().setOnListItemClickListener(new DayTimeAdapter.OnListItemClickListener() {
             @Override
             public void onListItemClick(@NonNull View view, @NonNull DayTime dayTime) {
                 if (null != onDayTimeClickListener) {
@@ -247,7 +264,7 @@ public class CalendarView extends LinearLayout {
                 }
             }
         });
-        adapterView.setOnListItemLongClickListener(new AdapterView.OnListItemLongClickListener() {
+        adapterView.getAdapter().setOnListItemLongClickListener(new DayTimeAdapter.OnListItemLongClickListener() {
             @Override
             public void onListItemLongClick(@NonNull View view, @NonNull DayTime dayTime) {
                 if (null != onDayTimeLongClickListener) {
@@ -261,6 +278,30 @@ public class CalendarView extends LinearLayout {
                 }
             }
         });
+        adapterView.init(calendar, DEFAULT_MONTH_INDEX);
+    }
+
+    public void shouldAnimateOnEnter(boolean shouldAnimate) {
+        shouldAnimateOnEnter(shouldAnimate, DEFAULT_ANIM_DURATION, DEFAULT_ANIM_INTERPOLATOR);
+    }
+
+    public void shouldAnimateOnEnter(boolean shouldAnimate, long duration) {
+        shouldAnimateOnEnter(shouldAnimate, duration, DEFAULT_ANIM_INTERPOLATOR);
+    }
+
+    public void shouldAnimateOnEnter(boolean shouldAnimate, long duration, @NonNull Interpolator interpolator) {
+        if (shouldAnimate) {
+            ViewCompat.setTranslationY(this, ScreenUtility.getScreenHeight(getContext()));
+            ViewCompat.setAlpha(this, 0f);
+            ViewCompat.animate(this)
+                    .translationY(0f)
+                    .setDuration(duration)
+                    .alpha(1f)
+                    .setInterpolator(interpolator)
+                    .start();
+
+            invalidate();
+        }
     }
 
     public void setOnMonthChangeListener(@Nullable OnMonthChangeListener onMonthChangeListener) {
@@ -278,6 +319,11 @@ public class CalendarView extends LinearLayout {
         invalidate();
     }
 
+    public void setOnDayTimeStyleChangeListener(@Nullable OnDayTimeStyleChangeListener onDayTimeStyleChangeListener) {
+        this.onDayTimeStyleChangeListener = onDayTimeStyleChangeListener;
+        invalidate();
+    }
+
     /**
      * The callback used to indicate the user changes the date.
      *
@@ -285,7 +331,7 @@ public class CalendarView extends LinearLayout {
      */
     public interface OnDayTimeClickListener {
 
-        /**
+        /**OnDayTimeLongClickListener
          * Called upon change of the selected day.
          *
          * @param view The view associated with this listener.
@@ -314,6 +360,19 @@ public class CalendarView extends LinearLayout {
          * @param eventList The list of events associated to this date selected.
          */
         void onDayTimeLongClick(@NonNull View view, int year, int month, int dayOfMonth, @Nullable List<Event> eventList);
+    }
+
+    /**
+     *
+     */
+    public interface OnDayTimeStyleChangeListener {
+
+        /**
+         *
+         * @param holder
+         * @param dayTime
+         */
+        void onDayTimeStyleChange(DayTimeAdapter.DayTimeViewHolder holder, DayTime dayTime);
     }
 
     /**

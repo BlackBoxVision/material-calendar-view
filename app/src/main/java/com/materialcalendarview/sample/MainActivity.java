@@ -1,5 +1,6 @@
 package com.materialcalendarview.sample;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,6 +16,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.android.support.calendar.adapter.DayTimeAdapter;
+import com.android.support.calendar.model.DayTime;
 import com.android.support.calendar.model.Event;
 import com.android.support.calendar.util.CalendarUtility;
 import com.android.support.calendar.widget.CalendarView;
@@ -35,7 +38,6 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String DATE_TEMPLATE = "dd/MM/yyyy";
 
-    //TODO Jonatan Salas: Añadir ButterKnife para inyectar las vistas
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
@@ -60,13 +62,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.setDrawerListener(drawerToggle);
+        drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
 
         navigationView.setNavigationItemSelectedListener(this);
 
         final SimpleDateFormat formatter = new SimpleDateFormat(DATE_TEMPLATE, Locale.getDefault());
 
+        calendarView.shouldAnimateOnEnter(true);
         calendarView.setOnDayTimeClickListener(new CalendarView.OnDayTimeClickListener() {
             @Override
             public void onDayTimeClick(@NonNull View view, int year, int month, int dayOfMonth, @Nullable List<Event> eventList) {
@@ -91,6 +94,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     textView.setText(getString(R.string.not_actual_month));
                 } else {
                     textView.setText(todayDate);
+                }
+            }
+        });
+
+        calendarView.setOnDayTimeStyleChangeListener(new CalendarView.OnDayTimeStyleChangeListener() {
+            @Override
+            public void onDayTimeStyleChange(DayTimeAdapter.DayTimeViewHolder holder, DayTime dayTime) {
+                //TODO JS: This is not working at all.
+                if (dayTime.isWeekend() || (!dayTime.isCurrentMonth() && dayTime.isWeekend())) {
+                    holder.itemView.setBackgroundColor(Color.DKGRAY);
                 }
             }
         });

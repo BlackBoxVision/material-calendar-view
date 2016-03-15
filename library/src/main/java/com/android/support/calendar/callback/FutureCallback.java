@@ -25,24 +25,33 @@ public class FutureCallback implements ThreadUtility.CallBack<List<DayTime>> {
 
     @Override
     public List<DayTime> execute() {
-        MonthDisplayHelper displayHelper = new MonthDisplayHelper(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.getFirstDayOfWeek());
+        final int year = CalendarUtility.getYear(calendar);
+        final int month = CalendarUtility.getMonth(calendar);
+        final int firstDayOfWeek = CalendarUtility.getFirstDayOfWeek(calendar);
+
+        final MonthDisplayHelper helper = new MonthDisplayHelper(year, month, firstDayOfWeek);
         final List<DayTime> dayTimeList = new ArrayList<>(42);
 
+        //TODO JS: Evaluate this code.
         for (int i = 0; i < 6; i++) {
-            int n[] = displayHelper.getDigitsForRow(i);
+            int n[] = helper.getDigitsForRow(i);
 
             for (int d = 0; d < 7; d++) {
-                if (displayHelper.isWithinCurrentMonth(i, d)) {
+                if (helper.isWithinCurrentMonth(i, d)) {
                     Calendar calendar = Calendar.getInstance(Locale.getDefault());
                     calendar.set(Calendar.DAY_OF_MONTH, n[d]);
                     calendar.add(Calendar.MONTH, index);
 
-                    if (n[d] == calendar.get(Calendar.DAY_OF_MONTH) && CalendarUtility.isWeekend(calendar) && index == 0) {
+                    int m = CalendarUtility.getMonth(calendar);
+                    int y = CalendarUtility.getYear(calendar);
+
+                    if (n[d] == calendar.get(Calendar.DAY_OF_MONTH) &&
+                            CalendarUtility.isWeekend(calendar) && index == 0) {
                         final DayTime dayTime = new DayTime()
                                 .setDay(n[d])
-                                .setMonth(calendar.get(Calendar.MONTH))
-                                .setYear(calendar.get(Calendar.YEAR))
-                                .setCurrentDay(true)
+                                .setMonth(m)
+                                .setYear(y)
+                                .setCurrentDay(false)
                                 .setCurrentMonth(true)
                                 .setCurrentYear(true)
                                 .setWeekend(true)
@@ -52,8 +61,8 @@ public class FutureCallback implements ThreadUtility.CallBack<List<DayTime>> {
                     } else if (n[d] == calendar.get(Calendar.DAY_OF_MONTH) && index == 0) {
                         final DayTime dayTime = new DayTime()
                                 .setDay(n[d])
-                                .setMonth(calendar.get(Calendar.MONTH))
-                                .setYear(calendar.get(Calendar.YEAR))
+                                .setMonth(m)
+                                .setYear(y)
                                 .setCurrentDay(true)
                                 .setCurrentMonth(true)
                                 .setCurrentYear(true)
@@ -64,8 +73,8 @@ public class FutureCallback implements ThreadUtility.CallBack<List<DayTime>> {
                     } else if (CalendarUtility.isWeekend(calendar)) {
                         final DayTime dayTime = new DayTime()
                                 .setDay(n[d])
-                                .setMonth(calendar.get(Calendar.MONTH))
-                                .setYear(calendar.get(Calendar.YEAR))
+                                .setMonth(m)
+                                .setYear(y)
                                 .setCurrentDay(false)
                                 .setCurrentMonth(true)
                                 .setCurrentYear(true)
@@ -76,8 +85,8 @@ public class FutureCallback implements ThreadUtility.CallBack<List<DayTime>> {
                     } else {
                         final DayTime dayTime = new DayTime()
                                 .setDay(n[d])
-                                .setMonth(calendar.get(Calendar.MONTH))
-                                .setYear(calendar.get(Calendar.YEAR))
+                                .setMonth(m)
+                                .setYear(y)
                                 .setCurrentDay(false)
                                 .setCurrentMonth(true)
                                 .setCurrentYear(true)
@@ -92,10 +101,13 @@ public class FutureCallback implements ThreadUtility.CallBack<List<DayTime>> {
                     calendar.set(Calendar.DAY_OF_MONTH, n[d]);
                     calendar.add(Calendar.MONTH, index);
 
+                    int m = CalendarUtility.getMonth(calendar);
+                    int y = CalendarUtility.getYear(calendar);
+
                     final DayTime dayTime = new DayTime()
                             .setDay(n[d])
-                            .setMonth(calendar.get(Calendar.MONTH))
-                            .setYear(calendar.get(Calendar.YEAR))
+                            .setMonth(m)
+                            .setYear(y)
                             .setCurrentDay(false)
                             .setCurrentMonth(false)
                             .setCurrentYear(true)

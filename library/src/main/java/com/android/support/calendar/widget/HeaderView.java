@@ -308,7 +308,7 @@ public class HeaderView extends LinearLayout {
      */
     public void setNextButtonDrawableColor(Integer color) {
         if (null != color) {
-            backButton.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+            nextButton.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
             updateLayout();
         } else {
             throw new IllegalViewArgumentException(COLOR_NOT_NULL_MESSAGE);

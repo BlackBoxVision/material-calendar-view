@@ -85,7 +85,15 @@ public final class CalendarUtility {
         return title.toUpperCase(Locale.getDefault());
     }
 
-    public static int getMonthIndex(int baseMonthIndex) {
-        return (baseMonthIndex < 0) ? 11 + baseMonthIndex : baseMonthIndex;
+    public static int getFirstDayOfWeek(Calendar calendar) {
+        return calendar.getFirstDayOfWeek();
+    }
+
+    public static int getMonth(Calendar calendar) {
+        return calendar.get(Calendar.MONTH);
+    }
+
+    public static int getYear(Calendar calendar) {
+        return calendar.get(Calendar.YEAR);
     }
 }
