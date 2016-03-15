@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onDayTimeStyleChange(DayTimeAdapter.DayTimeViewHolder holder, DayTime dayTime) {
                 //TODO JS: This is not working at all.
                 if (dayTime.isWeekend() || (!dayTime.isCurrentMonth() && dayTime.isWeekend())) {
-                    holder.itemView.setBackgroundColor(Color.DKGRAY);
+                    holder.textView.setBackgroundColor(Color.DKGRAY);
                 }
             }
         });

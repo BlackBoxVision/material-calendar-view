@@ -87,7 +87,7 @@ public class AdapterView extends LinearLayout {
         recyclerView.invalidate();
     }
 
-    public DayTimeAdapter getAdapter() {
+    public DayTimeAdapter adapter() {
         return monthAdapter;
     }
 

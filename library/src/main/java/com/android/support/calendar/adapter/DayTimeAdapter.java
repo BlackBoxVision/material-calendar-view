@@ -24,6 +24,7 @@ public class DayTimeAdapter extends RecyclerView.Adapter<DayTimeAdapter.DayTimeV
     private OnListItemClickListener onListItemClickListener;
     private OnListItemLongClickListener onListItemLongClickListener;
     private OnStyleChangeListener onStyleChangeListener;
+
     private Context context;
     private List<DayTime> items;
 
@@ -127,7 +128,7 @@ public class DayTimeAdapter extends RecyclerView.Adapter<DayTimeAdapter.DayTimeV
     }
 
     public class DayTimeViewHolder extends RecyclerView.ViewHolder {
-        private final TextView textView;
+        public final TextView textView;
 
         public DayTimeViewHolder(@NonNull View view) {
             super(view);
