@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Locale;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * @author jonatan.salas
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(

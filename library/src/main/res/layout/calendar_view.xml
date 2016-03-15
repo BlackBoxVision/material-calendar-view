@@ -8,13 +8,13 @@
     <com.android.support.calendar.widget.HeaderView
         android:id="@+id/calendar_title_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"/>
 
     <include android:id="@+id/calendar_week_view" layout="@layout/week_view"/>
 
     <com.android.support.calendar.widget.AdapterView
         android:id="@+id/calendar_adapter_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"/>
 
 </LinearLayout>
