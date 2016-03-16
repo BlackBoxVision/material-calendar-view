@@ -17,12 +17,7 @@ env:
     - ANDROID_TARGET=android-17  ANDROID_ABI=armeabi-v7a
     - ANDROID_TARGET=android-16  ANDROID_ABI=armeabi-v7a
     - ANDROID_TARGET=android-15  ANDROID_ABI=armeabi-v7a
-    - ANDROID_TARGET=android-14  ANDROID_ABI=armeabi-v7a
-    - ANDROID_TARGET=android-13  ANDROID_ABI=armeabi-v7a
-    - ANDROID_TARGET=android-12  ANDROID_ABI=armeabi-v7a
-    - ANDROID_TARGET=android-11  ANDROID_ABI=armeabi-v7a
     - ANDROID_TARGET=android-10  ANDROID_ABI=armeabi-v7a
-    - ANDROID_TARGET=android-9  ANDROID_ABI=armeabi-v7a
     - ANDROID_TARGET=android-8  ANDROID_ABI=armeabi-v7a
 
 
@@ -44,12 +39,7 @@ android:
     - android-17
     - android-16
     - android-15
-    - android-14
-    - android-13
-    - android-12
-    - android-11
     - android-10
-    - android-9
     - android-8
     - sys-img-armeabi-v7a-android-23
     - sys-img-armeabi-v7a-android-22
@@ -60,12 +50,7 @@ android:
     - sys-img-armeabi-v7a-android-17
     - sys-img-armeabi-v7a-android-16
     - sys-img-armeabi-v7a-android-15
-    - sys-img-armeabi-v7a-android-14
-    - sys-img-armeabi-v7a-android-13
-    - sys-img-armeabi-v7a-android-12
-    - sys-img-armeabi-v7a-android-11
     - sys-img-armeabi-v7a-android-10
-    - sys-img-armeabi-v7a-android-9
     - sys-img-armeabi-v7a-android-8
 
 before_script:
