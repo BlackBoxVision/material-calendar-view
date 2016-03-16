@@ -2,12 +2,16 @@ package com.materialcalendarview.sample;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -113,16 +117,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onDayViewStyleChange(ViewHolderWrapper wrapper, DayTime dayTime) {
                 if (dayTime.isCurrentMonth()) {
-                    wrapper.getView().setTypeface(Typeface.DEFAULT_BOLD);
-                    wrapper.getView().setBackgroundColor(Color.RED);
+                    wrapper.getView().setTextColor(Color.CYAN);
                 }
 
                 if (dayTime.isWeekend() || (!dayTime.isCurrentMonth() && dayTime.isWeekend())) {
-                    wrapper.getView().setBackgroundColor(Color.DKGRAY);
+                    wrapper.getView().setTextColor(Color.GREEN);
                 }
 
                 if (dayTime.getDay() == 7 && dayTime.getMonth() == 2 && dayTime.getYear() == 2016 && dayTime.isCurrentMonth()) {
-                    wrapper.getView().setBackgroundColor(Color.YELLOW);
+                    wrapper.getView().setTextColor(Color.BLACK);
                 }
             }
         });

@@ -12,6 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:padding="8dp"
+        android:background="?attr/selectableItemBackground"
         android:src="@drawable/ic_arrow_back_black_24dp"
         android:layout_weight="0.30"
         tools:ignore="contentDescription"/>
@@ -29,6 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:padding="8dp"
+        android:background="?attr/selectableItemBackground"
         android:src="@drawable/ic_arrow_forward_black_24dp"
         android:layout_weight="0.30"
         tools:ignore="contentDescription"/>
