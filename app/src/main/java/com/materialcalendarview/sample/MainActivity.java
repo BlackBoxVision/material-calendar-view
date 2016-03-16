@@ -1,6 +1,7 @@
 package com.materialcalendarview.sample;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -111,9 +112,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         calendarView.setOnDayViewStyleChangeListener(new CalendarView.OnDayViewStyleChangeListener() {
             @Override
             public void onDayViewStyleChange(ViewHolderWrapper wrapper, DayTime dayTime) {
-                //TODO JS: This is not working at all.
+                if (dayTime.isCurrentMonth()) {
+                    wrapper.getView().setTypeface(Typeface.DEFAULT_BOLD);
+                    wrapper.getView().setBackgroundColor(Color.RED);
+                }
+
                 if (dayTime.isWeekend() || (!dayTime.isCurrentMonth() && dayTime.isWeekend())) {
                     wrapper.getView().setBackgroundColor(Color.DKGRAY);
+                }
+
+                if (dayTime.getDay() == 7 && dayTime.getMonth() == 2 && dayTime.getYear() == 2016 && dayTime.isCurrentMonth()) {
+                    wrapper.getView().setBackgroundColor(Color.YELLOW);
                 }
             }
         });

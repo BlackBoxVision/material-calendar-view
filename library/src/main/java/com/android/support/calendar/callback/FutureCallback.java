@@ -47,7 +47,7 @@ public class FutureCallback implements ThreadUtility.CallBack<List<DayTime>> {
 
                     if (n[d] == calendar.get(Calendar.DAY_OF_MONTH) &&
                             CalendarUtility.isWeekend(calendar) && index == 0) {
-                        final DayTime dayTime = new DayTime()
+                        DayTime dayTime = new DayTime()
                                 .setDay(n[d])
                                 .setMonth(m)
                                 .setYear(y)
@@ -59,7 +59,7 @@ public class FutureCallback implements ThreadUtility.CallBack<List<DayTime>> {
 
                         dayTimeList.add(dayTime);
                     } else if (n[d] == calendar.get(Calendar.DAY_OF_MONTH) && index == 0) {
-                        final DayTime dayTime = new DayTime()
+                        DayTime dayTime = new DayTime()
                                 .setDay(n[d])
                                 .setMonth(m)
                                 .setYear(y)
@@ -71,7 +71,7 @@ public class FutureCallback implements ThreadUtility.CallBack<List<DayTime>> {
 
                         dayTimeList.add(dayTime);
                     } else if (CalendarUtility.isWeekend(calendar)) {
-                        final DayTime dayTime = new DayTime()
+                        DayTime dayTime = new DayTime()
                                 .setDay(n[d])
                                 .setMonth(m)
                                 .setYear(y)
@@ -101,10 +101,11 @@ public class FutureCallback implements ThreadUtility.CallBack<List<DayTime>> {
                     calendar.set(Calendar.DAY_OF_MONTH, n[d]);
                     calendar.add(Calendar.MONTH, index);
 
+
                     int m = CalendarUtility.getMonth(calendar);
                     int y = CalendarUtility.getYear(calendar);
 
-                    final DayTime dayTime = new DayTime()
+                    DayTime dayTime = new DayTime()
                             .setDay(n[d])
                             .setMonth(m)
                             .setYear(y)
