@@ -16,7 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.android.support.calendar.adapter.DayTimeAdapter;
+import com.android.support.calendar.wrapper.ViewHolderWrapper;
 import com.android.support.calendar.model.DayTime;
 import com.android.support.calendar.model.Event;
 import com.android.support.calendar.util.CalendarUtility;
@@ -100,10 +100,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         calendarView.setOnDayTimeStyleChangeListener(new CalendarView.OnDayTimeStyleChangeListener() {
             @Override
-            public void onDayTimeStyleChange(DayTimeAdapter.DayTimeViewHolder holder, DayTime dayTime) {
+            public void onDayTimeStyleChange(ViewHolderWrapper wrapper, DayTime dayTime) {
                 //TODO JS: This is not working at all.
                 if (dayTime.isWeekend() || (!dayTime.isCurrentMonth() && dayTime.isWeekend())) {
-                    holder.textView.setBackgroundColor(Color.DKGRAY);
+                    wrapper.getView().setBackgroundColor(Color.DKGRAY);
                 }
             }
         });

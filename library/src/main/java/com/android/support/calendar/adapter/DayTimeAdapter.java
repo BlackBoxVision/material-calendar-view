@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.android.support.calendar.R;
 import com.android.support.calendar.exception.IllegalViewArgumentException;
 import com.android.support.calendar.model.DayTime;
+import com.android.support.calendar.wrapper.ViewHolderWrapper;
 
 import java.util.List;
 
@@ -71,7 +72,8 @@ public class DayTimeAdapter extends RecyclerView.Adapter<DayTimeAdapter.DayTimeV
         }
 
         if (null != onStyleChangeListener) {
-            onStyleChangeListener.onStyleChange(holder, dayTime);
+            ViewHolderWrapper wrapper = new ViewHolderWrapper(holder);
+            onStyleChangeListener.onStyleChange(wrapper, dayTime);
         }
 
         holder.textView.setOnClickListener(new View.OnClickListener() {
@@ -154,6 +156,6 @@ public class DayTimeAdapter extends RecyclerView.Adapter<DayTimeAdapter.DayTimeV
 
     public interface OnStyleChangeListener {
 
-        void onStyleChange(@NonNull DayTimeAdapter.DayTimeViewHolder holder, @NonNull DayTime dayTime);
+        void onStyleChange(@NonNull ViewHolderWrapper wrapper, @NonNull DayTime dayTime);
     }
 }

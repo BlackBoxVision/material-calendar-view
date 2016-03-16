@@ -37,6 +37,7 @@ import java.util.Locale;
 
 import com.android.support.calendar.adapter.DayTimeAdapter;
 import com.android.support.calendar.R;
+import com.android.support.calendar.wrapper.ViewHolderWrapper;
 import com.android.support.calendar.model.DayTime;
 import com.android.support.calendar.model.Event;
 import com.android.support.calendar.util.CalendarUtility;
@@ -246,9 +247,9 @@ public class CalendarView extends LinearLayout {
 
         adapterView.adapter().setOnStyleChangeListener(new DayTimeAdapter.OnStyleChangeListener() {
             @Override
-            public void onStyleChange(@NonNull DayTimeAdapter.DayTimeViewHolder holder, @NonNull DayTime dayTime) {
+            public void onStyleChange(@NonNull ViewHolderWrapper wrapper, @NonNull DayTime dayTime) {
                 if (null != onDayTimeStyleChangeListener) {
-                    onDayTimeStyleChangeListener.onDayTimeStyleChange(holder, dayTime);
+                    onDayTimeStyleChangeListener.onDayTimeStyleChange(wrapper, dayTime);
                 }
             }
         });
@@ -375,10 +376,10 @@ public class CalendarView extends LinearLayout {
 
         /**
          *
-         * @param holder
+         * @param wrapper
          * @param dayTime
          */
-        void onDayTimeStyleChange(DayTimeAdapter.DayTimeViewHolder holder, DayTime dayTime);
+        void onDayTimeStyleChange(ViewHolderWrapper wrapper, DayTime dayTime);
     }
 
     /**
