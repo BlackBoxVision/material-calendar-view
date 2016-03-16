@@ -4,9 +4,11 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,8 +16,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
 
+import com.android.support.calendar.util.ScreenUtility;
 import com.android.support.calendar.wrapper.ViewHolderWrapper;
 import com.android.support.calendar.model.DayTime;
 import com.android.support.calendar.model.Event;
@@ -53,12 +57,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Bind(R.id.calendar_view)
     CalendarView calendarView;
 
+    @Bind(R.id.fab)
+    FloatingActionButton fab;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+
+        animate(fab);
+        animate(textView);
 
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -70,9 +80,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final SimpleDateFormat formatter = new SimpleDateFormat(DATE_TEMPLATE, Locale.getDefault());
 
         calendarView.shouldAnimateOnEnter(true);
-        calendarView.setOnDayTimeClickListener(new CalendarView.OnDayTimeClickListener() {
+        calendarView.setOnDayViewClickListener(new CalendarView.OnDayViewClickListener() {
             @Override
-            public void onDayTimeClick(@NonNull View view, int year, int month, int dayOfMonth, @Nullable List<Event> eventList) {
+            public void onDayViewClick(@NonNull View view, int year, int month, int dayOfMonth, @Nullable List<Event> eventList) {
                 final Calendar calendar = new GregorianCalendar(year, month, dayOfMonth);
                 final String dateString = formatter.format(calendar.getTime());
                 Snackbar.make(view, getString(R.string.selected_date) + " " + dateString, Snackbar.LENGTH_SHORT).show();
@@ -98,9 +108,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        calendarView.setOnDayTimeStyleChangeListener(new CalendarView.OnDayTimeStyleChangeListener() {
+        calendarView.setOnDayViewStyleChangeListener(new CalendarView.OnDayViewStyleChangeListener() {
             @Override
-            public void onDayTimeStyleChange(ViewHolderWrapper wrapper, DayTime dayTime) {
+            public void onDayViewStyleChange(ViewHolderWrapper wrapper, DayTime dayTime) {
                 //TODO JS: This is not working at all.
                 if (dayTime.isWeekend() || (!dayTime.isCurrentMonth() && dayTime.isWeekend())) {
                     wrapper.getView().setBackgroundColor(Color.DKGRAY);
@@ -162,5 +172,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void animate(View v) {
+        ViewCompat.setTranslationY(v, ScreenUtility.getScreenHeight(getApplicationContext()));
+        ViewCompat.setAlpha(v, 0f);
+        ViewCompat.animate(v)
+                .translationY(0f)
+                .setDuration(1500)
+                .alpha(1f)
+                .setInterpolator(new DecelerateInterpolator(3.0f))
+                .start();
     }
 }

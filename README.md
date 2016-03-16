@@ -169,7 +169,7 @@ calendarView.setNextButtonColor(R.color.colorAccent);
 calendarView.refreshCalendar(Calendar.getInstance(Locale.getDefault()));
 calendarView.setOnDateSelectedListener(new CalendarView.OnDateSelectedListener() {
     @Override
-    public void onDayTimeClick(@NonNull Date selectedDate) {
+    public void onDayViewClick(@NonNull Date selectedDate) {
         SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         textView.setText(df.format(selectedDate));
     }
