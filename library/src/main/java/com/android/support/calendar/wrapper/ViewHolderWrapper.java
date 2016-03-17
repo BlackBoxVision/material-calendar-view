@@ -1,8 +1,7 @@
 package com.android.support.calendar.wrapper;
 
-import android.widget.TextView;
-
 import com.android.support.calendar.adapter.DayTimeAdapter;
+import com.android.support.calendar.widget.DayView;
 
 /**
  * @author jonatan.salas
@@ -14,7 +13,7 @@ public class ViewHolderWrapper {
         this.holder = viewHolder;
     }
 
-    public TextView getView() {
+    public DayView getView() {
         return this.holder.textView;
     }
 }

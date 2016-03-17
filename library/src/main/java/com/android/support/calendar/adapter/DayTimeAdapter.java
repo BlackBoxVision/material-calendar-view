@@ -7,11 +7,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.android.support.calendar.R;
 import com.android.support.calendar.exception.IllegalViewArgumentException;
 import com.android.support.calendar.model.DayTime;
+import com.android.support.calendar.widget.DayView;
 import com.android.support.calendar.wrapper.ViewHolderWrapper;
 
 import java.util.List;
@@ -130,11 +130,11 @@ public class DayTimeAdapter extends RecyclerView.Adapter<DayTimeAdapter.DayTimeV
     }
 
     public class DayTimeViewHolder extends RecyclerView.ViewHolder {
-        public final TextView textView;
+        public final DayView textView;
 
         public DayTimeViewHolder(@NonNull View view) {
             super(view);
-            this.textView = (TextView) view.findViewById(R.id.day_view);
+            this.textView = (DayView) view.findViewById(R.id.day_view);
         }
     }
 

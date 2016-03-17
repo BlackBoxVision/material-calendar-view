@@ -122,6 +122,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (dayTime.getDay() == 7 && dayTime.getMonth() == 2 && dayTime.getYear() == 2016 && dayTime.isCurrentMonth()) {
                     wrapper.getView().setTextColor(Color.BLACK);
                 }
+
+                wrapper.getView().drawRipples();
             }
         });
     }
