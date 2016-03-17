@@ -379,7 +379,7 @@ public class CalendarView extends LinearLayout {
          * @param wrapper
          * @param dayTime
          */
-        void onDayViewStyleChange(ViewHolderWrapper wrapper, DayTime dayTime);
+        void onDayViewStyleChange(@NonNull ViewHolderWrapper wrapper, @NonNull DayTime dayTime);
     }
 
     /**

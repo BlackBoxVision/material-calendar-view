@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         calendarView.setOnDayViewStyleChangeListener(new CalendarView.OnDayViewStyleChangeListener() {
             @Override
-            public void onDayViewStyleChange(ViewHolderWrapper wrapper, DayTime dayTime) {
+            public void onDayViewStyleChange(@NonNull ViewHolderWrapper wrapper, @NonNull DayTime dayTime) {
                 if (dayTime.isCurrentMonth()) {
                     wrapper.getView().setTextColor(Color.CYAN);
                 }
