@@ -27,7 +27,7 @@ public class DayView extends TextView {
     }
 
     public void drawRipples() {
-        RippleCompat.apply(this, getDrawingCacheBackgroundColor());
+        RippleCompat.apply(this, getCurrentTextColor());
     }
 
     public void drawRipples(Integer color) {

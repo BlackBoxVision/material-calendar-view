@@ -123,6 +123,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     dayView.setTextColor(Color.BLACK);
                     dayView.setBackgroundColor(Color.CYAN);
                 }
+
+                dayView.drawRipples();
             }
         });
     }
