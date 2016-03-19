@@ -1,4 +1,4 @@
-package com.android.support.calendar.widget;
+package com.jonatansalas.materialcalendarview.widget;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,10 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.android.support.calendar.adapter.DayTimeAdapter;
-import com.android.support.calendar.R;
-import com.android.support.calendar.model.DayTime;
-import com.android.support.calendar.util.CalendarUtility;
+import com.jonatansalas.materialcalendarview.R;
+import com.jonatansalas.materialcalendarview.adapter.DayTimeAdapter;
+import com.jonatansalas.materialcalendarview.model.DayTime;
+import com.jonatansalas.materialcalendarview.util.CalendarUtility;
 
 import java.util.Calendar;
 import java.util.List;

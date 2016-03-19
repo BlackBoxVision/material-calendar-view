@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.android.support.calendar.widget;
+package com.jonatansalas.materialcalendarview.widget;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
@@ -30,11 +32,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.support.calendar.exception.IllegalViewArgumentException;
-import com.android.support.calendar.R;
-import com.android.support.calendar.util.CalendarUtility;
+import com.jonatansalas.materialcalendarview.R;
+import com.jonatansalas.materialcalendarview.exception.IllegalViewArgumentException;
+import com.jonatansalas.materialcalendarview.util.CalendarUtility;
 
-import static com.android.support.calendar.exception.IllegalViewArgumentException.*;
+import static com.jonatansalas.materialcalendarview.exception.IllegalViewArgumentException.*;
 
 /**
  * LinearLayout class that provides the Calendar Title View.
@@ -56,7 +58,7 @@ public class HeaderView extends LinearLayout {
      * @param context the context used to inflate or get resources
      */
     public HeaderView(Context context) {
-        this(context, null, 0);
+        this(context, null);
     }
 
     /**
@@ -67,7 +69,8 @@ public class HeaderView extends LinearLayout {
      * @param attrs the attributes styled from a XML file
      */
     public HeaderView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+        super(context, attrs);
+        init();
     }
 
 
@@ -79,6 +82,7 @@ public class HeaderView extends LinearLayout {
      * @param attrs the attributes styled from a XML file
      * @param defStyleAttr int resource used to get the Styles array
      */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public HeaderView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
@@ -149,10 +153,7 @@ public class HeaderView extends LinearLayout {
      */
     private void updateLayout() {
         invalidate();
-
-        if (!isInLayout()) {
-            requestLayout();
-        }
+        requestLayout();
     }
 
     /**

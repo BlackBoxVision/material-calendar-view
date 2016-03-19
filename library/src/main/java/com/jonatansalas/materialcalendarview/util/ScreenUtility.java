@@ -1,4 +1,4 @@
-package com.android.support.calendar.util;
+package com.jonatansalas.materialcalendarview.util;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

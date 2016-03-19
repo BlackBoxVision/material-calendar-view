@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.android.support.calendar.widget;
+package com.jonatansalas.materialcalendarview.widget;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -35,17 +37,16 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import com.android.support.calendar.adapter.DayTimeAdapter;
-import com.android.support.calendar.R;
-import com.android.support.calendar.wrapper.ViewHolderWrapper;
-import com.android.support.calendar.model.DayTime;
-import com.android.support.calendar.model.Event;
-import com.android.support.calendar.util.CalendarUtility;
-import com.android.support.calendar.util.ScreenUtility;
+import com.jonatansalas.materialcalendarview.R;
+import com.jonatansalas.materialcalendarview.adapter.DayTimeAdapter;
+import com.jonatansalas.materialcalendarview.model.DayTime;
+import com.jonatansalas.materialcalendarview.model.Event;
+import com.jonatansalas.materialcalendarview.util.CalendarUtility;
+import com.jonatansalas.materialcalendarview.util.ScreenUtility;
 
-import static com.android.support.calendar.R.styleable.*;
-import static com.android.support.calendar.R.color.*;
-import static com.android.support.calendar.R.layout.*;
+import static com.jonatansalas.materialcalendarview.R.styleable.*;
+import static com.jonatansalas.materialcalendarview.R.color.*;
+import static com.jonatansalas.materialcalendarview.R.layout.*;
 
 /**
  * This class is a calendar widget for displaying dates, selecting, adding and associating event for a
@@ -106,7 +107,8 @@ public class CalendarView extends LinearLayout {
      * @param context The application context used to get needed resources.
      */
     public CalendarView(@NonNull Context context) {
-        this(context, null, 0);
+        super(context, null);
+        init();
     }
 
     /**
@@ -118,7 +120,9 @@ public class CalendarView extends LinearLayout {
      * @param attrs The AttributeSet used to get custom styles and apply to this view.
      */
     public CalendarView(@NonNull Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+        super(context, attrs);
+        style(attrs);
+        init();
     }
 
     /**
@@ -130,13 +134,14 @@ public class CalendarView extends LinearLayout {
      * @param attrs The AttributeSet used to get custom styles and apply to this view.
      * @param defStyle Style definition for this View
      */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public CalendarView(@NonNull Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         style(attrs);
         init();
     }
 
-    private void style(AttributeSet attrs) {
+    private void style(@NonNull AttributeSet attrs) {
         final TypedArray a = getContext().obtainStyledAttributes(attrs, CalendarView);
 
         final int white = ContextCompat.getColor(getContext(), android.R.color.white);
@@ -247,9 +252,9 @@ public class CalendarView extends LinearLayout {
 
         adapterView.adapter().setOnStyleChangeListener(new DayTimeAdapter.OnStyleChangeListener() {
             @Override
-            public void onStyleChange(@NonNull ViewHolderWrapper wrapper, @NonNull DayTime dayTime) {
+            public void onStyleChange(@NonNull DayView dayView, @NonNull DayTime dayTime) {
                 if (null != onDayViewStyleChangeListener) {
-                    onDayViewStyleChangeListener.onDayViewStyleChange(wrapper, dayTime);
+                    onDayViewStyleChangeListener.onDayViewStyleChange(dayView, dayTime);
                 }
             }
         });
@@ -376,10 +381,10 @@ public class CalendarView extends LinearLayout {
 
         /**
          *
-         * @param wrapper
+         * @param dayView
          * @param dayTime
          */
-        void onDayViewStyleChange(@NonNull ViewHolderWrapper wrapper, @NonNull DayTime dayTime);
+        void onDayViewStyleChange(@NonNull DayView dayView, @NonNull DayTime dayTime);
     }
 
     /**

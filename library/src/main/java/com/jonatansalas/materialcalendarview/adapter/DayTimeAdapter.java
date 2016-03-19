@@ -1,4 +1,4 @@
-package com.android.support.calendar.adapter;
+package com.jonatansalas.materialcalendarview.adapter;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -8,15 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.support.calendar.R;
-import com.android.support.calendar.exception.IllegalViewArgumentException;
-import com.android.support.calendar.model.DayTime;
-import com.android.support.calendar.widget.DayView;
-import com.android.support.calendar.wrapper.ViewHolderWrapper;
+import com.jonatansalas.materialcalendarview.R;
+import com.jonatansalas.materialcalendarview.exception.IllegalViewArgumentException;
+import com.jonatansalas.materialcalendarview.model.DayTime;
+import com.jonatansalas.materialcalendarview.widget.DayView;
 
 import java.util.List;
 
-import static com.android.support.calendar.exception.IllegalViewArgumentException.*;
+import static com.jonatansalas.materialcalendarview.exception.IllegalViewArgumentException.*;
 
 /**
  * @author jonatan.salas
@@ -72,8 +71,7 @@ public class DayTimeAdapter extends RecyclerView.Adapter<DayTimeAdapter.DayTimeV
         }
 
         if (null != onStyleChangeListener) {
-            ViewHolderWrapper wrapper = new ViewHolderWrapper(holder);
-            onStyleChangeListener.onStyleChange(wrapper, dayTime);
+            onStyleChangeListener.onStyleChange(holder.textView, dayTime);
         }
 
         holder.textView.setOnClickListener(new View.OnClickListener() {
@@ -156,6 +154,6 @@ public class DayTimeAdapter extends RecyclerView.Adapter<DayTimeAdapter.DayTimeV
 
     public interface OnStyleChangeListener {
 
-        void onStyleChange(@NonNull ViewHolderWrapper wrapper, @NonNull DayTime dayTime);
+        void onStyleChange(@NonNull DayView dayView, @NonNull DayTime dayTime);
     }
 }

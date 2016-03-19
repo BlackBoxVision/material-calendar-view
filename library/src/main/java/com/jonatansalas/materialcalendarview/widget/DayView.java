@@ -1,4 +1,4 @@
-package com.android.support.calendar.widget;
+package com.jonatansalas.materialcalendarview.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;

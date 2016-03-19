@@ -1,10 +1,10 @@
-package com.android.support.calendar.callback;
+package com.jonatansalas.materialcalendarview.callback;
 
 import android.util.MonthDisplayHelper;
 
-import com.android.support.calendar.model.DayTime;
-import com.android.support.calendar.util.CalendarUtility;
-import com.android.support.calendar.util.ThreadUtility;
+import com.jonatansalas.materialcalendarview.model.DayTime;
+import com.jonatansalas.materialcalendarview.util.CalendarUtility;
+import com.jonatansalas.materialcalendarview.util.ThreadUtility;
 
 import java.util.ArrayList;
 import java.util.Calendar;

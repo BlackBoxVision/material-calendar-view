@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.android.support.calendar.util;
+package com.jonatansalas.materialcalendarview.util;
 
 import android.support.annotation.NonNull;
 
-import com.android.support.calendar.callback.FutureCallback;
-import com.android.support.calendar.model.DayTime;
+import com.jonatansalas.materialcalendarview.callback.FutureCallback;
+import com.jonatansalas.materialcalendarview.model.DayTime;
 
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
