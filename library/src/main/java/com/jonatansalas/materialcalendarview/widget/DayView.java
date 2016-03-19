@@ -19,11 +19,11 @@ public class DayView extends TextView {
 
     public DayView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
-        RippleCompat.init(context.getApplicationContext());
     }
 
     public DayView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        RippleCompat.init(context.getApplicationContext());
     }
 
     public void drawRipples() {
