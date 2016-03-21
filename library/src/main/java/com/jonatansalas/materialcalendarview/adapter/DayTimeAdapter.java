@@ -42,39 +42,39 @@ public class DayTimeAdapter extends RecyclerView.Adapter<DayTimeAdapter.DayTimeV
     public void onBindViewHolder(DayTimeViewHolder holder, int position) {
         final DayTime dayTime = items.get(position);
 
-        holder.textView.setClickable(true);
-        holder.textView.setText(String.valueOf(dayTime.getDay()));
-//            holder.textView.setTextSize(mAdapterViewFontSize);
-//            holder.textView.setTextColor(mAdapterViewTextColor);
+        holder.dayView.setClickable(true);
+        holder.dayView.setText(String.valueOf(dayTime.getDay()));
+//            holder.dayView.setTextSize(mAdapterViewFontSize);
+//            holder.dayView.setTextColor(mAdapterViewTextColor);
 
         if (!dayTime.isCurrentMonth()) {
-            holder.textView.setTypeface(Typeface.DEFAULT_BOLD);
-//                holder.textView.setBackgroundColor(mDisabledBackgroundColor);
-//                holder.textView.setTextColor(mDisabledTextColor);
-            holder.textView.setEnabled(false);
-            holder.textView.setClickable(false);
+            holder.dayView.setTypeface(Typeface.DEFAULT_BOLD);
+//                holder.dayView.setBackgroundColor(mDisabledBackgroundColor);
+//                holder.dayView.setTextColor(mDisabledTextColor);
+            holder.dayView.setEnabled(false);
+            holder.dayView.setClickable(false);
         }
 
         if (dayTime.isWeekend() && dayTime.isCurrentMonth()) {
 //                holder.mDayView.setBackgroundColor(mWeekendBackgroundColor);
-//                holder.textView.setTextColor(mWeekendTextColor);
-            holder.textView.setTypeface(Typeface.DEFAULT_BOLD);
-            holder.textView.setEnabled(true);
-            holder.textView.setClickable(true);
+//                holder.dayView.setTextColor(mWeekendTextColor);
+            holder.dayView.setTypeface(Typeface.DEFAULT_BOLD);
+            holder.dayView.setEnabled(true);
+            holder.dayView.setClickable(true);
         }
 
         if (dayTime.isCurrentDay() && dayTime.isCurrentMonth()) {
-//                holder.textView.setBackgroundColor(mCurrentBackgroundColor);"onListItemClickListener can't be null!"
-//                holder.textView.setTextColor(mCurrentTextColor);
-            holder.textView.setEnabled(true);
-            holder.textView.setClickable(true);
+//                holder.dayView.setBackgroundColor(mCurrentBackgroundColor);"onListItemClickListener can't be null!"
+//                holder.dayView.setTextColor(mCurrentTextColor);
+            holder.dayView.setEnabled(true);
+            holder.dayView.setClickable(true);
         }
 
         if (null != onStyleChangeListener) {
-            onStyleChangeListener.onStyleChange(holder.textView, dayTime);
+            onStyleChangeListener.onStyleChange(holder.dayView, dayTime);
         }
 
-        holder.textView.setOnClickListener(new View.OnClickListener() {
+        holder.dayView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != onListItemClickListener) {
@@ -85,7 +85,7 @@ public class DayTimeAdapter extends RecyclerView.Adapter<DayTimeAdapter.DayTimeV
             }
         });
 
-        holder.textView.setOnLongClickListener(new View.OnLongClickListener() {
+        holder.dayView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 boolean result = (null != onListItemLongClickListener);
@@ -128,11 +128,11 @@ public class DayTimeAdapter extends RecyclerView.Adapter<DayTimeAdapter.DayTimeV
     }
 
     public class DayTimeViewHolder extends RecyclerView.ViewHolder {
-        public final DayView textView;
+        public final DayView dayView;
 
         public DayTimeViewHolder(@NonNull View view) {
             super(view);
-            this.textView = (DayView) view.findViewById(R.id.day_view);
+            this.dayView = (DayView) view.findViewById(R.id.day_view);
         }
     }
 
