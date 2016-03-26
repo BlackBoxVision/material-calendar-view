@@ -25,7 +25,9 @@ public class DayTimeAdapter extends RecyclerView.Adapter<DayTimeAdapter.DayTimeV
     private OnListItemLongClickListener onListItemLongClickListener;
     private OnStyleChangeListener onStyleChangeListener;
 
+    @NonNull
     private Context context;
+
     private List<DayTime> items;
 
     public DayTimeAdapter(@NonNull Context context) {
@@ -106,7 +108,7 @@ public class DayTimeAdapter extends RecyclerView.Adapter<DayTimeAdapter.DayTimeV
         return (null != items) ? items.size() : 0;
     }
 
-    public void setItems(List<DayTime> items) {
+    public void setItems(@NonNull List<DayTime> items) {
         this.items = items;
         notifyDataSetChanged();
     }
