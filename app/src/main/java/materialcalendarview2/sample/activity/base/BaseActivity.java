@@ -42,7 +42,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        getPresenter().dettachView();
+        getPresenter().detachView();
     }
 
     @LayoutRes
