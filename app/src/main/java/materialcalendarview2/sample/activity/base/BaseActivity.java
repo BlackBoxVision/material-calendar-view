@@ -22,6 +22,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import butterknife.ButterKnife;
+
 import materialcalendarview2.sample.presenter.MainPresenter;
 
 /**
