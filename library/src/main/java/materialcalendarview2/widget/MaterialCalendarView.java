@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jonatansalas.materialcalendarview.widget;
+package materialcalendarview2.widget;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -37,16 +37,14 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import com.jonatansalas.materialcalendarview.R;
-import com.jonatansalas.materialcalendarview.adapter.DayTimeAdapter;
-import com.jonatansalas.materialcalendarview.model.DayTime;
-import com.jonatansalas.materialcalendarview.model.Event;
-import com.jonatansalas.materialcalendarview.util.CalendarUtility;
-import com.jonatansalas.materialcalendarview.util.ScreenUtility;
+import materialcalendarview2.R;
+import materialcalendarview2.adapter.DayTimeAdapter;
+import materialcalendarview2.model.DayTime;
+import materialcalendarview2.model.Event;
 
-import static com.jonatansalas.materialcalendarview.R.styleable.*;
-import static com.jonatansalas.materialcalendarview.R.color.*;
-import static com.jonatansalas.materialcalendarview.R.layout.*;
+import static materialcalendarview2.util.CalendarUtil.getShortWeekDays;
+import static materialcalendarview2.util.CalendarUtil.calculateWeekIndex;
+import static materialcalendarview2.util.ScreenUtil.getScreenHeight;
 
 /**
  * This class is a calendar widget for displaying dates, selecting, adding and associating event for a
@@ -54,7 +52,7 @@ import static com.jonatansalas.materialcalendarview.R.layout.*;
  *
  * @author jonatan.salas
  */
-public class CalendarView extends LinearLayout {
+public class MaterialCalendarView extends LinearLayout {
     private static final Interpolator DEFAULT_ANIM_INTERPOLATOR = new DecelerateInterpolator(3.0f);
     private static final long DEFAULT_ANIM_DURATION = 1500;
     private static final int DEFAULT_MONTH_INDEX = 0;
@@ -106,9 +104,8 @@ public class CalendarView extends LinearLayout {
      *
      * @param context The application context used to get needed resources.
      */
-    public CalendarView(@NonNull Context context) {
-        super(context, null);
-        init();
+    public MaterialCalendarView(@NonNull Context context) {
+        this(context, null);
     }
 
     /**
@@ -119,7 +116,7 @@ public class CalendarView extends LinearLayout {
      * @param context The application context used to get needed resources.
      * @param attrs The AttributeSet used to get custom styles and apply to this view.
      */
-    public CalendarView(@NonNull Context context, AttributeSet attrs) {
+    public MaterialCalendarView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         style(attrs);
         init();
@@ -135,61 +132,63 @@ public class CalendarView extends LinearLayout {
      * @param defStyle Style definition for this View
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public CalendarView(@NonNull Context context, AttributeSet attrs, int defStyle) {
+    public MaterialCalendarView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         style(attrs);
         init();
     }
 
-    private void style(@NonNull AttributeSet attrs) {
-        final TypedArray a = getContext().obtainStyledAttributes(attrs, CalendarView);
+    private void style(AttributeSet attrs) {
+        if (null != attrs) {
+            final TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.CalendarView);
 
-        final int white = ContextCompat.getColor(getContext(), android.R.color.white);
-        final int prim = ContextCompat.getColor(getContext(), colorPrimary);
-        final int accent = ContextCompat.getColor(getContext(), colorAccent);
-        final int darkerGray = ContextCompat.getColor(getContext(), android.R.color.darker_gray);
+            final int white = ContextCompat.getColor(getContext(), android.R.color.white);
+            final int prim = ContextCompat.getColor(getContext(), R.color.colorPrimary);
+            final int accent = ContextCompat.getColor(getContext(), R.color.colorAccent);
+            final int darkerGray = ContextCompat.getColor(getContext(), android.R.color.darker_gray);
 
-        final float titleFontSize = 15f;
-        final float fontSize = 14f;
+            final float titleFontSize = 15f;
+            final float fontSize = 14f;
 
-        try {
-            //Font size values..
-            headerViewFontSize = a.getFloat(CalendarView_headerViewFontSize, titleFontSize);
-            weekViewFontSize = a.getFloat(CalendarView_weekViewFontSize, titleFontSize);
-            adapterViewFontSize = a.getFloat(CalendarView_adapterViewFontSize, fontSize);
+            try {
+                //Font size values..
+                headerViewFontSize = a.getFloat(R.styleable.CalendarView_headerViewFontSize, titleFontSize);
+                weekViewFontSize = a.getFloat(R.styleable.CalendarView_weekViewFontSize, titleFontSize);
+                adapterViewFontSize = a.getFloat(R.styleable.CalendarView_adapterViewFontSize, fontSize);
 
-            //Background color values..
-            calendarViewBackgroundColor = a.getColor(CalendarView_calendarViewBackgroundColor, prim);
-            headerViewBackgroundColor = a.getColor(CalendarView_headerViewBackgroundColor, prim);
-            weekViewBackgroundColor = a.getColor(CalendarView_weekViewBackgroundColor, prim);
-            adapterViewBackgroundColor = a.getColor(CalendarView_adapterViewBackgroundColor, prim);
-            disabledBackgroundColor = a.getColor(CalendarView_disabledBackgroundColor, prim);
-            currentBackgroundColor = a.getColor(CalendarView_currentBackgroundColor, accent);
+                //Background color values..
+                calendarViewBackgroundColor = a.getColor(R.styleable.CalendarView_calendarViewBackgroundColor, prim);
+                headerViewBackgroundColor = a.getColor(R.styleable.CalendarView_headerViewBackgroundColor, prim);
+                weekViewBackgroundColor = a.getColor(R.styleable.CalendarView_weekViewBackgroundColor, prim);
+                adapterViewBackgroundColor = a.getColor(R.styleable.CalendarView_adapterViewBackgroundColor, prim);
+                disabledBackgroundColor = a.getColor(R.styleable.CalendarView_disabledBackgroundColor, prim);
+                currentBackgroundColor = a.getColor(R.styleable.CalendarView_currentBackgroundColor, accent);
 
-            //Text Color values..
-            headerViewTextColor = a.getColor(CalendarView_headerViewTextColor, accent);
-            weekViewTextColor = a.getColor(CalendarView_weekViewTextColor, white);
-            adapterViewTextColor = a.getColor(CalendarView_adapterViewTextColor, white);
-            disabledTextColor = a.getColor(CalendarView_disabledTextColor, darkerGray);
-            weekendTextColor = a.getColor(CalendarView_weekendTextColor, accent);
-            currentTextColor = a.getColor(CalendarView_currentTextColor, white);
+                //Text Color values..
+                headerViewTextColor = a.getColor(R.styleable.CalendarView_headerViewTextColor, accent);
+                weekViewTextColor = a.getColor(R.styleable.CalendarView_weekViewTextColor, white);
+                adapterViewTextColor = a.getColor(R.styleable.CalendarView_adapterViewTextColor, white);
+                disabledTextColor = a.getColor(R.styleable.CalendarView_disabledTextColor, darkerGray);
+                weekendTextColor = a.getColor(R.styleable.CalendarView_weekendTextColor, accent);
+                currentTextColor = a.getColor(R.styleable.CalendarView_currentTextColor, white);
 
-            //Drawable Color values..
-            drawableColor = a.getColor(CalendarView_drawableColor, accent);
+                //Drawable Color values..
+                drawableColor = a.getColor(R.styleable.CalendarView_drawableColor, accent);
 
-            //Arrow drawables..
-            leftArrowDrawable = a.getDrawable(CalendarView_leftArrowDrawable);
-            rightArrowDrawable = a.getDrawable(CalendarView_rightArrowDrawable);
+                //Arrow drawables..
+                leftArrowDrawable = a.getDrawable(R.styleable.CalendarView_leftArrowDrawable);
+                rightArrowDrawable = a.getDrawable(R.styleable.CalendarView_rightArrowDrawable);
 
-        } finally {
-            a.recycle();
+            } finally {
+                a.recycle();
+            }
         }
     }
 
     private void init() {
         calendar = Calendar.getInstance(Locale.getDefault());
 
-        view = LayoutInflater.from(getContext()).inflate(calendar_view, this, true);
+        view = LayoutInflater.from(getContext()).inflate(R.layout.calendar_view, this, true);
         view.setBackgroundColor(calendarViewBackgroundColor);
 
         initHeaderView();
@@ -198,7 +197,7 @@ public class CalendarView extends LinearLayout {
     }
 
     private void initHeaderView() {
-        headerView = (HeaderView) view.findViewById(R.id.calendar_title_layout);
+        headerView = (HeaderView) view.findViewById(R.id.header_view);
 
         headerView.setBackgroundColor(headerViewBackgroundColor);
         headerView.setTitleTextColor(headerViewTextColor);
@@ -228,17 +227,16 @@ public class CalendarView extends LinearLayout {
         weekView = view.findViewById(R.id.calendar_week_view);
         weekView.setBackgroundColor(weekViewBackgroundColor);
 
-        final String[] shortWeekDays = CalendarUtility.getShortWeekDays();
+        final List<String> shortWeekDays = getShortWeekDays();
         TextView dayOfWeek;
         String dayName;
 
-        for (int i = 1; i < shortWeekDays.length; i++) {
-            dayName = shortWeekDays[i].trim().toUpperCase(Locale.getDefault());
+        for (int i = 1; i < shortWeekDays.size(); i++) {
+            dayName = shortWeekDays.get(i).trim().toUpperCase(Locale.getDefault());
             int length = (dayName.length() < 3) ? dayName.length() : 3;
             dayName = dayName.substring(0, length).toUpperCase(Locale.getDefault());
 
-            final int intTag = CalendarUtility.calculateWeekIndex(i, calendar);
-            final String tag = String.valueOf(intTag);
+            final String tag = String.valueOf(calculateWeekIndex(calendar, i));
 
             dayOfWeek = (TextView) weekView.findViewWithTag(tag);
             dayOfWeek.setText(dayName);
@@ -303,7 +301,7 @@ public class CalendarView extends LinearLayout {
 
     public void shouldAnimateOnEnter(boolean shouldAnimate, long duration, @NonNull Interpolator interpolator) {
         if (shouldAnimate) {
-            ViewCompat.setTranslationY(this, ScreenUtility.getScreenHeight(getContext()));
+            ViewCompat.setTranslationY(this, getScreenHeight(getContext()));
             ViewCompat.setAlpha(this, 0f);
             ViewCompat.animate(this)
                     .translationY(0f)

@@ -1,22 +1,26 @@
-package com.jonatansalas.materialcalendarview.callback;
+package materialcalendarview2.callback;
 
 import android.util.MonthDisplayHelper;
 
-import com.jonatansalas.materialcalendarview.model.DayTime;
-import com.jonatansalas.materialcalendarview.util.CalendarUtility;
-import com.jonatansalas.materialcalendarview.util.ThreadUtility;
+import materialcalendarview2.callback.base.CallBack;
+import materialcalendarview2.model.DayTime;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import static materialcalendarview2.util.CalendarUtil.getMonth;
+import static materialcalendarview2.util.CalendarUtil.getYear;
+import static materialcalendarview2.util.CalendarUtil.getFirstDayOfWeek;
+import static materialcalendarview2.util.CalendarUtil.isWeekend;
+
 /**
  * @author jonatan.salas
  */
-public class FutureCallback implements ThreadUtility.CallBack<List<DayTime>> {
-    private Calendar calendar;
-    private int index;
+public final class FutureCallback implements CallBack<List<DayTime>> {
+    private final Calendar calendar;
+    private final int index;
 
     public FutureCallback(final Calendar calendar, final int index) {
         this.calendar = calendar;
@@ -25,9 +29,9 @@ public class FutureCallback implements ThreadUtility.CallBack<List<DayTime>> {
 
     @Override
     public List<DayTime> execute() {
-        final int year = CalendarUtility.getYear(calendar);
-        final int month = CalendarUtility.getMonth(calendar);
-        final int firstDayOfWeek = CalendarUtility.getFirstDayOfWeek(calendar);
+        final int year = getYear(calendar);
+        final int month = getMonth(calendar);
+        final int firstDayOfWeek = getFirstDayOfWeek(calendar);
 
         final MonthDisplayHelper helper = new MonthDisplayHelper(year, month, firstDayOfWeek);
         final List<DayTime> dayTimeList = new ArrayList<>(42);
@@ -42,11 +46,10 @@ public class FutureCallback implements ThreadUtility.CallBack<List<DayTime>> {
                     calendar.set(Calendar.DAY_OF_MONTH, n[d]);
                     calendar.add(Calendar.MONTH, index);
 
-                    int m = CalendarUtility.getMonth(calendar);
-                    int y = CalendarUtility.getYear(calendar);
+                    int m = getMonth(calendar);
+                    int y = getYear(calendar);
 
-                    if (n[d] == calendar.get(Calendar.DAY_OF_MONTH) &&
-                            CalendarUtility.isWeekend(calendar) && index == 0) {
+                    if (n[d] == calendar.get(Calendar.DAY_OF_MONTH) && isWeekend(calendar) && index == 0) {
                         DayTime dayTime = new DayTime()
                                 .setDay(n[d])
                                 .setMonth(m)
@@ -70,7 +73,7 @@ public class FutureCallback implements ThreadUtility.CallBack<List<DayTime>> {
                                 .setEventList(null);
 
                         dayTimeList.add(dayTime);
-                    } else if (CalendarUtility.isWeekend(calendar)) {
+                    } else if (isWeekend(calendar)) {
                         DayTime dayTime = new DayTime()
                                 .setDay(n[d])
                                 .setMonth(m)
@@ -101,9 +104,8 @@ public class FutureCallback implements ThreadUtility.CallBack<List<DayTime>> {
                     calendar.set(Calendar.DAY_OF_MONTH, n[d]);
                     calendar.add(Calendar.MONTH, index);
 
-
-                    int m = CalendarUtility.getMonth(calendar);
-                    int y = CalendarUtility.getYear(calendar);
+                    int m = getMonth(calendar);
+                    int y = getYear(calendar);
 
                     DayTime dayTime = new DayTime()
                             .setDay(n[d])

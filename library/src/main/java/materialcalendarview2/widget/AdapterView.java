@@ -1,6 +1,8 @@
-package com.jonatansalas.materialcalendarview.widget;
+package materialcalendarview2.widget;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -10,13 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.jonatansalas.materialcalendarview.R;
-import com.jonatansalas.materialcalendarview.adapter.DayTimeAdapter;
-import com.jonatansalas.materialcalendarview.model.DayTime;
-import com.jonatansalas.materialcalendarview.util.CalendarUtility;
-
 import java.util.Calendar;
-import java.util.List;
+
+import materialcalendarview2.R;
+import materialcalendarview2.adapter.DayTimeAdapter;
+
+import static materialcalendarview2.util.CalendarUtil.obtainDayTimes;
 
 /**
  * The View that contains the Adapter with the month data.
@@ -36,7 +37,7 @@ public class AdapterView extends LinearLayout {
      * @param context the context used to inflate or get resources
      */
     public AdapterView(Context context) {
-        this(context, null, 0);
+        this(context, null);
     }
 
     /**
@@ -47,7 +48,8 @@ public class AdapterView extends LinearLayout {
      * @param attrs   the attributes styled from a XML file
      */
     public AdapterView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+        super(context, attrs);
+        init();
     }
 
     /**
@@ -58,6 +60,7 @@ public class AdapterView extends LinearLayout {
      * @param attrs        the attributes styled from a XML file
      * @param defStyleAttr int resource used to get the Styles array
      */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public AdapterView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
@@ -79,10 +82,9 @@ public class AdapterView extends LinearLayout {
 
     public void init(@NonNull Calendar calendar, int monthIndex) {
         setMonthIndex(monthIndex);
-        final List<DayTime> list = CalendarUtility.obtainDayTimes(calendar, monthIndex);
 
         recyclerView.setAdapter(monthAdapter);
-        monthAdapter.setItems(list);
+        monthAdapter.setItems(obtainDayTimes(calendar, monthIndex));
 
         recyclerView.invalidate();
     }

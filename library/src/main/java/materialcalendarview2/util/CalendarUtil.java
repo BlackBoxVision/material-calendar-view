@@ -13,24 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jonatansalas.materialcalendarview.util;
+package materialcalendarview2.util;
 
 import android.support.annotation.NonNull;
 
-import com.jonatansalas.materialcalendarview.callback.FutureCallback;
-import com.jonatansalas.materialcalendarview.model.DayTime;
-
 import java.text.DateFormatSymbols;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import materialcalendarview2.callback.FutureCallback;
+import materialcalendarview2.model.DayTime;
+
+import static materialcalendarview2.util.ThreadUtil.runInBackground;
+
 /**
  * @author jonatan.salas
  */
-public final class CalendarUtility {
+public final class CalendarUtil {
 
-    private CalendarUtility() { }
+    private CalendarUtil() { }
 
     public static boolean isWeekend(Calendar calendar) {
         int position = calendar.get(Calendar.DAY_OF_WEEK);
@@ -54,10 +57,11 @@ public final class CalendarUtility {
                 && (cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)));
     }
 
-    public static String[] getShortWeekDays() {
-        return new DateFormatSymbols(Locale.getDefault()).getShortWeekdays();
+    public static List<String> getShortWeekDays() {
+        final String[] array = new DateFormatSymbols(Locale.getDefault()).getShortWeekdays();
+        return Arrays.asList(array);
     }
-    public static int calculateWeekIndex(int weekIndex, Calendar calendar) {
+    public static int calculateWeekIndex(final Calendar calendar, final int weekIndex) {
         int firstDayWeekPosition = calendar.getFirstDayOfWeek();
         if (firstDayWeekPosition == 1) {
             return weekIndex;
@@ -71,7 +75,7 @@ public final class CalendarUtility {
     }
 
     public static List<DayTime> obtainDayTimes(final Calendar calendar, final int index) {
-        return ThreadUtility.runInBackground(new FutureCallback(calendar, index));
+        return runInBackground(new FutureCallback(calendar, index));
     }
 
     public static String getDateTitle(int index) {

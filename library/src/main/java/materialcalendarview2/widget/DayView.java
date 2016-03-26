@@ -1,4 +1,4 @@
-package com.jonatansalas.materialcalendarview.widget;
+package materialcalendarview2.widget;
 
 import android.content.Context;
 import android.support.annotation.ColorRes;

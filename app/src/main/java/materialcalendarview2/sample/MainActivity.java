@@ -1,4 +1,4 @@
-package com.jonatansalas.sample;
+package materialcalendarview2.sample;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -19,12 +19,12 @@ import android.view.MenuItem;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
 
-import com.jonatansalas.materialcalendarview.model.DayTime;
-import com.jonatansalas.materialcalendarview.model.Event;
-import com.jonatansalas.materialcalendarview.util.CalendarUtility;
-import com.jonatansalas.materialcalendarview.util.ScreenUtility;
-import com.jonatansalas.materialcalendarview.widget.CalendarView;
-import com.jonatansalas.materialcalendarview.widget.DayView;
+import materialcalendarview2.model.DayTime;
+import materialcalendarview2.model.Event;
+import materialcalendarview2.util.CalendarUtil;
+import materialcalendarview2.util.ScreenUtil;
+import materialcalendarview2.widget.MaterialCalendarView;
+import materialcalendarview2.widget.DayView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     TextView textView;
 
     @Bind(R.id.calendar_view)
-    CalendarView calendarView;
+    MaterialCalendarView calendarView;
 
     @Bind(R.id.fab)
     FloatingActionButton fab;
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final SimpleDateFormat formatter = new SimpleDateFormat(DATE_TEMPLATE, Locale.getDefault());
 
         calendarView.shouldAnimateOnEnter(true);
-        calendarView.setOnDayViewClickListener(new CalendarView.OnDayViewClickListener() {
+        calendarView.setOnDayViewClickListener(new MaterialCalendarView.OnDayViewClickListener() {
             @Override
             public void onDayViewClick(@NonNull View view, int year, int month, int dayOfMonth, @Nullable List<Event> eventList) {
                 final Calendar calendar = new GregorianCalendar(year, month, dayOfMonth);
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final String todayDate = getString(R.string.today) + " " + formatter.format(new Date(System.currentTimeMillis()));
         textView.setText(todayDate);
 
-        calendarView.setOnMonthChangeListener(new CalendarView.OnMonthChangeListener() {
+        calendarView.setOnMonthChangeListener(new MaterialCalendarView.OnMonthChangeListener() {
             @Override
             public void onMonthChanged(@NonNull View view, int year, int month) {
                 final Calendar calender = new GregorianCalendar(year, month - 1, month);
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 final String message = getString(R.string.month_display) + " " + month + " " + getString(R.string.year_is) + " " + year;
                 Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show();
 
-                if (!CalendarUtility.isSameMonth(calender, calendar)) {
+                if (!CalendarUtil.isSameMonth(calender, calendar)) {
                     textView.setText(getString(R.string.not_actual_month));
                 } else {
                     textView.setText(todayDate);
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        calendarView.setOnDayViewStyleChangeListener(new CalendarView.OnDayViewStyleChangeListener() {
+        calendarView.setOnDayViewStyleChangeListener(new MaterialCalendarView.OnDayViewStyleChangeListener() {
             @Override
             public void onDayViewStyleChange(@NonNull DayView dayView, @NonNull DayTime dayTime) {
                 if (dayTime.isCurrentMonth()) {
@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void animate(View v) {
-        ViewCompat.setTranslationY(v, ScreenUtility.getScreenHeight(getApplicationContext()));
+        ViewCompat.setTranslationY(v, ScreenUtil.getScreenHeight(getApplicationContext()));
         ViewCompat.setAlpha(v, 0f);
         ViewCompat.animate(v)
                 .translationY(0f)

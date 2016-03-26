@@ -1,4 +1,4 @@
-package com.jonatansalas.materialcalendarview.util;
+package materialcalendarview2.util;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -8,9 +8,9 @@ import android.view.WindowManager;
 /**
  * @author jonatan.salas
  */
-public final class ScreenUtility {
+public final class ScreenUtil {
 
-    private ScreenUtility() { }
+    private ScreenUtil() { }
 
     public static int getScreenHeight(@NonNull Context context) {
         final DisplayMetrics metrics = new DisplayMetrics();

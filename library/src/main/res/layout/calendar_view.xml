@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <com.jonatansalas.materialcalendarview.widget.HeaderView
-        android:id="@+id/calendar_title_layout"
+        android:id="@+id/header_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

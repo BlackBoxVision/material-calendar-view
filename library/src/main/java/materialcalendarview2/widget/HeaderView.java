@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jonatansalas.materialcalendarview.widget;
+package materialcalendarview2.widget;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -32,11 +32,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.jonatansalas.materialcalendarview.R;
-import com.jonatansalas.materialcalendarview.exception.IllegalViewArgumentException;
-import com.jonatansalas.materialcalendarview.util.CalendarUtility;
+import materialcalendarview2.R;
+import materialcalendarview2.exception.IllegalViewArgumentException;
 
-import static com.jonatansalas.materialcalendarview.exception.IllegalViewArgumentException.*;
+import static materialcalendarview2.util.CalendarUtil.getDateTitle;
+import static materialcalendarview2.exception.IllegalViewArgumentException.*;
 
 /**
  * LinearLayout class that provides the Calendar Title View.
@@ -128,7 +128,7 @@ public class HeaderView extends LinearLayout {
      * "Month + Year".
      */
     private void setDateTitleText() {
-        dateTitle.setText(CalendarUtility.getDateTitle(monthIndex));
+        dateTitle.setText(getDateTitle(monthIndex));
         updateLayout();
     }
 
