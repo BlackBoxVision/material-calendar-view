@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2015 Jonatan E. Salas { link: http://the-android-developer.blogspot.com.ar }
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package materialcalendarview2.sample.activity;
 
 import android.graphics.Color;
@@ -10,20 +25,11 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-
-import materialcalendarview2.model.DayTime;
-import materialcalendarview2.model.Event;
-import materialcalendarview2.sample.presenter.MainPresenter;
-import materialcalendarview2.sample.view.MainView;
-import materialcalendarview2.sample.R;
-import materialcalendarview2.widget.MaterialCalendarView;
-import materialcalendarview2.widget.DayView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -33,7 +39,15 @@ import java.util.List;
 import java.util.Locale;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
+
+import materialcalendarview2.model.DayTime;
+import materialcalendarview2.model.Event;
+import materialcalendarview2.sample.activity.base.BaseActivity;
+import materialcalendarview2.sample.presenter.MainPresenter;
+import materialcalendarview2.sample.view.MainView;
+import materialcalendarview2.sample.R;
+import materialcalendarview2.widget.MaterialCalendarView;
+import materialcalendarview2.widget.DayView;
 
 import static android.support.design.widget.NavigationView.OnNavigationItemSelectedListener;
 
@@ -46,8 +60,9 @@ import static materialcalendarview2.sample.util.AnimationUtil.animate;
 /**
  * @author jonatan.salas
  */
-public class MainActivity extends AppCompatActivity implements MainView, OnNavigationItemSelectedListener,
-        OnDayViewClickListener, OnMonthChangeListener, OnDayViewStyleChangeListener {
+public class MainActivity extends BaseActivity implements MainView,
+        OnNavigationItemSelectedListener, OnDayViewClickListener,
+        OnMonthChangeListener, OnDayViewStyleChangeListener {
     private static final String DATE_TEMPLATE = "dd/MM/yyyy";
 
     @Bind(R.id.toolbar)
@@ -69,32 +84,37 @@ public class MainActivity extends AppCompatActivity implements MainView, OnNavig
     FloatingActionButton fab;
 
     @NonNull
-    private final MainPresenter presenter = new MainPresenter(this);
     private final SimpleDateFormat formatter = new SimpleDateFormat(DATE_TEMPLATE, Locale.getDefault());
+
+    @NonNull
     private String todayDate = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        presenter.addNavigationDrawer();
-        presenter.addCalendarView();
+        getPresenter().addNavigationDrawer();
+        getPresenter().addCalendarView();
+        getPresenter().addTextView();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        presenter.setToday();
-        presenter.animate();
+        getPresenter().animate();
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        presenter.dettachView();
+    protected int getLayoutId() {
+        return R.layout.activity_main;
+    }
+
+    @NonNull
+    @Override
+    protected MainPresenter createPresenter() {
+        return new MainPresenter(this);
     }
 
     @Override
@@ -135,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements MainView, OnNavig
     }
 
     @Override
-    public void setTodayDate() {
+    public void prepareTextView() {
         todayDate = getString(R.string.today) + " " + formatter.format(new Date(System.currentTimeMillis()));
         textView.setText(todayDate);
     }
