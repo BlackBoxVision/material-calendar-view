@@ -38,13 +38,16 @@ import java.util.List;
 import java.util.Locale;
 
 import materialcalendarview2.R;
-import materialcalendarview2.adapter.DayTimeAdapter;
 import materialcalendarview2.model.DayTime;
 import materialcalendarview2.model.Event;
 
+import static materialcalendarview2.adapter.DayTimeAdapter.OnStyleChangeListener;
+import static materialcalendarview2.adapter.DayTimeAdapter.OnListItemClickListener;
+import static materialcalendarview2.adapter.DayTimeAdapter.OnListItemLongClickListener;
 import static materialcalendarview2.util.CalendarUtil.getShortWeekDays;
 import static materialcalendarview2.util.CalendarUtil.calculateWeekIndex;
 import static materialcalendarview2.util.ScreenUtil.getScreenHeight;
+import static materialcalendarview2.widget.HeaderView.OnButtonClickedListener;
 
 /**
  * This class is a calendar widget for displaying dates, selecting, adding and associating event for a
@@ -97,6 +100,60 @@ public class MaterialCalendarView extends LinearLayout {
 
     private Calendar calendar;
 
+    private final OnStyleChangeListener onStyleChangeListener = new OnStyleChangeListener() {
+        @Override
+        public void onStyleChange(@NonNull DayView dayView, @NonNull DayTime dayTime) {
+            if (null != onDayViewStyleChangeListener) {
+                onDayViewStyleChangeListener.onDayViewStyleChange(dayView, dayTime);
+            }
+        }
+    };
+
+    private final OnListItemClickListener onListItemClickListener = new OnListItemClickListener() {
+        @Override
+        public void onListItemClick(@NonNull View view, @NonNull DayTime dayTime) {
+            if (null != onDayViewClickListener) {
+                onDayViewClickListener.onDayViewClick(
+                        view,
+                        dayTime.getYear(),
+                        dayTime.getMonth(),
+                        dayTime.getDay(),
+                        dayTime.getEventList()
+                );
+            }
+        }
+    };
+
+    private final OnListItemLongClickListener onListItemLongClickListener = new OnListItemLongClickListener() {
+        @Override
+        public void onListItemLongClick(@NonNull View view, @NonNull DayTime dayTime) {
+            if (null != onDayViewLongClickListener) {
+                onDayViewLongClickListener.onDayViewLongClick(
+                        view,
+                        dayTime.getYear(),
+                        dayTime.getMonth(),
+                        dayTime.getDay(),
+                        dayTime.getEventList()
+                );
+            }
+        }
+    };
+
+    private final OnButtonClickedListener onButtonClickedListener = new OnButtonClickedListener() {
+        @Override
+        public void onButtonClicked(@NonNull View view, int monthIndex) {
+            if (null != onMonthChangeListener) {
+                final Calendar calendar = Calendar.getInstance(Locale.getDefault());
+                calendar.add(Calendar.MONTH, monthIndex);
+
+                final int month = calendar.get(Calendar.MONTH) + 1;
+                final int year = calendar.get(Calendar.YEAR);
+
+                adapterView.init(calendar, monthIndex);
+                onMonthChangeListener.onMonthChanged(view, year, month);
+            }
+        }
+    };
 
     /**
      * Constructor with params. It takes the context as param, and use to get the
@@ -138,7 +195,7 @@ public class MaterialCalendarView extends LinearLayout {
         init();
     }
 
-    private void style(AttributeSet attrs) {
+    private void style(@Nullable AttributeSet attrs) {
         if (null != attrs) {
             final TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.CalendarView);
 
@@ -205,26 +262,11 @@ public class MaterialCalendarView extends LinearLayout {
         headerView.setTitleTextTypeface(Typeface.DEFAULT);
         headerView.setNextButtonDrawableColor(drawableColor);
         headerView.setBackButtonDrawableColor(drawableColor);
-
-        headerView.setOnButtonClicked(new HeaderView.OnButtonClickedListener() {
-            @Override
-            public void onButtonClicked(@NonNull View view, int monthIndex) {
-                if (null != onMonthChangeListener) {
-                    final Calendar calendar = Calendar.getInstance(Locale.getDefault());
-                    calendar.add(Calendar.MONTH, monthIndex);
-
-                    final int month = calendar.get(Calendar.MONTH) + 1;
-                    final int year = calendar.get(Calendar.YEAR);
-
-                    adapterView.init(calendar, monthIndex);
-                    onMonthChangeListener.onMonthChanged(view, year, month);
-                }
-            }
-        });
+        headerView.setOnButtonClicked(onButtonClickedListener);
     }
 
     private void initWeekView() {
-        weekView = view.findViewById(R.id.calendar_week_view);
+        weekView = view.findViewById(R.id.week_view);
         weekView.setBackgroundColor(weekViewBackgroundColor);
 
         final List<String> shortWeekDays = getShortWeekDays();
@@ -246,44 +288,12 @@ public class MaterialCalendarView extends LinearLayout {
     }
 
     private void initAdapterView() {
-        adapterView = (AdapterView) view.findViewById(R.id.calendar_adapter_view);
+        adapterView = (AdapterView) view.findViewById(R.id.adapter_view);
 
-        adapterView.adapter().setOnStyleChangeListener(new DayTimeAdapter.OnStyleChangeListener() {
-            @Override
-            public void onStyleChange(@NonNull DayView dayView, @NonNull DayTime dayTime) {
-                if (null != onDayViewStyleChangeListener) {
-                    onDayViewStyleChangeListener.onDayViewStyleChange(dayView, dayTime);
-                }
-            }
-        });
-        adapterView.adapter().setOnListItemClickListener(new DayTimeAdapter.OnListItemClickListener() {
-            @Override
-            public void onListItemClick(@NonNull View view, @NonNull DayTime dayTime) {
-                if (null != onDayViewClickListener) {
-                    onDayViewClickListener.onDayViewClick(
-                            view,
-                            dayTime.getYear(),
-                            dayTime.getMonth(),
-                            dayTime.getDay(),
-                            dayTime.getEventList()
-                    );
-                }
-            }
-        });
-        adapterView.adapter().setOnListItemLongClickListener(new DayTimeAdapter.OnListItemLongClickListener() {
-            @Override
-            public void onListItemLongClick(@NonNull View view, @NonNull DayTime dayTime) {
-                if (null != onDayViewLongClickListener) {
-                    onDayViewLongClickListener.onDayViewLongClick(
-                            view,
-                            dayTime.getYear(),
-                            dayTime.getMonth(),
-                            dayTime.getDay(),
-                            dayTime.getEventList()
-                    );
-                }
-            }
-        });
+        adapterView.getAdapter().setOnStyleChangeListener(onStyleChangeListener);
+        adapterView.getAdapter().setOnListItemClickListener(onListItemClickListener);
+        adapterView.getAdapter().setOnListItemLongClickListener(onListItemLongClickListener);
+
         adapterView.init(calendar, DEFAULT_MONTH_INDEX);
     }
 
@@ -397,7 +407,7 @@ public class MaterialCalendarView extends LinearLayout {
          *
          * @param view The view associated with this listener.
          * @param year The year that was set.
-         * @param month The month that was set [0-11].
+         * @param month The month that was set [1-12].
          */
         void onMonthChanged(@NonNull View view, int year, int month);
     }

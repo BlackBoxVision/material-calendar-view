@@ -52,6 +52,21 @@ public class HeaderView extends LinearLayout {
 
     private int monthIndex = 0;
 
+    private final OnClickListener onClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            final int id = v.getId();
+
+            if (id == R.id.back_button) {
+                monthIndex--;
+            } else {
+                monthIndex++;
+            }
+
+            prepareListeners(v);
+        }
+    };
+
     /**
      * Constructor with arguments. It only takes the Context as param.
      *
@@ -104,23 +119,11 @@ public class HeaderView extends LinearLayout {
 
         backButton.setEnabled(true);
         backButton.setClickable(true);
-        backButton.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    monthIndex--;
-                    prepareListeners(view);
-                }
-        });
+        backButton.setOnClickListener(onClickListener);
 
         nextButton.setEnabled(true);
         nextButton.setClickable(true);
-        nextButton.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    monthIndex++;
-                    prepareListeners(view);
-                }
-        });
+        nextButton.setOnClickListener(onClickListener);
     }
 
     /**

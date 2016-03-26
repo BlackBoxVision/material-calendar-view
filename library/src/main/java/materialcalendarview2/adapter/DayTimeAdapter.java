@@ -125,7 +125,7 @@ public class DayTimeAdapter extends RecyclerView.Adapter<DayTimeAdapter.DayTimeV
         this.onStyleChangeListener = onStyleChangeListener;
     }
 
-    public class DayTimeViewHolder extends RecyclerView.ViewHolder {
+    protected final class DayTimeViewHolder extends RecyclerView.ViewHolder {
         public final DayView dayView;
 
         public DayTimeViewHolder(@NonNull View view) {
@@ -139,6 +139,11 @@ public class DayTimeAdapter extends RecyclerView.Adapter<DayTimeAdapter.DayTimeV
      */
     public interface OnListItemClickListener {
 
+        /**
+         *
+         * @param view
+         * @param dayTime
+         */
         void onListItemClick(@NonNull View view, @NonNull DayTime dayTime);
     }
 
@@ -147,11 +152,24 @@ public class DayTimeAdapter extends RecyclerView.Adapter<DayTimeAdapter.DayTimeV
      */
     public interface OnListItemLongClickListener {
 
+        /**
+         *
+         * @param view
+         * @param dayTime
+         */
         void onListItemLongClick(@NonNull View view, @NonNull DayTime dayTime);
     }
 
+    /**
+     * @author jonatan.salas
+     */
     public interface OnStyleChangeListener {
 
+        /**
+         *
+         * @param dayView
+         * @param dayTime
+         */
         void onStyleChange(@NonNull DayView dayView, @NonNull DayTime dayTime);
     }
 }

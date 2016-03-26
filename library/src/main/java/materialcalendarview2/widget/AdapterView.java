@@ -89,7 +89,7 @@ public class AdapterView extends LinearLayout {
         recyclerView.invalidate();
     }
 
-    public DayTimeAdapter adapter() {
+    public DayTimeAdapter getAdapter() {
         return monthAdapter;
     }
 
