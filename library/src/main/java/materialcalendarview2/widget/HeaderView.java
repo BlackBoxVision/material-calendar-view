@@ -52,21 +52,6 @@ public class HeaderView extends LinearLayout {
 
     private int monthIndex = 0;
 
-    private final OnClickListener onClickListener = new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            final int id = v.getId();
-
-            if (id == R.id.back_button) {
-                monthIndex--;
-            } else {
-                monthIndex++;
-            }
-
-            prepareListeners(v);
-        }
-    };
-
     /**
      * Constructor with arguments. It only takes the Context as param.
      *
@@ -119,11 +104,23 @@ public class HeaderView extends LinearLayout {
 
         backButton.setEnabled(true);
         backButton.setClickable(true);
-        backButton.setOnClickListener(onClickListener);
+        backButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                monthIndex--;
+                prepareListeners(v);
+            }
+        });
 
         nextButton.setEnabled(true);
         nextButton.setClickable(true);
-        nextButton.setOnClickListener(onClickListener);
+        nextButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                monthIndex++;
+                prepareListeners(v);
+            }
+        });
     }
 
     /**
@@ -131,7 +128,7 @@ public class HeaderView extends LinearLayout {
      * "Month + Year".
      */
     private void setDateTitleText() {
-        dateTitle.setText(getDateTitle(monthIndex));
+        dateTitle.setText(getDateTitle(getMonthIndex()));
         updateLayout();
     }
 
@@ -144,7 +141,7 @@ public class HeaderView extends LinearLayout {
         setDateTitleText();
 
         if (null != onButtonClicked) {
-            onButtonClicked.onButtonClicked(view, monthIndex);
+            onButtonClicked.onButtonClicked(view, getMonthIndex());
         } else {
             throw new IllegalViewArgumentException(BUTTON_CLICK_LISTENER_NOT_NULL_MESSAGE);
         }
