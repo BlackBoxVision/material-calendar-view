@@ -104,22 +104,16 @@ public class HeaderView extends LinearLayout {
 
         backButton.setEnabled(true);
         backButton.setClickable(true);
-        backButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                monthIndex--;
-                prepareListeners(v);
-            }
+        backButton.setOnClickListener(v -> {
+            monthIndex--;
+            prepareListeners(v);
         });
 
         nextButton.setEnabled(true);
         nextButton.setClickable(true);
-        nextButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                monthIndex++;
-                prepareListeners(v);
-            }
+        nextButton.setOnClickListener(v -> {
+            monthIndex++;
+            prepareListeners(v);
         });
     }
 

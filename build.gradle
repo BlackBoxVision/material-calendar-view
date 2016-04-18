@@ -1,9 +1,11 @@
 buildscript {
     repositories {
         jcenter()
+        mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.0.0-beta7'
+        classpath 'com.android.tools.build:gradle:2.0.0'
+        classpath 'me.tatarka:gradle-retrolambda:3.2.3'
     }
 }
 

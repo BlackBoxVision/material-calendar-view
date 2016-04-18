@@ -76,30 +76,24 @@ public class DayTimeAdapter extends RecyclerView.Adapter<DayTimeAdapter.DayTimeV
             onStyleChangeListener.onStyleChange(holder.dayView, dayTime);
         }
 
-        holder.dayView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != onListItemClickListener) {
-                    onListItemClickListener.onListItemClick(v, dayTime);
-                } else {
-                    throw new IllegalViewArgumentException(ITEM_SELECTED_LISTENER_NOT_NULL_MESSAGE);
-                }
+        holder.dayView.setOnClickListener(v -> {
+            if (null != onListItemClickListener) {
+                onListItemClickListener.onListItemClick(v, dayTime);
+            } else {
+                throw new IllegalViewArgumentException(ITEM_SELECTED_LISTENER_NOT_NULL_MESSAGE);
             }
         });
 
-        holder.dayView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                boolean result = (null != onListItemLongClickListener);
+        holder.dayView.setOnLongClickListener(v ->  {
+            boolean result = (null != onListItemLongClickListener);
 
-                if (result) {
-                    onListItemLongClickListener.onListItemLongClick(v, dayTime);
-                } else {
-                    throw new IllegalViewArgumentException(ITEM_LONG_SELECTED_LISTENER_NOT_NULL_MESSAGE);
-                }
-
-                return result;
+            if (result) {
+                onListItemLongClickListener.onListItemLongClick(v, dayTime);
+            } else {
+                throw new IllegalViewArgumentException(ITEM_LONG_SELECTED_LISTENER_NOT_NULL_MESSAGE);
             }
+
+            return result;
         });
     }
 

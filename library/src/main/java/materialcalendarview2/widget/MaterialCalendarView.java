@@ -23,7 +23,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -40,14 +39,11 @@ import java.util.Locale;
 import materialcalendarview2.R;
 import materialcalendarview2.model.DayTime;
 import materialcalendarview2.model.Event;
+import materialcalendarview2.util.ContextUtils;
 
-import static materialcalendarview2.adapter.DayTimeAdapter.OnStyleChangeListener;
-import static materialcalendarview2.adapter.DayTimeAdapter.OnListItemClickListener;
-import static materialcalendarview2.adapter.DayTimeAdapter.OnListItemLongClickListener;
 import static materialcalendarview2.util.CalendarUtil.getShortWeekDays;
 import static materialcalendarview2.util.CalendarUtil.calculateWeekIndex;
 import static materialcalendarview2.util.ScreenUtil.getScreenHeight;
-import static materialcalendarview2.widget.HeaderView.OnButtonClickedListener;
 
 /**
  * This class is a calendar widget for displaying dates, selecting, adding and associating event for a
@@ -55,6 +51,7 @@ import static materialcalendarview2.widget.HeaderView.OnButtonClickedListener;
  *
  * @author jonatan.salas
  */
+@SuppressWarnings("all")
 public class MaterialCalendarView extends LinearLayout {
     private static final Interpolator DEFAULT_ANIM_INTERPOLATOR = new DecelerateInterpolator(3.0f);
     private static final long DEFAULT_ANIM_DURATION = 1500;
@@ -120,6 +117,7 @@ public class MaterialCalendarView extends LinearLayout {
      */
     public MaterialCalendarView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        ContextUtils.init(context);
         style(attrs);
         init();
     }
@@ -136,18 +134,19 @@ public class MaterialCalendarView extends LinearLayout {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public MaterialCalendarView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        ContextUtils.init(context);
         style(attrs);
         init();
     }
 
     private void style(@Nullable AttributeSet attrs) {
         if (null != attrs) {
-            final TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.CalendarView);
+            final TypedArray a = ContextUtils.getStylesAttributes(attrs, R.styleable.CalendarView);
 
-            final int white = ContextCompat.getColor(getContext(), android.R.color.white);
-            final int prim = ContextCompat.getColor(getContext(), R.color.colorPrimary);
-            final int accent = ContextCompat.getColor(getContext(), R.color.colorAccent);
-            final int darkerGray = ContextCompat.getColor(getContext(), android.R.color.darker_gray);
+            final int white = ContextUtils.getColor(android.R.color.white);
+            final int prim = ContextUtils.getColor(R.color.colorPrimary);
+            final int accent = ContextUtils.getColor(R.color.colorAccent);
+            final int darkerGray = ContextUtils.getColor(android.R.color.darker_gray);
 
             final float titleFontSize = 15f;
             final float fontSize = 14f;
@@ -190,7 +189,7 @@ public class MaterialCalendarView extends LinearLayout {
     private void init() {
         calendar = Calendar.getInstance(Locale.getDefault());
 
-        view = LayoutInflater.from(getContext()).inflate(R.layout.calendar_view, this, true);
+        view = LayoutInflater.from(ContextUtils.getApplicationContext()).inflate(R.layout.calendar_view, this, true);
         view.setBackgroundColor(calendarViewBackgroundColor);
 
         initHeaderView();
@@ -207,20 +206,18 @@ public class MaterialCalendarView extends LinearLayout {
         headerView.setTitleTextTypeface(Typeface.DEFAULT);
         headerView.setNextButtonDrawableColor(drawableColor);
         headerView.setBackButtonDrawableColor(drawableColor);
-        headerView.setOnButtonClicked(new OnButtonClickedListener() {
-            @Override
-            public void onButtonClicked(@NonNull View view, int monthIndex) {
-                Calendar calendar = Calendar.getInstance(Locale.getDefault());
-                calendar.add(Calendar.MONTH, monthIndex);
 
-                int month = calendar.get(Calendar.MONTH) + 1;
-                int year = calendar.get(Calendar.YEAR);
+        headerView.setOnButtonClicked((view, monthIndex) ->  {
+            Calendar calendar = Calendar.getInstance(Locale.getDefault());
+            calendar.add(Calendar.MONTH, monthIndex);
 
-                adapterView.init(calendar, monthIndex);
+            int month = calendar.get(Calendar.MONTH) + 1;
+            int year = calendar.get(Calendar.YEAR);
 
-                if (null != onMonthChangeListener) {
-                    onMonthChangeListener.onMonthChanged(view, year, month);
-                }
+            adapterView.init(calendar, monthIndex);
+
+            if (null != onMonthChangeListener) {
+                onMonthChangeListener.onMonthChanged(view, year, month);
             }
         });
     }
@@ -250,40 +247,33 @@ public class MaterialCalendarView extends LinearLayout {
     private void initAdapterView() {
         adapterView = (AdapterView) view.findViewById(R.id.adapter_view);
 
-        adapterView.getAdapter().setOnStyleChangeListener(new OnStyleChangeListener() {
-            @Override
-            public void onStyleChange(@NonNull DayView dayView, @NonNull DayTime dayTime) {
-                if (null != onDayViewStyleChangeListener) {
-                    onDayViewStyleChangeListener.onDayViewStyleChange(dayView, dayTime);
-                }
+        adapterView.getAdapter().setOnStyleChangeListener((dayView, dayTime) ->  {
+            if (null != onDayViewStyleChangeListener) {
+                onDayViewStyleChangeListener.onDayViewStyleChange(dayView, dayTime);
             }
         });
-        adapterView.getAdapter().setOnListItemClickListener(new OnListItemClickListener() {
-            @Override
-            public void onListItemClick(@NonNull View view, @NonNull DayTime dayTime) {
-                if (null != onDayViewClickListener) {
-                    onDayViewClickListener.onDayViewClick(
-                            view,
-                            dayTime.getYear(),
-                            dayTime.getMonth(),
-                            dayTime.getDay(),
-                            dayTime.getEventList()
-                    );
-                }
+
+        adapterView.getAdapter().setOnListItemClickListener((view, dayTime) ->  {
+            if (null != onDayViewClickListener) {
+                onDayViewClickListener.onDayViewClick(
+                        view,
+                        dayTime.getYear(),
+                        dayTime.getMonth(),
+                        dayTime.getDay(),
+                        dayTime.getEventList()
+                );
             }
         });
-        adapterView.getAdapter().setOnListItemLongClickListener(new OnListItemLongClickListener() {
-            @Override
-            public void onListItemLongClick(@NonNull View view, @NonNull DayTime dayTime) {
-                if (null != onDayViewLongClickListener) {
-                    onDayViewLongClickListener.onDayViewLongClick(
-                            view,
-                            dayTime.getYear(),
-                            dayTime.getMonth(),
-                            dayTime.getDay(),
-                            dayTime.getEventList()
-                    );
-                }
+
+        adapterView.getAdapter().setOnListItemLongClickListener((view, dayTime) ->  {
+            if (null != onDayViewLongClickListener) {
+                onDayViewLongClickListener.onDayViewLongClick(
+                        view,
+                        dayTime.getYear(),
+                        dayTime.getMonth(),
+                        dayTime.getDay(),
+                        dayTime.getEventList()
+                );
             }
         });
 
@@ -304,7 +294,7 @@ public class MaterialCalendarView extends LinearLayout {
 
     public void shouldAnimateOnEnter(boolean shouldAnimate, long duration, @NonNull Interpolator interpolator) {
         if (shouldAnimate) {
-            ViewCompat.setTranslationY(this, getScreenHeight(getContext()));
+            ViewCompat.setTranslationY(this, getScreenHeight(ContextUtils.getApplicationContext()));
             ViewCompat.setAlpha(this, 0f);
             ViewCompat.animate(this)
                     .translationY(0f)
