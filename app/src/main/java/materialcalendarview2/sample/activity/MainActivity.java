@@ -49,20 +49,13 @@ import materialcalendarview2.sample.R;
 import materialcalendarview2.widget.MaterialCalendarView;
 import materialcalendarview2.widget.DayView;
 
-import static android.support.design.widget.NavigationView.OnNavigationItemSelectedListener;
-
-import static materialcalendarview2.widget.MaterialCalendarView.OnDayViewClickListener;
-import static materialcalendarview2.widget.MaterialCalendarView.OnDayViewStyleChangeListener;
-import static materialcalendarview2.widget.MaterialCalendarView.OnMonthChangeListener;
 import static materialcalendarview2.util.CalendarUtil.isSameMonth;
 import static materialcalendarview2.sample.util.AnimationUtil.animate;
 
 /**
  * @author jonatan.salas
  */
-public class MainActivity extends BaseActivity implements MainView,
-        OnNavigationItemSelectedListener, OnDayViewClickListener,
-        OnMonthChangeListener, OnDayViewStyleChangeListener {
+public class MainActivity extends BaseActivity implements MainView {
     private static final String DATE_TEMPLATE = "dd/MM/yyyy";
 
     @Bind(R.id.toolbar)
@@ -151,7 +144,7 @@ public class MainActivity extends BaseActivity implements MainView,
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
 
-        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
     }
 
     @Override
@@ -163,9 +156,9 @@ public class MainActivity extends BaseActivity implements MainView,
     @Override
     public void prepareCalendarView() {
         calendarView.shouldAnimateOnEnter(true);
-        calendarView.setOnDayViewClickListener(this);
-        calendarView.setOnMonthChangeListener(this);
-        calendarView.setOnDayViewStyleChangeListener(this);
+        calendarView.setOnDayViewClickListener(this::onDayViewClick);
+        calendarView.setOnMonthChangeListener(this::onMonthChanged);
+        calendarView.setOnDayViewStyleChangeListener(this::onDayViewStyleChange);
     }
 
     @Override
@@ -175,20 +168,17 @@ public class MainActivity extends BaseActivity implements MainView,
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
-    @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    @Override
     public void onDayViewClick(@NonNull View view, int year, int month, int dayOfMonth, @Nullable List<Event> eventList) {
         final Calendar calendar = new GregorianCalendar(year, month, dayOfMonth);
         final String dateString = formatter.format(calendar.getTime());
         Snackbar.make(view, getString(R.string.selected_date) + " " + dateString, Snackbar.LENGTH_SHORT).show();
     }
 
-    @Override
     public void onDayViewStyleChange(@NonNull DayView dayView, @NonNull DayTime dayTime) {
         if (dayTime.isCurrentMonth()) {
             dayView.setTextColor(Color.CYAN);
@@ -206,7 +196,6 @@ public class MainActivity extends BaseActivity implements MainView,
         dayView.drawRipples();
     }
 
-    @Override
     public void onMonthChanged(@NonNull View view, int year, int month) {
         final Calendar calender = new GregorianCalendar(year, month - 1, month);
         final Calendar calendar = Calendar.getInstance(Locale.getDefault());
