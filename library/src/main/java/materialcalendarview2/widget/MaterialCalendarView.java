@@ -189,7 +189,7 @@ public class MaterialCalendarView extends LinearLayout {
     private void init() {
         calendar = Calendar.getInstance(Locale.getDefault());
 
-        view = LayoutInflater.from(ContextUtils.getApplicationContext()).inflate(R.layout.calendar_view, this, true);
+        view = LayoutInflater.from(getContext()).inflate(R.layout.calendar_view, this, true);
         view.setBackgroundColor(calendarViewBackgroundColor);
 
         initHeaderView();
