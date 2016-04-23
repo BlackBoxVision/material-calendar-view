@@ -14,9 +14,6 @@ import android.util.AttributeSet;
  * @author jonatan.salas
  */
 public final class ContextUtils {
-
-    //This context should be the ApplicationContext in order to prevent memory leaks..
-    //Make sure of calling this in Application.onCreate() method.
     private static Context ctx = null;
 
     //Prevent instantiation..
@@ -52,7 +49,7 @@ public final class ContextUtils {
 
     public static Context getApplicationContext() {
         checkNotNull();
-        return ctx.getApplicationContext();
+        return ctx;
     }
 
     static void checkNotNull() {

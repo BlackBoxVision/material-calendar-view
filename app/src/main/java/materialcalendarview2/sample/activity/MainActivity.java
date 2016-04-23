@@ -15,7 +15,6 @@
  */
 package materialcalendarview2.sample.activity;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -179,20 +178,6 @@ public class MainActivity extends BaseActivity implements MainView {
     }
 
     public void onDayViewStyleChange(@NonNull DayView dayView, @NonNull DayTime dayTime) {
-        if (dayTime.isCurrentMonth()) {
-            dayView.setTextColor(Color.CYAN);
-        }
-
-        if (dayTime.isWeekend() || (!dayTime.isCurrentMonth() && dayTime.isWeekend())) {
-            dayView.setTextColor(Color.GREEN);
-        }
-
-        if (dayTime.getDay() == 7 && dayTime.getMonth() == 2 && dayTime.getYear() == 2016 && dayTime.isCurrentMonth()) {
-            dayView.setTextColor(Color.BLACK);
-            dayView.setBackgroundColor(Color.CYAN);
-        }
-
-        dayView.drawRipples();
     }
 
     public void onMonthChanged(@NonNull View view, int year, int month) {
