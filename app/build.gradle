@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.samsistemas.materialcalendar"
-        minSdkVersion 8
+        minSdkVersion 11
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"

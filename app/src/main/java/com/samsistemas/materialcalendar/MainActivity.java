@@ -86,9 +86,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+        calendarView.setOnMonthTitleClickListener(new CalendarView.OnMonthTitleClickListener() {
+            @Override
+            public void onMonthTitleClick(@NonNull Date selectedDate) {
+            }
+        });
+
         DayView dayView = calendarView.findViewByDate(new Date(System.currentTimeMillis()));
-        if(null != dayView)
-            Toast.makeText(getApplicationContext(), "Today is: " + dayView.getText().toString() + "/" + calendarView.getCurrentMonth() + "/" +  calendarView.getCurrentYear(), Toast.LENGTH_SHORT).show();
+        if (null != dayView)
+            Toast.makeText(getApplicationContext(), "Today is: " + dayView.getText().toString() + "/" + calendarView.getCurrentMonth() + "/" + calendarView.getCurrentYear(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
