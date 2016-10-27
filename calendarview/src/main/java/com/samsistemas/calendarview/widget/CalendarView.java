@@ -15,7 +15,10 @@
  */
 package com.samsistemas.calendarview.widget;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
@@ -37,6 +40,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Scroller;
@@ -137,6 +141,7 @@ public class CalendarView extends LinearLayout {
     private ImageView mBackButton;
 
     //Listeners used by the Calendar...
+    private OnMonthTitleClickListener mOnMonthTitleClickListener;
     private OnDateClickListener mOnDateClickListener;
     private OnDateLongClickListener mOnDateLongClickListener;
     private OnMonthChangedListener mOnMonthChangedListener;
@@ -316,6 +321,16 @@ public class CalendarView extends LinearLayout {
         if (null != getTypeface()) {
             dateTitle.setTypeface(getTypeface(), Typeface.BOLD);
         }
+
+        dateTitle.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                if (mOnMonthTitleClickListener != null) {
+                    mOnMonthTitleClickListener.onMonthTitleClick(mCalendar.getTime());
+                    createDialogWithoutDateField(mContext);
+                }
+            }
+        });
     }
 
     /**
@@ -354,6 +369,107 @@ public class CalendarView extends LinearLayout {
                 dayOfWeek.setTypeface(getTypeface());
             }
         }
+    }
+
+    /**
+     * Date Picker (Month & Year only)
+     *
+     * @param context
+     * @author chris.chen
+     */
+    private void createDialogWithoutDateField(Context context) {
+
+        mCalendar = Calendar.getInstance(Locale.getDefault());
+        final int iYear = mCalendar.get(Calendar.YEAR);
+        final int iMonth = mCalendar.get(Calendar.MONTH);
+        final int iDay = mCalendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog dpd = new DatePickerDialog(context, R.style.CalendarViewTitle, new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(
+                    DatePicker datePicker,
+                    int year,
+                    int monthOfYear,
+                    int dayOfMonth
+            ) {
+
+                int diffMonth = (year - iYear) * 12 + (monthOfYear - iMonth);
+
+                mCurrentMonthIndex = diffMonth;
+                mCalendar.add(Calendar.MONTH, mCurrentMonthIndex);
+
+                refreshCalendar(mCalendar);
+                if (mOnMonthChangedListener != null) {
+                    mOnMonthChangedListener.onMonthChanged(mCalendar.getTime());
+                }
+
+            }
+        }, iYear,
+                iMonth,
+                iDay);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            int daySpinnerId = Resources.getSystem().getIdentifier("day", "id", "android");
+            if (daySpinnerId != 0) {
+                View daySpinner = dpd.getDatePicker().findViewById(daySpinnerId);
+                if (daySpinner != null) {
+                    daySpinner.setVisibility(View.GONE);
+                }
+            }
+
+            int monthSpinnerId = Resources.getSystem().getIdentifier("month", "id", "android");
+            if (monthSpinnerId != 0) {
+                View monthSpinner = dpd.getDatePicker().findViewById(monthSpinnerId);
+                if (monthSpinner != null) {
+                    monthSpinner.setVisibility(View.VISIBLE);
+                }
+            }
+
+            int yearSpinnerId = Resources.getSystem().getIdentifier("year", "id", "android");
+            if (yearSpinnerId != 0) {
+                View yearSpinner = dpd.getDatePicker().findViewById(yearSpinnerId);
+                if (yearSpinner != null) {
+                    yearSpinner.setVisibility(View.VISIBLE);
+                }
+            }
+        } else { //Older SDK versions
+            java.lang.reflect.Field f[] = dpd.getDatePicker().getClass().getDeclaredFields();
+            for (java.lang.reflect.Field field : f) {
+                if (field.getName().equals("mDayPicker") || field.getName().equals("mDaySpinner")) {
+                    field.setAccessible(true);
+                    Object dayPicker = null;
+                    try {
+                        dayPicker = field.get(dpd.getDatePicker());
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                    ((View) dayPicker).setVisibility(View.GONE);
+                }
+
+                if (field.getName().equals("mMonthPicker") || field.getName().equals("mMonthSpinner")) {
+                    field.setAccessible(true);
+                    Object monthPicker = null;
+                    try {
+                        monthPicker = field.get(dpd.getDatePicker());
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                    ((View) monthPicker).setVisibility(View.VISIBLE);
+                }
+
+                if (field.getName().equals("mYearPicker") || field.getName().equals("mYearSpinner")) {
+                    field.setAccessible(true);
+                    Object yearPicker = null;
+                    try {
+                        yearPicker = field.get(dpd.getDatePicker());
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                    ((View) yearPicker).setVisibility(View.VISIBLE);
+                }
+            }
+        }
+
+        dpd.show();
     }
 
     /**
@@ -947,10 +1063,24 @@ public class CalendarView extends LinearLayout {
         void onMonthChanged(@NonNull Date monthDate);
     }
 
+    /**
+     * Interface that define a method to implement to handle
+     * a month title change event.
+     *
+     * @author chris.chen
+     */
+    public interface OnMonthTitleClickListener {
+        void onMonthTitleClick(@NonNull Date monthDate);
+    }
 
     /**
      *  Attributes setters and getters.
      */
+
+    public void setOnMonthTitleClickListener(OnMonthTitleClickListener onMonthTitleClickListener) {
+        this.mOnMonthTitleClickListener = onMonthTitleClickListener;
+    }
+
     public void setOnDateClickListener(OnDateClickListener onDateClickListener) {
         this.mOnDateClickListener = onDateClickListener;
     }
