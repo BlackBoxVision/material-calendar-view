@@ -88,7 +88,7 @@ on your build.gradle at the end of repositories.
 
 ```java
 dependencies {
-    compile 'com.github.jonisaa:MaterialCalendarview:v1.2.2'
+    compile 'com.github.BlackBoxVision:material-calendar-view:v1.2.3'
 }
 ```
 ###For Maven:
@@ -103,9 +103,9 @@ dependencies {
 **Step 2:** Add the dependency in the form
 ```xml
 <dependency>
-     <groupId>com.github.jonisaa</groupId>
-     <artifactId>MaterialCalendarView</artifactId>
-     <version>v1.2.2</version>
+    <groupId>com.github.BlackBoxVision</groupId>
+    <artifactId>material-calendar-view</artifactId>
+    <version>v1.2.3</version>
 </dependency>
 ```
 ###For SBT:
@@ -116,7 +116,7 @@ resolvers += "jitpack" at "https://jitpack.io"
 ```
 **Step 2:** Add the dependency in the form
 ```java
-libraryDependencies += "com.github.jonisaa" % "MaterialCalendarView" % "v1.2.2"	
+libraryDependencies += "com.github.BlackBoxVision" % "material-calendar-view" % "v1.2.3"	
 ```
 ----------
 Using Material Calendar View library
