@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.samsistemas.calendarview.widget;
+package io.blackbox_vision.materialcalendarview.view;
 
-import android.app.AlertDialog;
+
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.res.Resources;
@@ -46,15 +46,16 @@ import android.widget.LinearLayout;
 import android.widget.Scroller;
 import android.widget.TextView;
 
-import com.samsistemas.calendarview.R;
-import com.samsistemas.calendarview.decor.DayDecorator;
-import com.samsistemas.calendarview.utility.CalendarUtility;
-
+import java.lang.reflect.Field;
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import io.blackbox_vision.materialcalendarview.R;
+import io.blackbox_vision.materialcalendarview.decor.DayDecorator;
+import io.blackbox_vision.materialcalendarview.utils.CalendarUtils;
 
 /***
  * Custom CalendarView class.
@@ -314,7 +315,7 @@ public class CalendarView extends LinearLayout {
 
         TextView dateTitle = (TextView) mView.findViewById(R.id.dateTitle);
 
-        String dateText = CalendarUtility.getCurrentMonth(mCurrentMonthIndex).toUpperCase(Locale.getDefault()) + " " + getCurrentYear();
+        String dateText = CalendarUtils.getCurrentMonth(mCurrentMonthIndex).toUpperCase(Locale.getDefault()) + " " + getCurrentYear();
         dateTitle.setText(dateText);
         dateTitle.setTextColor(mCalendarTitleTextColor);
 
@@ -349,7 +350,7 @@ public class CalendarView extends LinearLayout {
             dayOfTheWeekString = weekDaysArray[i];
             int length = dayOfTheWeekString.length() < 3 ? dayOfTheWeekString.length() : 3;
             dayOfTheWeekString = dayOfTheWeekString.substring(0, length).toUpperCase();
-            dayOfWeek = (TextView) mView.findViewWithTag(mContext.getString(R.string.day_of_week) + CalendarUtility.getWeekIndex(i, mCalendar));
+            dayOfWeek = (TextView) mView.findViewWithTag(mContext.getString(R.string.day_of_week) + CalendarUtils.getWeekIndex(i, mCalendar));
             dayOfWeek.setText(dayOfTheWeekString);
             mIsCommonDay = true;
             if(totalDayOfWeekend().length != 0) {
@@ -403,9 +404,7 @@ public class CalendarView extends LinearLayout {
                 }
 
             }
-        }, iYear,
-                iMonth,
-                iDay);
+        }, iYear, iMonth, iDay);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             int daySpinnerId = Resources.getSystem().getIdentifier("day", "id", "android");
@@ -431,39 +430,47 @@ public class CalendarView extends LinearLayout {
                     yearSpinner.setVisibility(View.VISIBLE);
                 }
             }
+
         } else { //Older SDK versions
-            java.lang.reflect.Field f[] = dpd.getDatePicker().getClass().getDeclaredFields();
-            for (java.lang.reflect.Field field : f) {
+            Field f[] = dpd.getDatePicker().getClass().getDeclaredFields();
+
+            for (Field field : f) {
                 if (field.getName().equals("mDayPicker") || field.getName().equals("mDaySpinner")) {
                     field.setAccessible(true);
                     Object dayPicker = null;
+
                     try {
                         dayPicker = field.get(dpd.getDatePicker());
                     } catch (IllegalAccessException e) {
                         e.printStackTrace();
                     }
+
                     ((View) dayPicker).setVisibility(View.GONE);
                 }
 
                 if (field.getName().equals("mMonthPicker") || field.getName().equals("mMonthSpinner")) {
                     field.setAccessible(true);
                     Object monthPicker = null;
+
                     try {
                         monthPicker = field.get(dpd.getDatePicker());
                     } catch (IllegalAccessException e) {
                         e.printStackTrace();
                     }
+
                     ((View) monthPicker).setVisibility(View.VISIBLE);
                 }
 
                 if (field.getName().equals("mYearPicker") || field.getName().equals("mYearSpinner")) {
                     field.setAccessible(true);
                     Object yearPicker = null;
+
                     try {
                         yearPicker = field.get(dpd.getDatePicker());
                     } catch (IllegalAccessException e) {
                         e.printStackTrace();
                     }
+
                     ((View) yearPicker).setVisibility(View.VISIBLE);
                 }
             }
@@ -483,7 +490,7 @@ public class CalendarView extends LinearLayout {
         int firstDayOfMonth = calendar.get(Calendar.DAY_OF_WEEK);
 
         // Calculate dayOfMonthIndex
-        int dayOfMonthIndex = CalendarUtility.getWeekIndex(firstDayOfMonth, calendar);
+        int dayOfMonthIndex = CalendarUtils.getWeekIndex(firstDayOfMonth, calendar);
         int actualMaximum = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
         final Calendar startCalendar = (Calendar) calendar.clone();
@@ -508,7 +515,7 @@ public class CalendarView extends LinearLayout {
                 dayView.setTypeface(getTypeface());
             }
 
-            if (CalendarUtility.isSameMonth(calendar, startCalendar)) {
+            if (CalendarUtils.isSameMonth(calendar, startCalendar)) {
                 dayOfMonthContainer.setOnClickListener(onDayOfMonthClickListener);
                 dayOfMonthContainer.setOnLongClickListener(onDayOfMonthLongClickListener);
                 dayView.setBackgroundColor(mCalendarBackgroundColor);
@@ -557,7 +564,7 @@ public class CalendarView extends LinearLayout {
 
     private void clearDayOfTheMonthStyle(Date currentDate) {
         if (currentDate != null) {
-            final Calendar calendar = CalendarUtility.getTodayCalendar(mContext, mFirstDayOfWeek);
+            final Calendar calendar = CalendarUtils.getTodayCalendar(mContext, mFirstDayOfWeek);
             calendar.setFirstDayOfWeek(mFirstDayOfWeek);
             calendar.setTime(currentDate);
 
@@ -590,7 +597,7 @@ public class CalendarView extends LinearLayout {
     }
 
     private int getDayIndexByDate(Calendar calendar) {
-        int monthOffset = CalendarUtility.getMonthOffset(calendar, mFirstDayOfWeek);
+        int monthOffset = CalendarUtils.getMonthOffset(calendar, mFirstDayOfWeek);
         int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
 
         return currentDay + monthOffset;
@@ -636,7 +643,7 @@ public class CalendarView extends LinearLayout {
         final Calendar calendar = Calendar.getInstance(getLocale());
         calendar.setTime(todayDate);
 
-        if (CalendarUtility.isToday(calendar)) {
+        if (CalendarUtils.isToday(calendar)) {
             final DayView dayOfMonth = findViewByCalendar(calendar);
 
             dayOfMonth.setTextColor(mCurrentDayOfMonth);
@@ -645,7 +652,7 @@ public class CalendarView extends LinearLayout {
     }
 
     public void setDateAsSelected(Date currentDate) {
-        final Calendar currentCalendar = CalendarUtility.getTodayCalendar(mContext, mFirstDayOfWeek);
+        final Calendar currentCalendar = CalendarUtils.getTodayCalendar(mContext, mFirstDayOfWeek);
         currentCalendar.setFirstDayOfWeek(mFirstDayOfWeek);
         currentCalendar.setTime(currentDate);
 
@@ -1190,7 +1197,7 @@ public class CalendarView extends LinearLayout {
     }
 
     public String getCurrentMonth() {
-        return CalendarUtility.getCurrentMonth(mCurrentMonthIndex);
+        return CalendarUtils.getCurrentMonth(mCurrentMonthIndex);
     }
 
     public String getCurrentYear() {
