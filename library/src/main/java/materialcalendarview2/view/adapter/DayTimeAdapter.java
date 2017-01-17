@@ -1,4 +1,4 @@
-package materialcalendarview2.adapter;
+package materialcalendarview2.view.adapter;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -9,20 +9,23 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import materialcalendarview2.R;
-import materialcalendarview2.exception.IllegalViewArgumentException;
-import materialcalendarview2.model.DayTime;
-import materialcalendarview2.widget.DayView;
+import materialcalendarview2.data.exception.IllegalViewArgumentException;
+import materialcalendarview2.data.model.DayTime;
+import materialcalendarview2.view.DayView;
 
 import java.util.List;
 
-import static materialcalendarview2.exception.IllegalViewArgumentException.*;
+import static materialcalendarview2.data.exception.IllegalViewArgumentException.*;
 
 /**
  * @author jonatan.salas
  */
 public class DayTimeAdapter extends RecyclerView.Adapter<DayTimeAdapter.DayTimeViewHolder> {
+
     private OnListItemClickListener onListItemClickListener;
+
     private OnListItemLongClickListener onListItemLongClickListener;
+
     private OnStyleChangeListener onStyleChangeListener;
 
     @NonNull
@@ -46,28 +49,28 @@ public class DayTimeAdapter extends RecyclerView.Adapter<DayTimeAdapter.DayTimeV
 
         holder.dayView.setClickable(true);
         holder.dayView.setText(String.valueOf(dayTime.getDay()));
-//            holder.dayView.setTextSize(mAdapterViewFontSize);
-//            holder.dayView.setTextColor(mAdapterViewTextColor);
+        //holder.dayView.setTextSize(mAdapterViewFontSize);
+        //holder.dayView.setTextColor(mAdapterViewTextColor);
 
         if (!dayTime.isCurrentMonth()) {
             holder.dayView.setTypeface(Typeface.DEFAULT_BOLD);
-//                holder.dayView.setBackgroundColor(mDisabledBackgroundColor);
-//                holder.dayView.setTextColor(mDisabledTextColor);
+            //holder.dayView.setBackgroundColor(mDisabledBackgroundColor);
+            //holder.dayView.setTextColor(mDisabledTextColor);
             holder.dayView.setEnabled(false);
             holder.dayView.setClickable(false);
         }
 
         if (dayTime.isWeekend() && dayTime.isCurrentMonth()) {
-//                holder.mDayView.setBackgroundColor(mWeekendBackgroundColor);
-//                holder.dayView.setTextColor(mWeekendTextColor);
+            //holder.mDayView.setBackgroundColor(mWeekendBackgroundColor);
+            //holder.dayView.setTextColor(mWeekendTextColor);
             holder.dayView.setTypeface(Typeface.DEFAULT_BOLD);
             holder.dayView.setEnabled(true);
             holder.dayView.setClickable(true);
         }
 
         if (dayTime.isCurrentDay() && dayTime.isCurrentMonth()) {
-//                holder.dayView.setBackgroundColor(mCurrentBackgroundColor);"onListItemClickListener can't be null!"
-//                holder.dayView.setTextColor(mCurrentTextColor);
+            //holder.dayView.setBackgroundColor(mCurrentBackgroundColor);"onListItemClickListener can't be null!"
+            //holder.dayView.setTextColor(mCurrentTextColor);
             holder.dayView.setEnabled(true);
             holder.dayView.setClickable(true);
         }
@@ -85,15 +88,13 @@ public class DayTimeAdapter extends RecyclerView.Adapter<DayTimeAdapter.DayTimeV
         });
 
         holder.dayView.setOnLongClickListener(v ->  {
-            boolean result = (null != onListItemLongClickListener);
-
-            if (result) {
+            if (null != onListItemLongClickListener) {
                 onListItemLongClickListener.onListItemLongClick(v, dayTime);
+
+                return true;
             } else {
                 throw new IllegalViewArgumentException(ITEM_LONG_SELECTED_LISTENER_NOT_NULL_MESSAGE);
             }
-
-            return result;
         });
     }
 

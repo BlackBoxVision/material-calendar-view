@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package materialcalendarview2.exception;
+package materialcalendarview2.data.exception;
 
 /**
  * Exception to be thrown when a related View method receives a bad argument.

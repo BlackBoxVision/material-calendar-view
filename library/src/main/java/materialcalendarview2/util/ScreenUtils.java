@@ -8,9 +8,9 @@ import android.view.WindowManager;
 /**
  * @author jonatan.salas
  */
-public final class ScreenUtil {
+public final class ScreenUtils {
 
-    private ScreenUtil() { }
+    private ScreenUtils() { }
 
     public static int getScreenHeight(@NonNull Context context) {
         final DisplayMetrics metrics = new DisplayMetrics();

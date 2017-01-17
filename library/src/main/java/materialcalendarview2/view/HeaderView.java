@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package materialcalendarview2.widget;
+package materialcalendarview2.view;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -33,10 +33,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import materialcalendarview2.R;
-import materialcalendarview2.exception.IllegalViewArgumentException;
+import materialcalendarview2.data.exception.IllegalViewArgumentException;
 
-import static materialcalendarview2.util.CalendarUtil.getDateTitle;
-import static materialcalendarview2.exception.IllegalViewArgumentException.*;
+import static materialcalendarview2.util.CalendarUtils.getDateTitle;
+import static materialcalendarview2.data.exception.IllegalViewArgumentException.*;
 
 /**
  * LinearLayout class that provides the Calendar Title View.

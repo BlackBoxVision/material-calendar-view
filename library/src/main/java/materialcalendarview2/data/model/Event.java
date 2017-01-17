@@ -13,18 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package materialcalendarview2.model;
+package materialcalendarview2.data.model;
 
 import android.support.annotation.NonNull;
 
 import java.util.Calendar;
 import java.util.Locale;
 
-public class Event {
+public final class Event {
+
     @NonNull
     private Calendar eventDate = Calendar.getInstance(Locale.getDefault());
+
     @NonNull
     private String description = "";
+
     private int duration;
 
     public Event() { }

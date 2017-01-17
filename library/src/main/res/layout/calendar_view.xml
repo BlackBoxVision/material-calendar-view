@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <materialcalendarview2.widget.HeaderView
+    <materialcalendarview2.view.HeaderView
         android:id="@+id/header_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
     <include android:id="@+id/week_view" layout="@layout/week_view"/>
 
-    <materialcalendarview2.widget.AdapterView
+    <materialcalendarview2.view.AdapterView
         android:id="@+id/adapter_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

@@ -1,4 +1,4 @@
-package materialcalendarview2.widget;
+package materialcalendarview2.view;
 
 import android.content.Context;
 import android.support.annotation.ColorRes;
@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.desmond.ripple.RippleCompat;
 
-import materialcalendarview2.model.DayTime;
+import materialcalendarview2.data.model.DayTime;
 
 /**
  * @author jonatan.salas

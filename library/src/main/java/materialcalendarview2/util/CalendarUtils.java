@@ -23,17 +23,17 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import materialcalendarview2.callback.FutureCallback;
-import materialcalendarview2.model.DayTime;
+import materialcalendarview2.data.callback.DayTimeCallback;
+import materialcalendarview2.data.model.DayTime;
 
-import static materialcalendarview2.util.ThreadUtil.runInBackground;
+import static materialcalendarview2.util.ThreadUtils.runInBackground;
 
 /**
  * @author jonatan.salas
  */
-public final class CalendarUtil {
+public final class CalendarUtils {
 
-    private CalendarUtil() { }
+    private CalendarUtils() { }
 
     public static boolean isWeekend(Calendar calendar) {
         int position = calendar.get(Calendar.DAY_OF_WEEK);
@@ -61,21 +61,19 @@ public final class CalendarUtil {
         final String[] array = new DateFormatSymbols(Locale.getDefault()).getShortWeekdays();
         return Arrays.asList(array);
     }
+
     public static int calculateWeekIndex(final Calendar calendar, final int weekIndex) {
-        int firstDayWeekPosition = calendar.getFirstDayOfWeek();
+        final int firstDayWeekPosition = calendar.getFirstDayOfWeek();
+
         if (firstDayWeekPosition == 1) {
             return weekIndex;
         } else {
-            if (weekIndex == 1) {
-                return 7;
-            } else {
-                return weekIndex - 1;
-            }
+            return (weekIndex == 1)? 7 : weekIndex - 1;
         }
     }
 
     public static List<DayTime> obtainDayTimes(final Calendar calendar, final int index) {
-        return runInBackground(new FutureCallback(calendar, index));
+        return runInBackground(new DayTimeCallback(calendar, index));
     }
 
     public static String getDateTitle(int index) {

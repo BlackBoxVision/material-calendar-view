@@ -7,7 +7,7 @@
 
     <include layout="@layout/week_view"/>
 
-    <materialcalendarview2.widget.AdapterView
+    <materialcalendarview2.view.AdapterView
         android:id="@+id/calendar_adapter_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<materialcalendarview2.widget.DayView
+<materialcalendarview2.view.DayView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/day_view"

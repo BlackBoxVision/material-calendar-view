@@ -21,7 +21,7 @@ import android.support.v4.view.ViewCompat;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
-import static materialcalendarview2.util.ScreenUtil.getScreenHeight;
+import static materialcalendarview2.util.ScreenUtils.getScreenHeight;
 
 /**
  * @author jonatan.salas

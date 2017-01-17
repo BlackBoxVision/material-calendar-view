@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package materialcalendarview2.model;
+package materialcalendarview2.data.model;
 
 import android.support.annotation.Nullable;
 
@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * @author jonatan.salas
  */
-public class DayTime {
+public final class DayTime {
     private int day;
     private int month;
     private int year;

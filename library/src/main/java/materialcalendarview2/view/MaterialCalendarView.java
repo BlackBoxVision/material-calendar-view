@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package materialcalendarview2.widget;
+package materialcalendarview2.view;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -38,12 +38,12 @@ import java.util.List;
 import java.util.Locale;
 
 import materialcalendarview2.R;
-import materialcalendarview2.model.DayTime;
-import materialcalendarview2.model.Event;
+import materialcalendarview2.data.model.DayTime;
+import materialcalendarview2.data.model.Event;
 
-import static materialcalendarview2.util.CalendarUtil.getShortWeekDays;
-import static materialcalendarview2.util.CalendarUtil.calculateWeekIndex;
-import static materialcalendarview2.util.ScreenUtil.getScreenHeight;
+import static materialcalendarview2.util.CalendarUtils.getShortWeekDays;
+import static materialcalendarview2.util.CalendarUtils.calculateWeekIndex;
+import static materialcalendarview2.util.ScreenUtils.getScreenHeight;
 
 
 /**

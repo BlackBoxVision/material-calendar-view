@@ -1,4 +1,4 @@
-package materialcalendarview2.widget;
+package materialcalendarview2.view;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -15,9 +15,9 @@ import android.widget.LinearLayout;
 import java.util.Calendar;
 
 import materialcalendarview2.R;
-import materialcalendarview2.adapter.DayTimeAdapter;
+import materialcalendarview2.view.adapter.DayTimeAdapter;
 
-import static materialcalendarview2.util.CalendarUtil.obtainDayTimes;
+import static materialcalendarview2.util.CalendarUtils.obtainDayTimes;
 
 /**
  * The View that contains the Adapter with the month data.

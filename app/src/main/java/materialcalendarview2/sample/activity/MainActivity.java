@@ -39,16 +39,16 @@ import java.util.Locale;
 
 import butterknife.Bind;
 
-import materialcalendarview2.model.DayTime;
-import materialcalendarview2.model.Event;
+import materialcalendarview2.data.model.DayTime;
+import materialcalendarview2.data.model.Event;
 import materialcalendarview2.sample.activity.base.BaseActivity;
 import materialcalendarview2.sample.presenter.MainPresenter;
 import materialcalendarview2.sample.view.MainView;
 import materialcalendarview2.sample.R;
-import materialcalendarview2.widget.MaterialCalendarView;
-import materialcalendarview2.widget.DayView;
+import materialcalendarview2.view.MaterialCalendarView;
+import materialcalendarview2.view.DayView;
 
-import static materialcalendarview2.util.CalendarUtil.isSameMonth;
+import static materialcalendarview2.util.CalendarUtils.isSameMonth;
 import static materialcalendarview2.sample.util.AnimationUtil.animate;
 
 /**

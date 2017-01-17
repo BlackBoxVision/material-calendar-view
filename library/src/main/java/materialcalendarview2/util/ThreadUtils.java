@@ -9,22 +9,19 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import materialcalendarview2.callback.base.CallBack;
+import materialcalendarview2.data.callback.base.CallBack;
 
 /**
  * @author jonatan.salas
  */
-public final class ThreadUtil {
-    private static final String LOG_TAG = ThreadUtil.class.getSimpleName();
+public final class ThreadUtils {
+    private static final String LOG_TAG = ThreadUtils.class.getSimpleName();
 
-    private ThreadUtil() { }
+    private ThreadUtils() { }
 
     @Nullable
     public static <T> T runInBackground(@NonNull final CallBack<T> callBack) {
-        final Future<T> future = Executors
-                .newSingleThreadExecutor()
-                .submit(getCallable(callBack));
-
+        final Future<T> future = Executors.newSingleThreadExecutor().submit(getCallable(callBack));
         T object = null;
 
         try {
@@ -38,11 +35,6 @@ public final class ThreadUtil {
 
     @NonNull
     private static <T> Callable<T> getCallable(@NonNull final CallBack<T> callBack) {
-        return new Callable<T>() {
-            @Override
-            public T call() throws Exception {
-                return callBack.execute();
-            }
-        };
+        return () -> callBack.execute();
     }
 }
