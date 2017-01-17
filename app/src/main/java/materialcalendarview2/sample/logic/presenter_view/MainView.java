@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package materialcalendarview2.sample.view;
+package materialcalendarview2.sample.logic.presenter_view;
 
 /**
  * @author jonatan.salas

@@ -26,7 +26,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -42,8 +41,8 @@ import butterknife.Bind;
 import materialcalendarview2.data.model.DayTime;
 import materialcalendarview2.data.model.Event;
 import materialcalendarview2.sample.activity.base.BaseActivity;
-import materialcalendarview2.sample.presenter.MainPresenter;
-import materialcalendarview2.sample.view.MainView;
+import materialcalendarview2.sample.logic.presenter.MainPresenter;
+import materialcalendarview2.sample.logic.presenter_view.MainView;
 import materialcalendarview2.sample.R;
 import materialcalendarview2.view.MaterialCalendarView;
 import materialcalendarview2.view.DayView;
@@ -54,7 +53,7 @@ import static materialcalendarview2.sample.util.AnimationUtil.animate;
 /**
  * @author jonatan.salas
  */
-public class MainActivity extends BaseActivity implements MainView {
+public final class MainActivity extends BaseActivity implements MainView {
     private static final String DATE_TEMPLATE = "dd/MM/yyyy";
 
     @Bind(R.id.toolbar)
@@ -119,17 +118,6 @@ public class MainActivity extends BaseActivity implements MainView {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void prepareNavigationDrawer() {
         final ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
                 this,
@@ -177,8 +165,7 @@ public class MainActivity extends BaseActivity implements MainView {
         Snackbar.make(view, getString(R.string.selected_date) + " " + dateString, Snackbar.LENGTH_SHORT).show();
     }
 
-    public void onDayViewStyleChange(@NonNull DayView dayView, @NonNull DayTime dayTime) {
-    }
+    public void onDayViewStyleChange(@NonNull DayView dayView, @NonNull DayTime dayTime) { }
 
     public void onMonthChanged(@NonNull View view, int year, int month) {
         final Calendar calender = new GregorianCalendar(year, month - 1, month);

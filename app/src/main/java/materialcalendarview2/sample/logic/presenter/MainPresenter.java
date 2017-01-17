@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package materialcalendarview2.sample.presenter;
+package materialcalendarview2.sample.logic.presenter;
 
 import android.support.annotation.Nullable;
 
-import materialcalendarview2.sample.view.MainView;
+import materialcalendarview2.sample.logic.presenter_view.MainView;
 
 /**
  * @author jonatan.salas
