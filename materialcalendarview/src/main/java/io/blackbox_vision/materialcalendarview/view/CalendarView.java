@@ -266,6 +266,7 @@ public class CalendarView extends LinearLayout {
                 calendar.add(Calendar.MONTH, currentMonthIndex);
 
                 refreshCalendar(calendar);
+
                 if (onMonthChangedListener != null) {
                     onMonthChangedListener.onMonthChanged(calendar.getTime());
                 }
@@ -278,6 +279,7 @@ public class CalendarView extends LinearLayout {
                 currentMonthIndex++;
                 calendar = Calendar.getInstance(Locale.getDefault());
                 calendar.add(Calendar.MONTH, currentMonthIndex);
+
                 refreshCalendar(calendar);
 
                 if (onMonthChangedListener != null) {
@@ -330,6 +332,7 @@ public class CalendarView extends LinearLayout {
         titleLayout.setBackgroundColor(weekLayoutBackgroundColor);
 
         final String[] weekDaysArray = new DateFormatSymbols(getLocale()).getShortWeekdays();
+
         for (int i = 1; i < weekDaysArray.length; i++) {
             dayOfTheWeekString = weekDaysArray[i];
             int length = dayOfTheWeekString.length() < 3 ? dayOfTheWeekString.length() : 3;
