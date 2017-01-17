@@ -6,7 +6,7 @@ MaterialCalendarView is a prettier and simpler, material design calendar that al
 
 ##Screenshots
 
-<img src="https://raw.githubusercontent.com/SAMSistemas/MaterialCalendarView/master/screenshots/calendars.png" height="425" width="100%">
+<img src="https://raw.githubusercontent.com/BlackBoxVision/material-calendar-view/master/art/calendars.png" height="475" width="100%">
 
 <img src="https://i.imgur.com/ViolZD2.gif" height="550" width="100%" style="align: center;">
 
