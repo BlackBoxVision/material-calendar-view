@@ -22,7 +22,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <com.samsistemas.calendarview.widget.CalendarView
+                    <io.blackbox_vision.materialcalendarview.view.CalendarView
                         android:id="@+id/calendar_view"
                         android:layout_marginTop="56dp"
                         android:layout_marginEnd="2dp"
@@ -43,7 +43,7 @@
                         app:weekLayoutBackgroundColor="@color/colorPrimary"
                         app:weekendColor="@color/red"
                         app:weekend="saturday|sunday">
-                    </com.samsistemas.calendarview.widget.CalendarView>
+                    </io.blackbox_vision.materialcalendarview.view.CalendarView>
 
                 </FrameLayout>
 

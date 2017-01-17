@@ -127,16 +127,16 @@ This project includes a Sample App that shows you the true power of this library
 
 Pay attention to the following:
 ```xml
-<com.samsistemas.calendarview.widget.CalendarView
+<io.blackbox_vision.calendarview.widget.CalendarView
 	android:id="@+id/calendar_view"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:background="@color/colorPrimary">
-</com.samsistemas.calendarview.widget.CalendarView>
+</io.blackbox_vision.calendarview.widget.CalendarView>
 ```
 The above code snippet will show the simple Calendar View on the default layout. Now, you can use the following attributes if you want to customize the appearance of calendar:
 ```xml
-<com.samsistemas.calendarview.widget.CalendarView
+<io.blackbox_vision.calendarview.widget.CalendarView
     android:id="@+id/calendar_view"
     android:layout_marginTop="56dp"
     android:layout_marginEnd="2dp"
@@ -158,7 +158,7 @@ The above code snippet will show the simple Calendar View on the default layout.
     app:weekLayoutBackgroundColor="@color/colorPrimary"
     app:weekendColor="@color/red"
     app:weekend="saturday|sunday">
-</com.samsistemas.calendarview.widget.CalendarView>
+</io.blackbox_vision.calendarview.widget.CalendarView>
 ```
 The next step is initialize the Calendar View to change the appearance and behavior of calendar using the following methods:
 

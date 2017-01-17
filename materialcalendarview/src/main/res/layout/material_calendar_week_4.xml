@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    android:tag="weekRow4"
+    android:weightSum="7">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:tag="dayOfMonthContainer22">
+
+        <io.blackbox_vision.materialcalendarview.view.DayView
+            style="@style/CalendarView.DayOfTheMonth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:tag="dayOfMonthText22"
+            tools:text="22"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:tag="dayOfMonthContainer23">
+
+        <io.blackbox_vision.materialcalendarview.view.DayView
+            style="@style/CalendarView.DayOfTheMonth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:tag="dayOfMonthText23"
+            tools:text="23" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:tag="dayOfMonthContainer24">
+
+        <io.blackbox_vision.materialcalendarview.view.DayView
+            style="@style/CalendarView.DayOfTheMonth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:tag="dayOfMonthText24"
+            tools:text="24"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:tag="dayOfMonthContainer25">
+
+        <io.blackbox_vision.materialcalendarview.view.DayView
+            style="@style/CalendarView.DayOfTheMonth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:tag="dayOfMonthText25"
+            tools:text="25"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:tag="dayOfMonthContainer26">
+
+        <io.blackbox_vision.materialcalendarview.view.DayView
+            style="@style/CalendarView.DayOfTheMonth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:tag="dayOfMonthText26"
+            tools:text="26"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:tag="dayOfMonthContainer27">
+
+        <io.blackbox_vision.materialcalendarview.view.DayView
+            style="@style/CalendarView.DayOfTheMonth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:tag="dayOfMonthText27"
+            tools:text="27"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:tag="dayOfMonthContainer28">
+
+        <io.blackbox_vision.materialcalendarview.view.DayView
+            style="@style/CalendarView.DayOfTheMonth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:tag="dayOfMonthText28"
+            tools:text="28" />
+
+    </RelativeLayout>
+</LinearLayout>
