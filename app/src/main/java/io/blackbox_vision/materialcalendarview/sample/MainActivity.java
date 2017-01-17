@@ -101,6 +101,12 @@ public final class MainActivity extends AppCompatActivity implements NavigationV
             }
         });
 
+        calendarView.setOnMonthTitleClickListener(new CalendarView.OnMonthTitleClickListener() {
+            @Override
+            public void onMonthTitleClick(@NonNull Date selectedDate) {
+            }
+        });
+
         final DayView dayView = calendarView.findViewByDate(new Date(System.currentTimeMillis()));
 
         if (null != dayView) {
