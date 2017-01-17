@@ -11,9 +11,7 @@ import android.widget.TextView;
 
 import io.blackbox_vision.materialcalendarview.R;
 
-/**
- * @author jonatan.salas
- */
+
 public class HeaderView extends RelativeLayout {
     private static final String LOG = HeaderView.class.getSimpleName();
 

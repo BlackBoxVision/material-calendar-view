@@ -1,18 +1,3 @@
-/*
- * Copyright (C) 2015 Jonatan Ezequiel Salas
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package io.blackbox_vision.materialcalendarview.view;
 
 
@@ -56,6 +41,7 @@ import java.util.Locale;
 import io.blackbox_vision.materialcalendarview.R;
 import io.blackbox_vision.materialcalendarview.decor.DayDecorator;
 import io.blackbox_vision.materialcalendarview.utils.CalendarUtils;
+
 
 /***
  * Custom CalendarView class.
@@ -498,11 +484,12 @@ public class CalendarView extends LinearLayout {
 
         DayView dayView;
         ViewGroup dayOfMonthContainer;
+
         for (int i = 1; i < 43; i++) {
             dayOfMonthContainer = (ViewGroup) view.findViewWithTag(getContext().getString(R.string.day_of_month_container) + i);
             dayView = (DayView) view.findViewWithTag(getContext().getString(R.string.day_of_month_text) + i);
-            if (dayView == null)
-                continue;
+
+            if (dayView == null) continue;
 
             //Apply the default styles
             dayOfMonthContainer.setOnClickListener(null);
@@ -528,19 +515,21 @@ public class CalendarView extends LinearLayout {
                     }
                 }
 
-                if(isCommonDay) {
+                if (isCommonDay) {
                     dayView.setTextColor(dayOfWeekTextColor);
                 }
+
             } else {
                 dayView.setBackgroundColor(disabledDayBackgroundColor);
                 dayView.setTextColor(disabledDayTextColor);
 
-                if (!isOverflowDateVisible())
+                if (!isOverflowDateVisible()) {
                     dayView.setVisibility(View.GONE);
-                else if (i >= 36 && ((float) monthEndIndex / 7.0f) >= 1) {
+                } else if (i >= 36 && ((float) monthEndIndex / 7.0f) >= 1) {
                     dayView.setVisibility(View.GONE);
                 }
             }
+
             dayView.decorate();
 
             //Set the current day color
@@ -554,6 +543,7 @@ public class CalendarView extends LinearLayout {
         // If the last week row has no visible days, hide it or show it in case
         ViewGroup weekRow = (ViewGroup) view.findViewWithTag("weekRow6");
         dayView = (DayView) view.findViewWithTag("dayOfMonthText36");
+
         if (dayView.getVisibility() != VISIBLE) {
             weekRow.setVisibility(GONE);
         } else {
@@ -570,6 +560,7 @@ public class CalendarView extends LinearLayout {
             final DayView dayView = findViewByCalendar(calendar);
             dayView.setBackgroundColor(calendarBackgroundColor);
             isCommonDay = true;
+
             if(totalDayOfWeekend().length != 0) {
                 for (int weekend : totalDayOfWeekend()) {
                     if (calendar.get(Calendar.DAY_OF_WEEK) == weekend) {
@@ -763,6 +754,7 @@ public class CalendarView extends LinearLayout {
 
     private void requestParentDisallowInterceptTouchEvent(boolean disallowIntercept) {
         final ViewParent parent = getParent();
+
         if (parent != null) {
             parent.requestDisallowInterceptTouchEvent(disallowIntercept);
         }
@@ -1049,7 +1041,6 @@ public class CalendarView extends LinearLayout {
          */
         void onDateLongClick(@NonNull Date selectedDate);
     }
-
 
     /**
      * Interface that define a method to implement to handle

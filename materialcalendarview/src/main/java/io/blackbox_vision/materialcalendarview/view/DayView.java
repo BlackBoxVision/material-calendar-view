@@ -12,8 +12,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+
 public class DayView extends TextView {
-    private List<DayDecorator> mDayDecoratorList;
+    private List<DayDecorator> dayDecoratorList;
     private Date mDate;
 
     public DayView(Context context) {
@@ -26,6 +27,7 @@ public class DayView extends TextView {
 
     public DayView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.CUPCAKE) {
             if (isInEditMode()) {
                 return;
@@ -34,7 +36,7 @@ public class DayView extends TextView {
     }
 
     public void bind(Date date, List<DayDecorator> decorators) {
-        this.mDayDecoratorList = decorators;
+        this.dayDecoratorList = decorators;
         this.mDate = date;
 
         final SimpleDateFormat df = new SimpleDateFormat("d", Locale.getDefault());
@@ -43,9 +45,9 @@ public class DayView extends TextView {
     }
 
     public void decorate() {
-        //Set custom mDayDecoratorList
-        if (null != mDayDecoratorList) {
-            for (DayDecorator decorator : mDayDecoratorList) {
+        //Set custom dayDecoratorList
+        if (null != dayDecoratorList) {
+            for (DayDecorator decorator : dayDecoratorList) {
                 decorator.decorate(this);
             }
         }
