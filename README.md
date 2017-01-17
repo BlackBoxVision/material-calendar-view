@@ -1,20 +1,20 @@
 
-#Material Calendar View ![Build Status](https://travis-ci.org/BlackBoxVision/material-calendar-view.svg?branch=master) [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Material%20Calendar%20View-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/2715) [![Join the chat at https://gitter.im/jonisaa/material-calendar-view](https://badges.gitter.im/jonisaa/material-calendar-view.svg)](https://gitter.im/jonisaa/material-calendar-view?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+#Material Calendar View 
+[![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT) [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Material%20Calendar%20View-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/2715) [![](https://jitpack.io/v/BlackBoxVision/material-calendar-view.svg)](https://jitpack.io/#BlackBoxVision/material-calendar-view) ![Build Status](https://travis-ci.org/BlackBoxVision/material-calendar-view.svg?branch=master) 
 
 MaterialCalendarView is a prettier and simpler, material design calendar that allows full customization and it's backwards compatible with API 11+.
-    
-----------
-Screenshots
--------------
+
+##Screenshots
+
 <img src="https://raw.githubusercontent.com/SAMSistemas/MaterialCalendarView/master/screenshots/calendars.png" height="425" width="100%">
 
 <img src="https://i.imgur.com/ViolZD2.gif" height="550" width="100%" style="align: center;">
 
 ##Installation
 
-### For Gradle:
-**Step 1:** you must add the JitPack repository to your build file. Type the
-on your build.gradle at the end of repositories.
+**Gradle**
+
+- Add it in your root build.gradle at the end of repositories:
 
 ```java
   repositories {
@@ -24,58 +24,63 @@ on your build.gradle at the end of repositories.
   }
 ```
 
-**Step 2:** Add the dependency in the form
+- Add the dependency:
 
 ```java
 dependencies {
-    compile 'com.github.BlackBoxVision:material-calendar-view:v1.2.3'
+    compile 'com.github.BlackBoxVision:material-calendar-view:v1.3.0'
 }
 ```
-###For Maven:
+**Maven**
 
-**Step 1:** Add the JitPack repository to your maven file. 
+- Add the JitPack repository to your maven file. 
+
 ```xml
 <repository>
      <id>jitpack.io</id>
      <url>https://jitpack.io</url>
 </repository>
 ```
-**Step 2:** Add the dependency in the form
+- Add the dependency in the form
+
 ```xml
 <dependency>
     <groupId>com.github.BlackBoxVision</groupId>
     <artifactId>material-calendar-view</artifactId>
-    <version>v1.2.3</version>
+    <version>v1.3.0</version>
 </dependency>
 ```
-###For SBT:
+**SBT**
 
-**Step 1:** Add it in your build.sbt at the end of resolvers:
+- Add it in your build.sbt at the end of resolvers:
+
 ```java
 resolvers += "jitpack" at "https://jitpack.io"
 ```
-**Step 2:** Add the dependency in the form
+
+- Add the dependency in the form:
+
 ```java
-libraryDependencies += "com.github.BlackBoxVision" % "material-calendar-view" % "v1.2.3"	
+libraryDependencies += "com.github.BlackBoxVision" % "material-calendar-view" % "v1.3.0"	
 ```
 
 ##Usage example
 
-Pay attention to the following:
+In your layout.xml file:
 
 ```xml
-<io.blackbox_vision.calendarview.widget.CalendarView
+<io.blackbox_vision.materialcalendarview.view.CalendarView
 	android:id="@+id/calendar_view"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:background="@color/colorPrimary">
-</io.blackbox_vision.calendarview.widget.CalendarView>
+</io.blackbox_vision.materialcalendarview.view.CalendarView>
 ```
 
-The above code snippet will show the simple Calendar View on the default layout. Now, you can use the following attributes if you want to customize the appearance of calendar:
+This example shows all the possible customization around Material Calendar View:
 
 ```xml
-<io.blackbox_vision.calendarview.widget.CalendarView
+<io.blackbox_vision.materialcalendarview.view.CalendarView
     android:id="@+id/calendar_view"
     android:layout_marginTop="56dp"
     android:layout_marginEnd="2dp"
@@ -97,9 +102,9 @@ The above code snippet will show the simple Calendar View on the default layout.
     app:weekLayoutBackgroundColor="@color/colorPrimary"
     app:weekendColor="@color/red"
     app:weekend="saturday|sunday">
-</io.blackbox_vision.calendarview.widget.CalendarView>
+</io.blackbox_vision.materialcalendarview.view.CalendarView>
 ```
-The next step is initialize the Calendar View to change the appearance and behavior of calendar using the following methods:
+Then, in your Activity.java or Fragment.java initialize the calendar: 
 
 ```java
 calendarView = (CalendarView) findViewById(R.id.calendar_view);
