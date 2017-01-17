@@ -27,7 +27,6 @@ import static materialcalendarview2.util.CalendarUtil.obtainDayTimes;
 public class AdapterView extends LinearLayout {
     private DayTimeAdapter monthAdapter;
     private RecyclerView recyclerView;
-    private View view;
 
     private int monthIndex = 0;
 
@@ -67,9 +66,8 @@ public class AdapterView extends LinearLayout {
     }
 
     private void init() {
+        final View view = LayoutInflater.from(getContext()).inflate(R.layout.adapter_view, this, true);
         monthAdapter = new DayTimeAdapter(getContext());
-
-        view = LayoutInflater.from(getContext()).inflate(R.layout.adapter_view, this, true);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
 

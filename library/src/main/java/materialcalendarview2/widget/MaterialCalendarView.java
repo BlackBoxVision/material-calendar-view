@@ -23,6 +23,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -39,11 +40,11 @@ import java.util.Locale;
 import materialcalendarview2.R;
 import materialcalendarview2.model.DayTime;
 import materialcalendarview2.model.Event;
-import materialcalendarview2.util.ContextUtils;
 
 import static materialcalendarview2.util.CalendarUtil.getShortWeekDays;
 import static materialcalendarview2.util.CalendarUtil.calculateWeekIndex;
 import static materialcalendarview2.util.ScreenUtil.getScreenHeight;
+
 
 /**
  * This class is a calendar widget for displaying dates, selecting, adding and associating event for a
@@ -104,7 +105,7 @@ public class MaterialCalendarView extends LinearLayout {
      * @param context The application context used to get needed resources.
      */
     public MaterialCalendarView(@NonNull Context context) {
-        this(context, null);
+        this(context, null, 0);
     }
 
     /**
@@ -116,8 +117,7 @@ public class MaterialCalendarView extends LinearLayout {
      * @param attrs The AttributeSet used to get custom styles and apply to this view.
      */
     public MaterialCalendarView(@NonNull Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-        ContextUtils.init(context);
+        super(context, attrs, 0);
         style(attrs);
         init();
     }
@@ -134,19 +134,18 @@ public class MaterialCalendarView extends LinearLayout {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public MaterialCalendarView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        ContextUtils.init(context);
         style(attrs);
         init();
     }
 
     private void style(@Nullable AttributeSet attrs) {
         if (null != attrs) {
-            final TypedArray a = ContextUtils.getStylesAttributes(attrs, R.styleable.CalendarView);
+            final TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.CalendarView);
 
-            final int white = ContextUtils.getColor(android.R.color.white);
-            final int prim = ContextUtils.getColor(R.color.colorPrimary);
-            final int accent = ContextUtils.getColor(R.color.colorAccent);
-            final int darkerGray = ContextUtils.getColor(android.R.color.darker_gray);
+            final int white = ContextCompat.getColor(getContext(), android.R.color.white);
+            final int prim = ContextCompat.getColor(getContext(), R.color.colorPrimary);
+            final int accent = ContextCompat.getColor(getContext(), R.color.colorAccent);
+            final int darkerGray = ContextCompat.getColor(getContext(), android.R.color.darker_gray);
 
             final float titleFontSize = 15f;
             final float fontSize = 14f;
@@ -294,7 +293,7 @@ public class MaterialCalendarView extends LinearLayout {
 
     public void shouldAnimateOnEnter(boolean shouldAnimate, long duration, @NonNull Interpolator interpolator) {
         if (shouldAnimate) {
-            ViewCompat.setTranslationY(this, getScreenHeight(ContextUtils.getApplicationContext()));
+            ViewCompat.setTranslationY(this, getScreenHeight(getContext()));
             ViewCompat.setAlpha(this, 0f);
             ViewCompat.animate(this)
                     .translationY(0f)
