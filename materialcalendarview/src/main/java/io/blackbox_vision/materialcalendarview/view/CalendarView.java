@@ -17,6 +17,7 @@ import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewConfigurationCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -32,14 +33,14 @@ import android.widget.Scroller;
 import android.widget.TextView;
 
 import java.lang.reflect.Field;
-import java.text.DateFormatSymbols;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import io.blackbox_vision.materialcalendarview.R;
-import io.blackbox_vision.materialcalendarview.decor.DayDecorator;
+import io.blackbox_vision.materialcalendarview.data.Day;
 import io.blackbox_vision.materialcalendarview.utils.CalendarUtils;
 
 
@@ -149,8 +150,8 @@ public final class CalendarView extends LinearLayout {
     private int currentDayOfMonth;
     private int weekendColor;
     private int weekend;
+    private int drawableColor;
 
-    private List<DayDecorator> decoratorsList = null;
     private boolean isOverflowDateVisible = true;
     private int firstDayOfWeek = Calendar.SUNDAY;
     private int currentMonthIndex = 0;
@@ -201,6 +202,7 @@ public final class CalendarView extends LinearLayout {
         final int endColor = ContextCompat.getColor(getContext(), R.color.weekend_color);
 
         try {
+            drawableColor = a.getColor(R.styleable.MaterialCalendarView_drawableColor, black);
             calendarBackgroundColor = a.getColor(R.styleable.MaterialCalendarView_calendarBackgroundColor, white);
             calendarTitleBackgroundColor = a.getColor(R.styleable.MaterialCalendarView_titleLayoutBackgroundColor, white);
             calendarTitleTextColor = a.getColor(R.styleable.MaterialCalendarView_calendarTitleTextColor, black);
@@ -224,6 +226,7 @@ public final class CalendarView extends LinearLayout {
      * This method init all necessary variables and Views that our Calendar is going to use.
      */
     private void drawCalendar() {
+        calendar = Calendar.getInstance(Locale.getDefault());
         gestureDetector = new GestureDetectorCompat(getContext(), new CalendarGestureDetector());
         scroller = new Scroller(getContext(), null);
 
@@ -239,24 +242,15 @@ public final class CalendarView extends LinearLayout {
         closeEnough = (int) (CLOSE_ENOUGH * density);
         defaultGutterSize = (int) (DEFAULT_GUTTER_SIZE * density);
 
-        //Inflate current view..
         view = LayoutInflater.from(getContext()).inflate(R.layout.material_calendar_view, this, true);
 
-        //Get buttons for Calendar and set it´s listeners..
-        if (null == backButton) {
-            backButton = (ImageView) view.findViewById(R.id.left_button);
-        }
-
-        if (null == nextButton) {
-            nextButton = (ImageView) view.findViewById(R.id.right_button);
-        }
+        backButton = (ImageView) view.findViewById(R.id.left_button);
+        nextButton = (ImageView) view.findViewById(R.id.right_button);
 
         backButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                currentMonthIndex--;
-                calendar = Calendar.getInstance(Locale.getDefault());
-                calendar.add(Calendar.MONTH, currentMonthIndex);
+                calendar.add(Calendar.MONTH, currentMonthIndex--);
 
                 refreshCalendar(calendar);
 
@@ -269,9 +263,7 @@ public final class CalendarView extends LinearLayout {
         nextButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                currentMonthIndex++;
-                calendar = Calendar.getInstance(Locale.getDefault());
-                calendar.add(Calendar.MONTH, currentMonthIndex);
+                calendar.add(Calendar.MONTH, currentMonthIndex++);
 
                 refreshCalendar(calendar);
 
@@ -281,8 +273,11 @@ public final class CalendarView extends LinearLayout {
             }
         });
 
+        backButton.setColorFilter(drawableColor, PorterDuff.Mode.SRC_ATOP);
+        nextButton.setColorFilter(drawableColor, PorterDuff.Mode.SRC_ATOP);
+
         setFirstDayOfWeek(Calendar.SUNDAY);
-        refreshCalendar(Calendar.getInstance(getLocale()));
+        refreshCalendar(Calendar.getInstance(Locale.getDefault()));
     }
 
     /**
@@ -292,7 +287,7 @@ public final class CalendarView extends LinearLayout {
         View titleLayout = view.findViewById(R.id.title_layout);
         titleLayout.setBackgroundColor(calendarTitleBackgroundColor);
 
-        TextView dateTitle = (TextView) view.findViewById(R.id.dateTitle);
+        TextView dateTitle = (TextView) view.findViewById(R.id.date_title);
 
         String dateText = CalendarUtils.getCurrentMonth(currentMonthIndex).toUpperCase(Locale.getDefault()) + " " + getCurrentYear();
         dateTitle.setText(dateText);
@@ -324,14 +319,15 @@ public final class CalendarView extends LinearLayout {
         View weekLayout = view.findViewById(R.id.week_layout);
         weekLayout.setBackgroundColor(weekLayoutBackgroundColor);
 
-        final String[] weekDaysArray = new DateFormatSymbols(getLocale()).getShortWeekdays();
+        final List<String> weekDaysArray = CalendarUtils.getShortWeekDays(Locale.getDefault());
 
-        for (int i = 1; i < weekDaysArray.length; i++) {
-            dayOfTheWeekString = weekDaysArray[i];
+        for (int i = 1; i < weekDaysArray.size(); i++) {
+            dayOfTheWeekString = weekDaysArray.get(i);
             int length = dayOfTheWeekString.length() < 3 ? dayOfTheWeekString.length() : 3;
             dayOfTheWeekString = dayOfTheWeekString.substring(0, length).toUpperCase();
-            dayOfWeek = (TextView) view.findViewWithTag(getContext().getString(R.string.day_of_week) + CalendarUtils.getWeekIndex(i, calendar));
+            dayOfWeek = (TextView) view.findViewWithTag(getContext().getString(R.string.day_of_week) + CalendarUtils.calculateWeekIndex(calendar, i));
             dayOfWeek.setText(dayOfTheWeekString);
+
             isCommonDay = true;
 
             if (totalDayOfWeekend().length != 0) {
@@ -460,21 +456,100 @@ public final class CalendarView extends LinearLayout {
         dpd.show();
     }
 
+    private void newSetDaysInCalendar() {
+        final List<Day> days = CalendarUtils.obtainDays(calendar, currentMonthIndex);
+
+        DayView textView;
+        ViewGroup container;
+
+        for (int i = 0; i < days.size(); i++) {
+            Day day = days.get(i);
+
+            int fixedIndex = i + 1;
+
+            container = (ViewGroup) view.findViewWithTag(getContext().getString(R.string.day_of_month_container) + fixedIndex);
+            textView = (DayView) view.findViewWithTag(getContext().getString(R.string.day_of_month_text) + fixedIndex);
+
+            container.setOnClickListener(null);
+
+            if (null != typeface) {
+                textView.setTypeface(typeface);
+            }
+
+            textView.setText(String.valueOf(day.getDay()));
+            textView.setVisibility(View.VISIBLE);
+
+            if (day.isCurrentMonth()) {
+                container.setOnClickListener(onDayOfMonthClickListener);
+                container.setOnLongClickListener(onDayOfMonthLongClickListener);
+
+                textView.setBackgroundColor(calendarBackgroundColor);
+
+                isCommonDay = true;
+
+                if (totalDayOfWeekend().length != 0) {
+                    for (int weekend : totalDayOfWeekend()) {
+                        Calendar calendar = Calendar.getInstance(Locale.getDefault());
+
+                        calendar.set(Calendar.DAY_OF_MONTH, day.getDay());
+                        calendar.set(Calendar.MONTH, day.getMonth());
+                        calendar.set(Calendar.YEAR, day.getYear());
+
+                        if (day.isWeekend() && calendar.get(Calendar.DAY_OF_WEEK) == weekend) {
+                            textView.setTextColor(weekendColor);
+                            isCommonDay = false;
+                        }
+                    }
+                }
+
+                if (isCommonDay) {
+                    textView.setTextColor(dayOfWeekTextColor);
+                }
+
+            } else {
+                textView.setBackgroundColor(disabledDayBackgroundColor);
+                textView.setTextColor(disabledDayTextColor);
+
+                //if (!isOverflowDateVisible()) {
+                //    textView.setVisibility(View.GONE);
+                //} else if (i >= 36 && ((float) days.size() / 7.0f) >= 1) {
+                //    textView.setVisibility(View.GONE);
+                //}
+            }
+
+            if (day.isCurrentDay()) {
+                Calendar calendar = Calendar.getInstance(Locale.getDefault());
+
+                calendar.set(Calendar.DAY_OF_MONTH, day.getDay());
+                calendar.set(Calendar.MONTH, day.getMonth());
+                calendar.set(Calendar.YEAR, day.getYear());
+
+                setCurrentDay(calendar.getTime());
+            }
+        }
+    }
+
     /**
      * This method prepare and populate the days in the CalendarView
      */
     private void setDaysInCalendar() {
-        Calendar calendar = Calendar.getInstance(getLocale());
+        Log.i(CalendarView.class.getSimpleName(), "Calling setDayInCalendar index -> " + currentMonthIndex);
+        Log.i(CalendarView.class.getSimpleName(), "Calling setDayInCalendar");
+
+        Calendar calendar = Calendar.getInstance(Locale.getDefault());
+
         calendar.setTime(calendar.getTime());
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         calendar.setFirstDayOfWeek(firstDayOfWeek);
+
         int firstDayOfMonth = calendar.get(Calendar.DAY_OF_WEEK);
 
         // Calculate dayOfMonthIndex
-        int dayOfMonthIndex = CalendarUtils.getWeekIndex(firstDayOfMonth, calendar);
+        int dayOfMonthIndex = CalendarUtils.calculateWeekIndex(calendar, firstDayOfMonth);
         int actualMaximum = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
-        final Calendar startCalendar = (Calendar) calendar.clone();
+        Calendar startCalendar = (Calendar) calendar.clone();
+
         //Add required number of days
         startCalendar.add(Calendar.DATE, -(dayOfMonthIndex - 1));
         int monthEndIndex = 42 - (actualMaximum + dayOfMonthIndex - 1);
@@ -486,11 +561,17 @@ public final class CalendarView extends LinearLayout {
             dayOfMonthContainer = (ViewGroup) view.findViewWithTag(getContext().getString(R.string.day_of_month_container) + i);
             dayView = (DayView) view.findViewWithTag(getContext().getString(R.string.day_of_month_text) + i);
 
-            if (dayView == null) continue;
+            if (dayView == null) {
+                Log.i(CalendarView.class.getSimpleName(), "dayView is null bro");
+                continue;
+            }
 
             //Apply the default styles
             dayOfMonthContainer.setOnClickListener(null);
-            dayView.bind(startCalendar.getTime(), getDecoratorsList());
+
+            final SimpleDateFormat df = new SimpleDateFormat("d", Locale.getDefault());
+
+            dayView.setText(df.format(startCalendar.getTime()));
             dayView.setVisibility(View.VISIBLE);
 
             if (null != typeface) {
@@ -527,8 +608,6 @@ public final class CalendarView extends LinearLayout {
                 }
             }
 
-            dayView.decorate();
-
             //Set the current day color
             if (calendar.get(Calendar.MONTH) == startCalendar.get(Calendar.MONTH)) {
                 setCurrentDay(calendar.getTime());
@@ -551,11 +630,11 @@ public final class CalendarView extends LinearLayout {
 
     private void clearDayOfTheMonthStyle(Date currentDate) {
         if (currentDate != null) {
-            final Calendar calendar = CalendarUtils.getTodayCalendar(getContext(), firstDayOfWeek);
+            Calendar calendar = Calendar.getInstance(Locale.getDefault());
             calendar.setFirstDayOfWeek(firstDayOfWeek);
             calendar.setTime(currentDate);
 
-            final DayView dayView = findViewByCalendar(calendar);
+            DayView dayView = findViewByCalendar(calendar);
             dayView.setBackgroundColor(calendarBackgroundColor);
             isCommonDay = true;
 
@@ -575,7 +654,7 @@ public final class CalendarView extends LinearLayout {
     }
 
     public DayView findViewByDate(@NonNull Date dateToFind) {
-        final Calendar calendar = Calendar.getInstance(getLocale());
+        Calendar calendar = Calendar.getInstance(Locale.getDefault());
         calendar.setTime(dateToFind);
         return (DayView) getView(getContext().getString(R.string.day_of_month_text), calendar);
     }
@@ -604,7 +683,7 @@ public final class CalendarView extends LinearLayout {
         setTotalDayOfWeekend();
         initWeekLayout();
 
-        setDaysInCalendar();
+        newSetDaysInCalendar();
     }
 
     private void setTotalDayOfWeekend() {
@@ -630,7 +709,7 @@ public final class CalendarView extends LinearLayout {
     }
 
     public void setCurrentDay(@NonNull Date todayDate) {
-        final Calendar calendar = Calendar.getInstance(getLocale());
+        Calendar calendar = Calendar.getInstance(Locale.getDefault());
         calendar.setTime(todayDate);
 
         if (CalendarUtils.isToday(calendar)) {
@@ -642,7 +721,7 @@ public final class CalendarView extends LinearLayout {
     }
 
     public void setDateAsSelected(Date currentDate) {
-        final Calendar currentCalendar = CalendarUtils.getTodayCalendar(getContext(), firstDayOfWeek);
+        Calendar currentCalendar = Calendar.getInstance(Locale.getDefault());
         currentCalendar.setFirstDayOfWeek(firstDayOfWeek);
         currentCalendar.setTime(currentDate);
 
@@ -668,7 +747,7 @@ public final class CalendarView extends LinearLayout {
             final TextView dayOfMonthText = (TextView) view.findViewWithTag(getContext().getString(R.string.day_of_month_text) + tagId);
 
             // Fire event
-            final Calendar calendar = Calendar.getInstance();
+            Calendar calendar = Calendar.getInstance();
             calendar.setFirstDayOfWeek(firstDayOfWeek);
             calendar.setTime(calendar.getTime());
             calendar.set(Calendar.DAY_OF_MONTH, Integer.valueOf(dayOfMonthText.getText().toString()));
@@ -695,7 +774,7 @@ public final class CalendarView extends LinearLayout {
             final TextView dayOfMonthText = (TextView) view.findViewWithTag(getContext().getString(R.string.day_of_month_text) + tagId);
 
             // Fire event
-            final Calendar calendar = Calendar.getInstance();
+            Calendar calendar = Calendar.getInstance();
             calendar.setFirstDayOfWeek(firstDayOfWeek);
             calendar.setTime(calendar.getTime());
             calendar.set(Calendar.DAY_OF_MONTH, Integer.valueOf(dayOfMonthText.getText().toString()));
@@ -1103,11 +1182,6 @@ public final class CalendarView extends LinearLayout {
         invalidate();
     }
 
-    public void setDecoratorsList(List<DayDecorator> decoratorsList) {
-        this.decoratorsList = decoratorsList;
-        invalidate();
-    }
-
     public void setIsOverflowDateVisible(boolean isOverflowDateVisible) {
         this.isOverflowDateVisible = isOverflowDateVisible;
         invalidate();
@@ -1198,16 +1272,11 @@ public final class CalendarView extends LinearLayout {
         invalidate();
     }
 
-    public Typeface getTypeface() {
-        return typeface;
-    }
-
-    public List<DayDecorator> getDecoratorsList() {
-        return decoratorsList;
-    }
-
-    public Locale getLocale() {
-        return getContext().getResources().getConfiguration().locale;
+    public void setDrawableColor(@ColorRes int drawableColor) {
+        this.drawableColor = drawableColor;
+        setNextButtonColor(drawableColor);
+        setBackButtonColor(drawableColor);
+        invalidate();
     }
 
     public String getCurrentMonth() {

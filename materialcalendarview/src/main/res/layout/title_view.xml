@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/actionbar_size"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginBottom="1dp"
     android:clickable="true"
     android:paddingBottom="@dimen/calendarTitlePaddingBottom"
@@ -17,10 +18,10 @@
         android:layout_centerVertical="true"
         android:padding="@dimen/padding"
         android:background="?attr/selectableItemBackground"
-        android:src="@drawable/ic_arrow_back_white_24dp"
+        android:src="@drawable/ic_keyboard_arrow_left_black_24dp"
         tools:ignore="contentDescription"/>
 
-    <TextView android:id="@+id/dateTitle"
+    <TextView android:id="@+id/date_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal|center|center_vertical"
@@ -42,7 +43,7 @@
         android:layout_centerVertical="true"
         android:padding="@dimen/padding"
         android:background="?attr/selectableItemBackground"
-        android:src="@drawable/ic_arrow_forward_white_24dp"
+        android:src="@drawable/ic_keyboard_arrow_right_black_24dp"
         tools:ignore="contentDescription"/>
 
 </RelativeLayout>

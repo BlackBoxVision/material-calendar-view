@@ -2,6 +2,7 @@
 <resources>
 
     <declare-styleable name="MaterialCalendarView">
+        <attr name="drawableColor" format="color"/>
         <attr name="calendarTitleTextColor" format="color" />
         <attr name="dayOfWeekTextColor" format="color" />
         <attr name="calendarBackgroundColor" format="color" />
