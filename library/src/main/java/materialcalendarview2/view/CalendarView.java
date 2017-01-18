@@ -53,7 +53,7 @@ import static materialcalendarview2.util.ScreenUtils.getScreenHeight;
  * @author jonatan.salas
  */
 @SuppressWarnings("all")
-public class MaterialCalendarView extends LinearLayout {
+public final class CalendarView extends LinearLayout {
     private static final Interpolator DEFAULT_ANIM_INTERPOLATOR = new DecelerateInterpolator(3.0f);
     private static final long DEFAULT_ANIM_DURATION = 1500;
     private static final int DEFAULT_MONTH_INDEX = 0;
@@ -97,6 +97,8 @@ public class MaterialCalendarView extends LinearLayout {
     private View view;
 
     private Calendar calendar;
+    private Locale locale;
+    private Integer firstDayOfWeek;
 
     /**
      * Constructor with params. It takes the context as param, and use to get the
@@ -104,41 +106,41 @@ public class MaterialCalendarView extends LinearLayout {
      *
      * @param context The application context used to get needed resources.
      */
-    public MaterialCalendarView(@NonNull Context context) {
+    public CalendarView(@NonNull Context context) {
         this(context, null, 0);
     }
 
     /**
      * Constructor with params. It takes the context as main param, and an AttributeSet as second
      * param. We use the context to get the resources that needs to inflate correctly and the AttributeSet
-     * object used to style the view after inflate it.
+     * object used to takeStyles the view after inflate it.
      *
      * @param context The application context used to get needed resources.
      * @param attrs The AttributeSet used to get custom styles and apply to this view.
      */
-    public MaterialCalendarView(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public CalendarView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs, 0);
-        style(attrs);
-        init();
+        takeStyles(attrs);
+        drawCalendar();
     }
 
     /**
      * Constructor with params. It takes the context as main param, and an AttributeSet as second
      * param. We use the context to get the resources that needs to inflate correctly and the AttributeSet
-     * object used to style the view after inflate it.
+     * object used to takeStyles the view after inflate it.
      *
      * @param context The application context used to get needed resources.
      * @param attrs The AttributeSet used to get custom styles and apply to this view.
      * @param defStyle Style definition for this View
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public MaterialCalendarView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyle) {
+    public CalendarView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        style(attrs);
-        init();
+        takeStyles(attrs);
+        drawCalendar();
     }
 
-    private void style(@Nullable AttributeSet attrs) {
+    private void takeStyles(@Nullable AttributeSet attrs) {
         if (null != attrs) {
             final TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.CalendarView);
 
@@ -185,8 +187,12 @@ public class MaterialCalendarView extends LinearLayout {
         }
     }
 
-    private void init() {
-        calendar = Calendar.getInstance(Locale.getDefault());
+    private void drawCalendar() {
+        firstDayOfWeek = null != firstDayOfWeek? firstDayOfWeek : Calendar.MONDAY;
+        locale = null != locale? locale : Locale.getDefault();
+
+        calendar = Calendar.getInstance(locale);
+        calendar.setFirstDayOfWeek(firstDayOfWeek);
 
         view = LayoutInflater.from(getContext()).inflate(R.layout.calendar_view, this, true);
         view.setBackgroundColor(calendarViewBackgroundColor);
@@ -197,7 +203,9 @@ public class MaterialCalendarView extends LinearLayout {
     }
 
     private void initHeaderView() {
-        headerView = (HeaderView) view.findViewById(R.id.header_view);
+        if (null == headerView) {
+            headerView = (HeaderView) view.findViewById(R.id.header_view);
+        }
 
         headerView.setBackgroundColor(headerViewBackgroundColor);
         headerView.setTitleTextColor(headerViewTextColor);
@@ -205,9 +213,10 @@ public class MaterialCalendarView extends LinearLayout {
         headerView.setTitleTextTypeface(Typeface.DEFAULT);
         headerView.setNextButtonDrawableColor(drawableColor);
         headerView.setBackButtonDrawableColor(drawableColor);
+        headerView.setLocale(locale);
 
         headerView.setOnButtonClicked((view, monthIndex) ->  {
-            Calendar calendar = Calendar.getInstance(Locale.getDefault());
+            final Calendar calendar = Calendar.getInstance(locale);
             calendar.add(Calendar.MONTH, monthIndex);
 
             int month = calendar.get(Calendar.MONTH) + 1;
@@ -222,17 +231,20 @@ public class MaterialCalendarView extends LinearLayout {
     }
 
     private void initWeekView() {
-        weekView = view.findViewById(R.id.week_view);
+        if (null == weekView) {
+            weekView = view.findViewById(R.id.week_view);
+        }
+
         weekView.setBackgroundColor(weekViewBackgroundColor);
 
-        final List<String> shortWeekDays = getShortWeekDays();
+        final List<String> shortWeekDays = getShortWeekDays(locale);
         TextView dayOfWeek;
         String dayName;
 
         for (int i = 1; i < shortWeekDays.size(); i++) {
-            dayName = shortWeekDays.get(i).trim().toUpperCase(Locale.getDefault());
+            dayName = shortWeekDays.get(i).trim().toUpperCase(locale);
             int length = (dayName.length() < 3) ? dayName.length() : 3;
-            dayName = dayName.substring(0, length).toUpperCase(Locale.getDefault());
+            dayName = dayName.substring(0, length).toUpperCase(locale);
 
             final String tag = String.valueOf(calculateWeekIndex(calendar, i));
 
@@ -244,7 +256,9 @@ public class MaterialCalendarView extends LinearLayout {
     }
 
     private void initAdapterView() {
-        adapterView = (AdapterView) view.findViewById(R.id.adapter_view);
+        if (null == adapterView) {
+            adapterView = (AdapterView) view.findViewById(R.id.adapter_view);
+        }
 
         adapterView.getAdapter().setOnStyleChangeListener((dayView, dayTime) ->  {
             if (null != onDayViewStyleChangeListener) {
@@ -323,6 +337,18 @@ public class MaterialCalendarView extends LinearLayout {
 
     public void setOnDayViewStyleChangeListener(@Nullable OnDayViewStyleChangeListener onDayViewStyleChangeListener) {
         this.onDayViewStyleChangeListener = onDayViewStyleChangeListener;
+        invalidate();
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale = locale;
+        drawCalendar();
+        invalidate();
+    }
+
+    public void setFirstDayOfWeek(Integer firstDayOfWeek) {
+        this.firstDayOfWeek = firstDayOfWeek;
+        drawCalendar();
         invalidate();
     }
 

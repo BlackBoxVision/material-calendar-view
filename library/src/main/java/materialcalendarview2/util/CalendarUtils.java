@@ -57,8 +57,8 @@ public final class CalendarUtils {
                 && (cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)));
     }
 
-    public static List<String> getShortWeekDays() {
-        final String[] array = new DateFormatSymbols(Locale.getDefault()).getShortWeekdays();
+    public static List<String> getShortWeekDays(Locale locale) {
+        final String[] array = new DateFormatSymbols(locale).getShortWeekdays();
         return Arrays.asList(array);
     }
 
@@ -76,9 +76,9 @@ public final class CalendarUtils {
         return runInBackground(new DayTimeCallback(calendar, index));
     }
 
-    public static String getDateTitle(int index) {
-        final String[] months = new DateFormatSymbols(Locale.getDefault()).getMonths();
-        final Calendar calendar = Calendar.getInstance(Locale.getDefault());
+    public static String getDateTitle(Locale locale, int index) {
+        final String[] months = new DateFormatSymbols(locale).getMonths();
+        final Calendar calendar = Calendar.getInstance(locale);
 
         calendar.add(Calendar.MONTH, index);
 

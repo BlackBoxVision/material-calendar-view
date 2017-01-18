@@ -44,7 +44,7 @@ import materialcalendarview2.sample.activity.base.BaseActivity;
 import materialcalendarview2.sample.logic.presenter.MainPresenter;
 import materialcalendarview2.sample.logic.presenter_view.MainView;
 import materialcalendarview2.sample.R;
-import materialcalendarview2.view.MaterialCalendarView;
+import materialcalendarview2.view.CalendarView;
 import materialcalendarview2.view.DayView;
 
 import static materialcalendarview2.util.CalendarUtils.isSameMonth;
@@ -69,7 +69,7 @@ public final class MainActivity extends BaseActivity implements MainView {
     TextView textView;
 
     @Bind(R.id.calendar_view)
-    MaterialCalendarView calendarView;
+    CalendarView calendarView;
 
     @Bind(R.id.fab)
     FloatingActionButton fab;
@@ -113,7 +113,6 @@ public final class MainActivity extends BaseActivity implements MainView {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
-
         }
     }
 
@@ -141,14 +140,16 @@ public final class MainActivity extends BaseActivity implements MainView {
 
     @Override
     public void prepareCalendarView() {
-        calendarView.shouldAnimateOnEnter(true);
         calendarView.setOnDayViewClickListener(this::onDayViewClick);
         calendarView.setOnMonthChangeListener(this::onMonthChanged);
         calendarView.setOnDayViewStyleChangeListener(this::onDayViewStyleChange);
+        calendarView.setFirstDayOfWeek(Calendar.SUNDAY);
+        calendarView.setLocale(Locale.CHINESE);
     }
 
     @Override
     public void animateViews() {
+        calendarView.shouldAnimateOnEnter(true);
         animate(fab, getApplicationContext());
         animate(textView, getApplicationContext());
     }
@@ -162,6 +163,7 @@ public final class MainActivity extends BaseActivity implements MainView {
     public void onDayViewClick(@NonNull View view, int year, int month, int dayOfMonth, @Nullable List<Event> eventList) {
         final Calendar calendar = new GregorianCalendar(year, month, dayOfMonth);
         final String dateString = formatter.format(calendar.getTime());
+
         Snackbar.make(view, getString(R.string.selected_date) + " " + dateString, Snackbar.LENGTH_SHORT).show();
     }
 

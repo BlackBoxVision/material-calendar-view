@@ -32,6 +32,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.Locale;
+
 import materialcalendarview2.R;
 import materialcalendarview2.data.exception.IllegalViewArgumentException;
 
@@ -43,7 +45,7 @@ import static materialcalendarview2.data.exception.IllegalViewArgumentException.
  *
  * @author jonatan.salas
  */
-public class HeaderView extends LinearLayout {
+public final class HeaderView extends LinearLayout {
     private OnButtonClickedListener onButtonClicked;
     private ImageView nextButton;
     private ImageView backButton;
@@ -51,6 +53,7 @@ public class HeaderView extends LinearLayout {
     private View view;
 
     private int monthIndex = 0;
+    private Locale locale;
 
     /**
      * Constructor with arguments. It only takes the Context as param.
@@ -70,9 +73,8 @@ public class HeaderView extends LinearLayout {
      */
     public HeaderView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        drawHeader();
     }
-
 
     /**
      * Constructor with arguments. It takes the Context as main param
@@ -85,18 +87,27 @@ public class HeaderView extends LinearLayout {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public HeaderView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        drawHeader();
     }
 
     /**
-     * Method that init all components that are part of the HeaderView.
+     * Method that drawHeader all components that are part of the HeaderView.
      */
-    private void init() {
+    private void drawHeader() {
+        locale = null != locale? locale : Locale.getDefault();
         view = LayoutInflater.from(getContext()).inflate(R.layout.header_view, this, true);
 
-        backButton = (ImageView) view.findViewById(R.id.back_button);
-        nextButton = (ImageView) view.findViewById(R.id.next_button);
-        dateTitle = (TextView) view.findViewById(R.id.date_title);
+        if (null == backButton) {
+            backButton = (ImageView) view.findViewById(R.id.back_button);
+        }
+
+        if (null == nextButton) {
+            nextButton = (ImageView) view.findViewById(R.id.next_button);
+        }
+
+        if (null == dateTitle) {
+            dateTitle = (TextView) view.findViewById(R.id.date_title);
+        }
 
         setDateTitleText();
 
@@ -122,8 +133,8 @@ public class HeaderView extends LinearLayout {
      * "Month + Year".
      */
     private void setDateTitleText() {
-        dateTitle.setText(getDateTitle(getMonthIndex()));
-        updateLayout();
+        dateTitle.setText(getDateTitle(locale, monthIndex));
+        invalidate();
     }
 
     /**
@@ -139,15 +150,6 @@ public class HeaderView extends LinearLayout {
         } else {
             throw new IllegalViewArgumentException(BUTTON_CLICK_LISTENER_NOT_NULL_MESSAGE);
         }
-    }
-
-    /**
-     * This method should be called after setting a custom attribute, in order to request a new
-     * layout pass.
-     */
-    private void updateLayout() {
-        invalidate();
-        requestLayout();
     }
 
     /**
@@ -169,10 +171,11 @@ public class HeaderView extends LinearLayout {
     public void setTitleTextTypeface(Typeface typeface, int style) {
         if (null != typeface) {
             dateTitle.setTypeface(typeface, style);
-            updateLayout();
         } else {
             throw new IllegalViewArgumentException(TYPEFACE_NOT_NULL_MESSAGE);
         }
+        
+        invalidate();
     }
 
     /**
@@ -183,7 +186,7 @@ public class HeaderView extends LinearLayout {
     public void setTitleTextSize(Float size) {
         if (null != size) {
             dateTitle.setTextSize(size);
-            updateLayout();
+            invalidate();
         } else {
             throw new IllegalViewArgumentException(SIZE_NOT_NULL_MESSAGE);
         }
@@ -196,7 +199,7 @@ public class HeaderView extends LinearLayout {
      */
     public void setTitleTextColor(@ColorRes int colorId) {
         if (0 != colorId) {
-            setTitleTextColor(getColor(colorId));
+            setTitleTextColor(colorId);
         } else {
             throw new IllegalViewArgumentException(COLOR_ID_NOT_ZERO_VALUE);
         }
@@ -210,7 +213,7 @@ public class HeaderView extends LinearLayout {
     public void setTitleTextColor(Integer color) {
         if (null != color) {
             dateTitle.setTextColor(color);
-            updateLayout();
+           invalidate();
         } else {
             throw new IllegalViewArgumentException(COLOR_NOT_NULL_MESSAGE);
         }
@@ -227,6 +230,8 @@ public class HeaderView extends LinearLayout {
         } else {
             throw new IllegalViewArgumentException(DRAWABLE_ID_NOT_ZERO_VALUE);
         }
+
+        invalidate();
     }
 
     /**
@@ -240,6 +245,8 @@ public class HeaderView extends LinearLayout {
         } else {
             throw new IllegalViewArgumentException(DRAWABLE_ID_NOT_ZERO_VALUE);
         }
+
+        invalidate();
     }
 
     /**
@@ -250,10 +257,12 @@ public class HeaderView extends LinearLayout {
     public void setNextButtonDrawable(Drawable drawable) {
         if (null != drawable) {
             nextButton.setImageDrawable(drawable);
-            updateLayout();
+           invalidate();
         } else {
             throw new IllegalViewArgumentException(DRAWABLE_NOT_NULL_MESSAGE);
         }
+
+        invalidate();
     }
 
     /**
@@ -264,10 +273,12 @@ public class HeaderView extends LinearLayout {
     public void setBackButtonDrawable(Drawable drawable) {
         if (null != drawable) {
             backButton.setImageDrawable(drawable);
-            updateLayout();
+           invalidate();
         } else {
             throw new IllegalViewArgumentException(DRAWABLE_NOT_NULL_MESSAGE);
         }
+
+        invalidate();
     }
 
     /**
@@ -277,10 +288,12 @@ public class HeaderView extends LinearLayout {
      */
     public void setNextButtonDrawableColor(@ColorRes int colorId) {
         if (0 != colorId) {
-            setNextButtonDrawableColor(getColor(colorId));
+            setNextButtonDrawableColor(colorId);
         } else {
             throw new IllegalViewArgumentException(COLOR_ID_NOT_ZERO_VALUE);
         }
+
+        invalidate();
     }
 
     /**
@@ -290,10 +303,12 @@ public class HeaderView extends LinearLayout {
      */
     public void setBackButtonDrawableColor(@ColorRes int colorId) {
         if (0 != colorId) {
-            setBackButtonDrawableColor(getColor(colorId));
+            setBackButtonDrawableColor(colorId);
         } else {
             throw new IllegalViewArgumentException(COLOR_ID_NOT_ZERO_VALUE);
         }
+
+        invalidate();
     }
 
     /**
@@ -304,10 +319,12 @@ public class HeaderView extends LinearLayout {
     public void setNextButtonDrawableColor(Integer color) {
         if (null != color) {
             nextButton.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
-            updateLayout();
+           invalidate();
         } else {
             throw new IllegalViewArgumentException(COLOR_NOT_NULL_MESSAGE);
         }
+
+        invalidate();
     }
 
     /**
@@ -318,10 +335,12 @@ public class HeaderView extends LinearLayout {
     public void setBackButtonDrawableColor(Integer color) {
         if (null != color) {
             backButton.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
-            updateLayout();
+           invalidate();
         } else {
             throw new IllegalViewArgumentException(COLOR_NOT_NULL_MESSAGE);
         }
+
+        invalidate();
     }
 
     /**
@@ -332,7 +351,7 @@ public class HeaderView extends LinearLayout {
     public void setBackgroundColorResource(@ColorRes int colorId) {
         if (0 != colorId) {
             view.setBackgroundResource(colorId);
-            updateLayout();
+           invalidate();
         } else {
             throw new IllegalViewArgumentException(COLOR_ID_NOT_ZERO_VALUE);
         }
@@ -346,7 +365,7 @@ public class HeaderView extends LinearLayout {
     public void setBackgroundColor(Integer color) {
         if (null != color) {
             view.setBackgroundColor(color);
-            updateLayout();
+           invalidate();
         } else {
             throw new IllegalViewArgumentException(COLOR_NOT_NULL_MESSAGE);
         }
@@ -374,7 +393,7 @@ public class HeaderView extends LinearLayout {
         if (null != drawable) {
             //TODO JS: Investigate how to this without a deprecated method.
             view.setBackgroundDrawable(drawable);
-            updateLayout();
+           invalidate();
         } else {
             throw new IllegalViewArgumentException(DRAWABLE_NOT_NULL_MESSAGE);
         }
@@ -387,6 +406,12 @@ public class HeaderView extends LinearLayout {
      */
     public void setOnButtonClicked(@NonNull OnButtonClickedListener onButtonClicked) {
         this.onButtonClicked = onButtonClicked;
+        invalidate();
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale = locale;
+        //drawHeader();
         invalidate();
     }
 
@@ -407,16 +432,6 @@ public class HeaderView extends LinearLayout {
      */
     private Drawable getDrawable(@DrawableRes int resId) {
         return ContextCompat.getDrawable(getContext(), resId);
-    }
-
-    /**
-     * Method that gets an int color representation by its resource id.
-     *
-     * @param resId int value that represents the resource id of the color to get.
-     * @return an int value that represents a color.
-     */
-    private int getColor(@ColorRes int resId) {
-        return ContextCompat.getColor(getContext(), resId);
     }
 
     /**
