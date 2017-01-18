@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Material Calendar Sample</string>
+    <string name="app_name">Material Calendar View</string>
     <string name="action_settings">Settings</string>
     <string name="large_text">This is a test app</string>
 

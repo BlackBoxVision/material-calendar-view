@@ -48,7 +48,7 @@ public class HeaderView extends RelativeLayout {
 
     private void init(Context context) {
         final LayoutInflater inflater = LayoutInflater.from(context);
-        final View root = inflater.inflate(R.layout.material_calendar_title, this, false);
+        final View root = inflater.inflate(R.layout.title_view, this, false);
 
         initBackButton(root);
         initMonthTitleView(root);

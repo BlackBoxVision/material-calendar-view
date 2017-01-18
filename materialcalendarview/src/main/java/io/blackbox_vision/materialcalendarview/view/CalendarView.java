@@ -240,7 +240,7 @@ public final class CalendarView extends LinearLayout {
         defaultGutterSize = (int) (DEFAULT_GUTTER_SIZE * density);
 
         //Inflate current view..
-        view = LayoutInflater.from(getContext()).inflate(R.layout.material_calendar_with_title, this, true);
+        view = LayoutInflater.from(getContext()).inflate(R.layout.material_calendar_view, this, true);
 
         //Get buttons for Calendar and set it´s listeners..
         if (null == backButton) {
@@ -333,7 +333,8 @@ public final class CalendarView extends LinearLayout {
             dayOfWeek = (TextView) view.findViewWithTag(getContext().getString(R.string.day_of_week) + CalendarUtils.getWeekIndex(i, calendar));
             dayOfWeek.setText(dayOfTheWeekString);
             isCommonDay = true;
-            if(totalDayOfWeekend().length != 0) {
+
+            if (totalDayOfWeekend().length != 0) {
                 for (int weekend : totalDayOfWeekend()) {
                     if (i == weekend) {
                         dayOfWeek.setTextColor(weekendColor);
@@ -359,8 +360,8 @@ public final class CalendarView extends LinearLayout {
      * @author chris.chen
      */
     private void createDialogWithoutDateField(Context context) {
-
         calendar = Calendar.getInstance(Locale.getDefault());
+
         final int iYear = calendar.get(Calendar.YEAR);
         final int iMonth = calendar.get(Calendar.MONTH);
         final int iDay = calendar.get(Calendar.DAY_OF_MONTH);
@@ -558,7 +559,7 @@ public final class CalendarView extends LinearLayout {
             dayView.setBackgroundColor(calendarBackgroundColor);
             isCommonDay = true;
 
-            if(totalDayOfWeekend().length != 0) {
+            if (totalDayOfWeekend().length != 0) {
                 for (int weekend : totalDayOfWeekend()) {
                     if (calendar.get(Calendar.DAY_OF_WEEK) == weekend) {
                         dayView.setTextColor(weekendColor);
@@ -611,11 +612,13 @@ public final class CalendarView extends LinearLayout {
         char days[]= Integer.toBinaryString(weekend).toCharArray();
         int day = 1;
         int index = 0;
-        for(int i = days.length - 1; i >= 0; i--) {
-            if(days[i] == '1') {
+
+        for (int i = days.length - 1; i >= 0; i--) {
+            if (days[i] == '1') {
                 weekendDay[index] = day;
                 index++;
             }
+
             day++;
         }
 

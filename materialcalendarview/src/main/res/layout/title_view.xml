@@ -21,7 +21,6 @@
         tools:ignore="contentDescription"/>
 
     <TextView android:id="@+id/dateTitle"
-        style="@style/CalendarView.MonthTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal|center|center_vertical"
