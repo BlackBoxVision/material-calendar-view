@@ -43,12 +43,12 @@ import io.blackbox_vision.materialcalendarview.decor.DayDecorator;
 import io.blackbox_vision.materialcalendarview.utils.CalendarUtils;
 
 
-/***
- * Custom CalendarView class.
+/**
+ * CalendarView class
  *
  * @author jonatan.salas
  */
-public class CalendarView extends LinearLayout {
+public final class CalendarView extends LinearLayout {
 
     /**
      * Indicates that the CalendarView is in an idle, settled state. The current page
@@ -169,9 +169,6 @@ public class CalendarView extends LinearLayout {
      */
     public CalendarView(Context context) {
         this(context, null);
-
-        //Initialize the gesture listener needed..
-        gestureDetector = new GestureDetectorCompat(context, new CalendarGestureDetector());
     }
 
     /**
@@ -183,18 +180,8 @@ public class CalendarView extends LinearLayout {
      */
     public CalendarView(Context context, AttributeSet attrs) {
         super(context, attrs);
-
-        //Initialize the gesture listener needed..
-        gestureDetector = new GestureDetectorCompat(context, new CalendarGestureDetector());
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.CUPCAKE) {
-            if (isInEditMode()) {
-                return;
-            }
-        }
-
-        getAttributes(attrs);
-        init();
+        takeStyles(attrs);
+        drawCalendar();
     }
 
     /***
@@ -202,7 +189,7 @@ public class CalendarView extends LinearLayout {
      *
      * @param attrs - Attribute set object with custom values to be setted
      */
-    private void getAttributes(AttributeSet attrs) {
+    private void takeStyles(AttributeSet attrs) {
         final TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.MaterialCalendarView, 0, 0);
 
         final int white = ContextCompat.getColor(getContext(), android.R.color.white);
@@ -236,7 +223,8 @@ public class CalendarView extends LinearLayout {
     /**
      * This method init all necessary variables and Views that our Calendar is going to use.
      */
-    private void init() {
+    private void drawCalendar() {
+        gestureDetector = new GestureDetectorCompat(getContext(), new CalendarGestureDetector());
         scroller = new Scroller(getContext(), null);
 
         //Variables associated to handle touch events..
@@ -255,8 +243,13 @@ public class CalendarView extends LinearLayout {
         view = LayoutInflater.from(getContext()).inflate(R.layout.material_calendar_with_title, this, true);
 
         //Get buttons for Calendar and set it´s listeners..
-        backButton = (ImageView) view.findViewById(R.id.left_button);
-        nextButton = (ImageView) view.findViewById(R.id.right_button);
+        if (null == backButton) {
+            backButton = (ImageView) view.findViewById(R.id.left_button);
+        }
+
+        if (null == nextButton) {
+            nextButton = (ImageView) view.findViewById(R.id.right_button);
+        }
 
         backButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -305,8 +298,8 @@ public class CalendarView extends LinearLayout {
         dateTitle.setText(dateText);
         dateTitle.setTextColor(calendarTitleTextColor);
 
-        if (null != getTypeface()) {
-            dateTitle.setTypeface(getTypeface(), Typeface.BOLD);
+        if (null != typeface) {
+            dateTitle.setTypeface(typeface);
         }
 
         dateTitle.setOnClickListener(new OnClickListener() {
@@ -328,8 +321,8 @@ public class CalendarView extends LinearLayout {
         String dayOfTheWeekString;
 
         //Setting background color white
-        View titleLayout = view.findViewById(R.id.week_layout);
-        titleLayout.setBackgroundColor(weekLayoutBackgroundColor);
+        View weekLayout = view.findViewById(R.id.week_layout);
+        weekLayout.setBackgroundColor(weekLayoutBackgroundColor);
 
         final String[] weekDaysArray = new DateFormatSymbols(getLocale()).getShortWeekdays();
 
@@ -349,12 +342,12 @@ public class CalendarView extends LinearLayout {
                 }
             }
 
-            if(isCommonDay) {
+            if (isCommonDay) {
                 dayOfWeek.setTextColor(dayOfWeekTextColor);
             }
 
-            if (null != getTypeface()) {
-                dayOfWeek.setTypeface(getTypeface());
+            if (null != typeface) {
+                dayOfWeek.setTypeface(typeface);
             }
         }
     }
@@ -499,8 +492,8 @@ public class CalendarView extends LinearLayout {
             dayView.bind(startCalendar.getTime(), getDecoratorsList());
             dayView.setVisibility(View.VISIBLE);
 
-            if (null != getTypeface()) {
-                dayView.setTypeface(getTypeface());
+            if (null != typeface) {
+                dayView.setTypeface(typeface);
             }
 
             if (CalendarUtils.isSameMonth(calendar, startCalendar)) {
@@ -536,8 +529,9 @@ public class CalendarView extends LinearLayout {
             dayView.decorate();
 
             //Set the current day color
-            if(calendar.get(Calendar.MONTH) == startCalendar.get(Calendar.MONTH) )
+            if (calendar.get(Calendar.MONTH) == startCalendar.get(Calendar.MONTH)) {
                 setCurrentDay(calendar.getTime());
+            }
 
             startCalendar.add(Calendar.DATE, 1);
             dayOfMonthIndex++;
@@ -1078,102 +1072,127 @@ public class CalendarView extends LinearLayout {
 
     public void setOnMonthTitleClickListener(OnMonthTitleClickListener onMonthTitleClickListener) {
         this.onMonthTitleClickListener = onMonthTitleClickListener;
+        invalidate();
     }
 
     public void setOnDateClickListener(OnDateClickListener onDateClickListener) {
         this.onDateClickListener = onDateClickListener;
+        invalidate();
     }
 
     public void setOnDateLongClickListener(OnDateLongClickListener onDateLongClickListener) {
         this.onDateLongClickListener = onDateLongClickListener;
+        invalidate();
     }
 
     public void setOnMonthChangedListener(OnMonthChangedListener onMonthChangedListener) {
         this.onMonthChangedListener = onMonthChangedListener;
+        invalidate();
     }
 
     private void setLastSelectedDay(Date lastSelectedDay) {
         this.lastSelectedDay = lastSelectedDay;
+        invalidate();
     }
 
     public void setTypeface(Typeface typeface) {
         this.typeface = typeface;
+        invalidate();
     }
 
     public void setDecoratorsList(List<DayDecorator> decoratorsList) {
         this.decoratorsList = decoratorsList;
+        invalidate();
     }
 
     public void setIsOverflowDateVisible(boolean isOverflowDateVisible) {
         this.isOverflowDateVisible = isOverflowDateVisible;
+        invalidate();
     }
 
     public void setFirstDayOfWeek(int firstDayOfWeek) {
         this.firstDayOfWeek = firstDayOfWeek;
+        invalidate();
     }
 
     public void setDisabledDayBackgroundColor(int disabledDayBackgroundColor) {
         this.disabledDayBackgroundColor = disabledDayBackgroundColor;
+        invalidate();
     }
 
     public void setDisabledDayTextColor(int disabledDayTextColor) {
         this.disabledDayTextColor = disabledDayTextColor;
+        invalidate();
     }
 
     public void setCalendarBackgroundColor(int calendarBackgroundColor) {
         this.calendarBackgroundColor = calendarBackgroundColor;
+        invalidate();
     }
 
     public void setSelectedDayBackground(int selectedDayBackground) {
         this.selectedDayBackground = selectedDayBackground;
+        invalidate();
     }
 
     public void setWeekLayoutBackgroundColor(int weekLayoutBackgroundColor) {
         this.weekLayoutBackgroundColor = weekLayoutBackgroundColor;
+        invalidate();
     }
 
     public void setCalendarTitleBackgroundColor(int calendarTitleBackgroundColor) {
         this.calendarTitleBackgroundColor = calendarTitleBackgroundColor;
+        invalidate();
     }
 
     public void setSelectedDayTextColor(int selectedDayTextColor) {
         this.selectedDayTextColor = selectedDayTextColor;
+        invalidate();
     }
 
     public void setCalendarTitleTextColor(int calendarTitleTextColor) {
         this.calendarTitleTextColor = calendarTitleTextColor;
+        invalidate();
     }
 
     public void setDayOfWeekTextColor(int dayOfWeekTextColor) {
         this.dayOfWeekTextColor = dayOfWeekTextColor;
+        invalidate();
     }
 
     public void setCurrentDayOfMonth(int currentDayOfMonth) {
         this.currentDayOfMonth = currentDayOfMonth;
+        invalidate();
     }
 
     public void setWeekendColor(int weekendColor) {
         this.weekendColor = weekendColor;
+        invalidate();
     }
 
     public void setWeekend(int weekend) {
         this.weekend = weekend;
+        invalidate();
     }
 
     public void setBackButtonColor(@ColorRes int colorId) {
         this.backButton.setColorFilter(ContextCompat.getColor(getContext(), colorId), PorterDuff.Mode.SRC_ATOP);
+        invalidate();
     }
 
     public void setNextButtonColor(@ColorRes int colorId) {
         this.nextButton.setColorFilter(ContextCompat.getColor(getContext(), colorId), PorterDuff.Mode.SRC_ATOP);
+        invalidate();
     }
 
     public void setBackButtonDrawable(@DrawableRes int drawableId) {
         this.backButton.setImageDrawable(ContextCompat.getDrawable(getContext(), drawableId));
+        invalidate();
     }
 
     public void setNextButtonDrawable(@DrawableRes int drawableId) {
         this.nextButton.setImageDrawable(ContextCompat.getDrawable(getContext(), drawableId));
+        invalidate();
     }
 
     public Typeface getTypeface() {
