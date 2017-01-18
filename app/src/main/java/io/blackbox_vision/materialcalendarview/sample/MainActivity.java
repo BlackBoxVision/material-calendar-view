@@ -2,7 +2,6 @@ package io.blackbox_vision.materialcalendarview.sample;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -40,9 +39,6 @@ public final class MainActivity extends AppCompatActivity implements NavigationV
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    @BindView(R.id.toolbar_layout)
-    CollapsingToolbarLayout toolbarLayout;
-
     @BindView(R.id.nav_view)
     NavigationView navigationView;
 
@@ -60,8 +56,6 @@ public final class MainActivity extends AppCompatActivity implements NavigationV
 
         setSupportActionBar(toolbar);
         final ActionBar actionBar = getSupportActionBar();
-
-        toolbarLayout.setTitleEnabled(false);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,9 +84,9 @@ public final class MainActivity extends AppCompatActivity implements NavigationV
             }
         });
 
-        calendarView.setOnMonthChangedListener(new CalendarView.OnMonthChangedListener() {
+        calendarView.setOnMonthChangeListener(new CalendarView.OnMonthChangeListener() {
             @Override
-            public void onMonthChanged(@NonNull Date monthDate) {
+            public void onMonthChange(@NonNull Date monthDate) {
                 SimpleDateFormat df = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
 
                 if (null != actionBar) {

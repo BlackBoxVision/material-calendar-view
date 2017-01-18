@@ -1,7 +1,11 @@
 package io.blackbox_vision.materialcalendarview.view;
 
 import android.content.Context;
-import android.os.Build;
+import android.graphics.PorterDuff;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,14 +16,20 @@ import android.widget.TextView;
 import io.blackbox_vision.materialcalendarview.R;
 
 
-public class HeaderView extends RelativeLayout {
-    private static final String LOG = HeaderView.class.getSimpleName();
+public final class HeaderView extends RelativeLayout {
+    private ImageView nextButton;
+    private ImageView backButton;
 
-    private TextView mMonthTitleView;
-    private ImageView mNextButton;
-    private ImageView mBackButton;
+    private TextView titleTextView;
 
-    private int currentMonthIndex = 0;
+    @Nullable
+    private OnTitleClickListener onTitleClickListener;
+
+    @Nullable
+    private OnNextButtonClickListener onNextButtonClickListener;
+
+    @Nullable
+    private OnBackButtonClickListener onBackButtonClickListener;
 
     public HeaderView(Context context) {
         this(context, null, 0);
@@ -31,45 +41,108 @@ public class HeaderView extends RelativeLayout {
 
     public HeaderView(Context context, AttributeSet attrs, int defStyleArr) {
         super(context, attrs, defStyleArr);
+        drawHeaderView();
+    }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.CUPCAKE) {
-            if (isInEditMode()) {
-                return;
+    private void drawHeaderView() {
+        final View view = LayoutInflater.from(getContext()).inflate(R.layout.header_view, this, true);
+
+        nextButton = (ImageView) view.findViewById(R.id.right_button);
+        backButton = (ImageView) view.findViewById(R.id.left_button);
+
+        titleTextView = (TextView) view.findViewById(R.id.date_title);
+
+        nextButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != onNextButtonClickListener) {
+                    onNextButtonClickListener.onNextButtonClick(v);
+                }
             }
+        });
+
+        backButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != onBackButtonClickListener) {
+                    onBackButtonClickListener.onBackButtonClick(v);
+                }
+            }
+        });
+
+        titleTextView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != onTitleClickListener) {
+                    onTitleClickListener.onTitleClick();
+                }
+            }
+        });
+    }
+
+    public void setTitle(@Nullable String text) {
+        titleTextView.setText(text);
+        invalidate();
+    }
+
+    public void setTitleColor(int color) {
+        titleTextView.setTextColor(color);
+        invalidate();
+    }
+
+    public void setTypeface(@Nullable Typeface typeface) {
+        if (null != typeface) {
+            titleTextView.setTypeface(typeface);
         }
 
-        getAttributes(context, attrs);
-        init(context);
+        invalidate();
     }
 
-    private void getAttributes(Context context, AttributeSet attrs) {
-
+    public void setNextButtonColor(int color) {
+        nextButton.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+        invalidate();
     }
 
-    private void init(Context context) {
-        final LayoutInflater inflater = LayoutInflater.from(context);
-        final View root = inflater.inflate(R.layout.title_view, this, false);
-
-        initBackButton(root);
-        initMonthTitleView(root);
-        initNextButton(root);
+    public void setBackButtonColor(int color) {
+        backButton.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
+        invalidate();
     }
 
-    private void initMonthTitleView(View root) {
-        if (null != root) {
-
-        }
+    public void setNextButtonDrawable(@NonNull Drawable drawable) {
+        nextButton.setImageDrawable(drawable);
     }
 
-    private void initBackButton(View root) {
-        if (null != root) {
-
-        }
+    public void setBackButtonDrawable(@NonNull Drawable drawable) {
+        backButton.setImageDrawable(drawable);
     }
 
-    private void initNextButton(View root) {
-        if (null != root) {
+    public void setOnTitleClickListener(@Nullable OnTitleClickListener onTitleClickListener) {
+        this.onTitleClickListener = onTitleClickListener;
+        invalidate();
+    }
 
-        }
+    public void setOnNextButtonClickListener(@Nullable OnNextButtonClickListener onNextButtonClickListener) {
+        this.onNextButtonClickListener = onNextButtonClickListener;
+        invalidate();
+    }
+
+    public void setOnBackButtonClickListener(@Nullable OnBackButtonClickListener onBackButtonClickListener) {
+        this.onBackButtonClickListener = onBackButtonClickListener;
+        invalidate();
+    }
+
+    public interface OnTitleClickListener {
+
+        void onTitleClick();
+    }
+
+    public interface OnNextButtonClickListener {
+
+        void onNextButtonClick(@NonNull View v);
+    }
+
+    public interface OnBackButtonClickListener {
+
+        void onBackButtonClick(@NonNull View v);
     }
 }

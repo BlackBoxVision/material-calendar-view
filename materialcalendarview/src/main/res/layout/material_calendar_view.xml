@@ -4,8 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include android:id="@+id/title_layout"
-        layout="@layout/title_view" />
+    <io.blackbox_vision.materialcalendarview.view.HeaderView
+        android:id="@+id/header_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <include android:id="@+id/week_layout"
         layout="@layout/week_view" />
