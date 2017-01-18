@@ -1,4 +1,4 @@
-package io.blackbox_vision.materialcalendarview.utils;
+package io.blackbox_vision.materialcalendarview.internal.utils;
 
 import android.support.annotation.NonNull;
 import android.util.MonthDisplayHelper;
@@ -10,7 +10,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import io.blackbox_vision.materialcalendarview.data.Day;
+import io.blackbox_vision.materialcalendarview.internal.data.Day;
 
 
 @SuppressWarnings("all")
@@ -88,6 +88,7 @@ public final class CalendarUtils {
         }
     }
 
+    //TODO review weekend generation
     public static List<Day> obtainDays(final Calendar calendar, final int index) {
         int year = getYear(calendar);
         int month = getMonth(calendar);
@@ -104,13 +105,13 @@ public final class CalendarUtils {
 
                 if (helper.isWithinCurrentMonth(i, j)) {
                     Calendar c = Calendar.getInstance(Locale.getDefault());
-                    calendar.set(Calendar.DAY_OF_MONTH, n[j]);
-                    calendar.add(Calendar.MONTH, index);
+                    c.set(Calendar.DAY_OF_MONTH, n[j]);
+                    c.add(Calendar.MONTH, index);
 
                     int m = getMonth(c);
                     int y = getYear(c);
 
-                    if (n[j] == calendar.get(Calendar.DAY_OF_MONTH) && isWeekend(c) && index == 0) {
+                    if (n[j] == c.get(Calendar.DAY_OF_MONTH) && isWeekend(c) && index == 0) {
                         d.setDay(n[j])
                          .setMonth(m)
                          .setYear(y)
@@ -128,7 +129,7 @@ public final class CalendarUtils {
                          .setCurrentYear(true)
                          .setWeekend(false);
 
-                    } else if (isWeekend(calendar)) {
+                    } else if (isWeekend(c)) {
                         d.setDay(n[j])
                          .setMonth(m)
                          .setYear(y)

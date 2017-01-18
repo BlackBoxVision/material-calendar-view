@@ -36,8 +36,8 @@ import java.util.List;
 import java.util.Locale;
 
 import io.blackbox_vision.materialcalendarview.R;
-import io.blackbox_vision.materialcalendarview.data.Day;
-import io.blackbox_vision.materialcalendarview.utils.CalendarUtils;
+import io.blackbox_vision.materialcalendarview.internal.data.Day;
+import io.blackbox_vision.materialcalendarview.internal.utils.CalendarUtils;
 
 
 /**
@@ -257,47 +257,38 @@ public final class CalendarView extends LinearLayout {
         headerView.setTitleColor(titleTextColor);
         headerView.setTypeface(typeface);
 
-        headerView.setOnTitleClickListener(new HeaderView.OnTitleClickListener() {
-            @Override
-            public void onTitleClick() {
-                if (onMonthTitleClickListener != null) {
-                    onMonthTitleClickListener.onMonthTitleClick(calendar.getTime());
-                    createDialogWithoutDateField(getContext());
-                }
+        headerView.setOnTitleClickListener(() -> {
+            if (onMonthTitleClickListener != null) {
+                onMonthTitleClickListener.onMonthTitleClick(calendar.getTime());
+                createDialogWithoutDateField(getContext());
             }
         });
 
-        headerView.setOnNextButtonClickListener(new HeaderView.OnNextButtonClickListener() {
-            @Override
-            public void onNextButtonClick(@NonNull View v) {
-                currentMonthIndex++;
-                headerView.setTitle(CalendarUtils.getDateTitle(Locale.getDefault(), currentMonthIndex));
+        headerView.setOnNextButtonClickListener(v -> {
+            currentMonthIndex++;
+            headerView.setTitle(CalendarUtils.getDateTitle(Locale.getDefault(), currentMonthIndex));
 
-                Calendar calendar = Calendar.getInstance(Locale.getDefault());
-                calendar.add(Calendar.MONTH, currentMonthIndex);
+            Calendar calendar = Calendar.getInstance(Locale.getDefault());
+            calendar.add(Calendar.MONTH, currentMonthIndex);
 
-                refreshCalendar(calendar);
+            refreshCalendar(calendar);
 
-                if (onMonthChangeListener != null) {
-                    onMonthChangeListener.onMonthChange(calendar.getTime());
-                }
+            if (onMonthChangeListener != null) {
+                onMonthChangeListener.onMonthChange(calendar.getTime());
             }
         });
 
-        headerView.setOnBackButtonClickListener(new HeaderView.OnBackButtonClickListener() {
-            @Override
-            public void onBackButtonClick(@NonNull View v) {
-                currentMonthIndex--;
-                headerView.setTitle(CalendarUtils.getDateTitle(Locale.getDefault(), currentMonthIndex));
+        headerView.setOnBackButtonClickListener(v -> {
+            currentMonthIndex--;
+            headerView.setTitle(CalendarUtils.getDateTitle(Locale.getDefault(), currentMonthIndex));
 
-                Calendar calendar = Calendar.getInstance(Locale.getDefault());
-                calendar.add(Calendar.MONTH, currentMonthIndex);
+            Calendar calendar = Calendar.getInstance(Locale.getDefault());
+            calendar.add(Calendar.MONTH, currentMonthIndex);
 
-                refreshCalendar(calendar);
+            refreshCalendar(calendar);
 
-                if (onMonthChangeListener != null) {
-                    onMonthChangeListener.onMonthChange(calendar.getTime());
-                }
+            if (onMonthChangeListener != null) {
+                onMonthChangeListener.onMonthChange(calendar.getTime());
             }
         });
     }
@@ -483,6 +474,11 @@ public final class CalendarView extends LinearLayout {
                 textView.setBackgroundColor(calendarBackgroundColor);
 
                 isCommonDay = true;
+
+                if (day.isWeekend()) {
+                    textView.setTextColor(weekendColor);
+                    isCommonDay = false;
+                }
 
                 if (totalDayOfWeekend().length != 0) {
                     for (int weekend : totalDayOfWeekend()) {

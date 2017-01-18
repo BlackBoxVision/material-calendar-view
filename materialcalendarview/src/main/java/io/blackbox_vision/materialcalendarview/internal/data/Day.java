@@ -1,4 +1,4 @@
-package io.blackbox_vision.materialcalendarview.data;
+package io.blackbox_vision.materialcalendarview.internal.data;
 
 
 public final class Day {
