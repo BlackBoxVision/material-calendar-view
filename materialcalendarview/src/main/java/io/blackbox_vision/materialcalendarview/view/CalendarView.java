@@ -250,7 +250,10 @@ public final class CalendarView extends LinearLayout {
         backButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                calendar.add(Calendar.MONTH, currentMonthIndex--);
+                currentMonthIndex--;
+
+                Calendar calendar = Calendar.getInstance(Locale.getDefault());
+                calendar.add(Calendar.MONTH, currentMonthIndex);
 
                 refreshCalendar(calendar);
 
@@ -263,7 +266,10 @@ public final class CalendarView extends LinearLayout {
         nextButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                calendar.add(Calendar.MONTH, currentMonthIndex++);
+                currentMonthIndex++;
+
+                Calendar calendar = Calendar.getInstance(Locale.getDefault());
+                calendar.add(Calendar.MONTH, currentMonthIndex);
 
                 refreshCalendar(calendar);
 
@@ -283,7 +289,7 @@ public final class CalendarView extends LinearLayout {
     /**
      * Display calendar title with next previous month button
      */
-    private void initTitleLayout() {
+    private void drawTitleView() {
         View titleLayout = view.findViewById(R.id.title_layout);
         titleLayout.setBackgroundColor(calendarTitleBackgroundColor);
 
@@ -311,7 +317,7 @@ public final class CalendarView extends LinearLayout {
     /**
      * Initialize the calendar week layout, considers start day
      */
-    private void initWeekLayout() {
+    private void drawWeekView() {
         TextView dayOfWeek;
         String dayOfTheWeekString;
 
@@ -373,9 +379,12 @@ public final class CalendarView extends LinearLayout {
                 int diffMonth = (year - iYear) * 12 + (monthOfYear - iMonth);
 
                 currentMonthIndex = diffMonth;
+                Calendar calendar = Calendar.getInstance(Locale.getDefault());
+
                 calendar.add(Calendar.MONTH, currentMonthIndex);
 
                 refreshCalendar(calendar);
+
                 if (onMonthChangedListener != null) {
                     onMonthChangedListener.onMonthChanged(calendar.getTime());
                 }
@@ -510,6 +519,7 @@ public final class CalendarView extends LinearLayout {
                 textView.setBackgroundColor(disabledDayBackgroundColor);
                 textView.setTextColor(disabledDayTextColor);
 
+                //TODO review
                 //if (!isOverflowDateVisible()) {
                 //    textView.setVisibility(View.GONE);
                 //} else if (i >= 36 && ((float) days.size() / 7.0f) >= 1) {
@@ -533,9 +543,6 @@ public final class CalendarView extends LinearLayout {
      * This method prepare and populate the days in the CalendarView
      */
     private void setDaysInCalendar() {
-        Log.i(CalendarView.class.getSimpleName(), "Calling setDayInCalendar index -> " + currentMonthIndex);
-        Log.i(CalendarView.class.getSimpleName(), "Calling setDayInCalendar");
-
         Calendar calendar = Calendar.getInstance(Locale.getDefault());
 
         calendar.setTime(calendar.getTime());
@@ -647,7 +654,7 @@ public final class CalendarView extends LinearLayout {
                 }
             }
 
-            if(isCommonDay) {
+            if (isCommonDay) {
                 dayView.setTextColor(dayOfWeekTextColor);
             }
         }
@@ -679,16 +686,16 @@ public final class CalendarView extends LinearLayout {
         calendar = c;
         calendar.setFirstDayOfWeek(firstDayOfWeek);
 
-        initTitleLayout();
+        drawTitleView();
         setTotalDayOfWeekend();
-        initWeekLayout();
+        drawWeekView();
 
         newSetDaysInCalendar();
     }
 
     private void setTotalDayOfWeekend() {
         int[] weekendDay = new int[Integer.bitCount(weekend)];
-        char days[]= Integer.toBinaryString(weekend).toCharArray();
+        char days[] = Integer.toBinaryString(weekend).toCharArray();
         int day = 1;
         int index = 0;
 
@@ -1056,8 +1063,10 @@ public final class CalendarView extends LinearLayout {
                     if (Math.abs(diffX) > touchSlop && Math.abs(velocityX) > minimumVelocity && Math.abs(velocityX) < maximumVelocity) {
                         if (e2.getX() - e1.getX() > flingDistance) {
                             currentMonthIndex--;
-                            calendar = Calendar.getInstance(Locale.getDefault());
+
+                            Calendar calendar = Calendar.getInstance(Locale.getDefault());
                             calendar.add(Calendar.MONTH, currentMonthIndex);
+
                             refreshCalendar(calendar);
 
                             if (onMonthChangedListener != null) {
@@ -1066,10 +1075,12 @@ public final class CalendarView extends LinearLayout {
 
                         } else if(e1.getX() - e2.getX() > flingDistance) {
                             currentMonthIndex++;
-                            calendar = Calendar.getInstance(Locale.getDefault());
+
+                            Calendar calendar = Calendar.getInstance(Locale.getDefault());
                             calendar.add(Calendar.MONTH, currentMonthIndex);
 
                             refreshCalendar(calendar);
+
                             if (onMonthChangedListener != null) {
                                 onMonthChangedListener.onMonthChanged(calendar.getTime());
                             }

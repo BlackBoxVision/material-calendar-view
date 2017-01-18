@@ -93,7 +93,7 @@ public final class MainActivity extends AppCompatActivity implements NavigationV
         calendarView.setOnMonthChangedListener(new CalendarView.OnMonthChangedListener() {
             @Override
             public void onMonthChanged(@NonNull Date monthDate) {
-                SimpleDateFormat df = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
+                SimpleDateFormat df = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
 
                 if (null != actionBar) {
                     actionBar.setTitle(df.format(monthDate));
