@@ -1,5 +1,9 @@
 package io.blackbox_vision.materialcalendarview.internal.data;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 
 public final class Day {
     private int day;
@@ -72,5 +76,33 @@ public final class Day {
     public Day setWeekend(boolean weekend) {
         this.weekend = weekend;
         return this;
+    }
+
+    public Calendar toCalendar() {
+        Calendar c = Calendar.getInstance(Locale.getDefault());
+
+        c.set(Calendar.DAY_OF_MONTH, day);
+        c.set(Calendar.MONTH, month);
+        c.set(Calendar.YEAR, year);
+
+        return c;
+    }
+
+    public Calendar toCalendar(Locale locale) {
+        Calendar c = Calendar.getInstance(locale);
+
+        c.set(Calendar.DAY_OF_MONTH, day);
+        c.set(Calendar.MONTH, month);
+        c.set(Calendar.YEAR, year);
+
+        return c;
+    }
+
+    public Date toDate() {
+        return toCalendar().getTime();
+    }
+
+    public Date toDate(Locale locale) {
+        return toCalendar(locale).getTime();
     }
 }

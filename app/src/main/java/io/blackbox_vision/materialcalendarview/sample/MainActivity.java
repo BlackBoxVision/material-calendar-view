@@ -1,7 +1,6 @@
 package io.blackbox_vision.materialcalendarview.sample;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -28,7 +27,7 @@ import java.util.Date;
 import java.util.Locale;
 
 
-public final class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public final class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.textview)
     TextView textView;
@@ -57,18 +56,13 @@ public final class MainActivity extends AppCompatActivity implements NavigationV
         setSupportActionBar(toolbar);
         final ActionBar actionBar = getSupportActionBar();
 
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-            }
-        });
+        fab.setOnClickListener(this::onClick);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        navigationView.setNavigationItemSelectedListener(this);
+        navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
 
         calendarView.setFirstDayOfWeek(Calendar.MONDAY);
         calendarView.setIsOverflowDateVisible(true);
@@ -76,35 +70,28 @@ public final class MainActivity extends AppCompatActivity implements NavigationV
         calendarView.setBackButtonColor(R.color.colorAccent);
         calendarView.setNextButtonColor(R.color.colorAccent);
         calendarView.refreshCalendar(Calendar.getInstance(Locale.getDefault()));
-        calendarView.setOnDateLongClickListener(new CalendarView.OnDateLongClickListener() {
-            @Override
-            public void onDateLongClick(@NonNull Date selectedDate) {
-                SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-                textView.setText(df.format(selectedDate));
+        calendarView.setOnDateLongClickListener(selectedDate -> {
+            final SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+            textView.setText(df.format(selectedDate));
+        });
+
+        calendarView.setOnMonthChangeListener(monthDate -> {
+            final SimpleDateFormat df = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
+
+            if (null != actionBar) {
+                actionBar.setTitle(df.format(monthDate));
             }
         });
 
-        calendarView.setOnMonthChangeListener(new CalendarView.OnMonthChangeListener() {
-            @Override
-            public void onMonthChange(@NonNull Date monthDate) {
-                SimpleDateFormat df = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
-
-                if (null != actionBar) {
-                    actionBar.setTitle(df.format(monthDate));
-                }
-            }
-        });
-
-        calendarView.setOnMonthTitleClickListener(new CalendarView.OnMonthTitleClickListener() {
-            @Override
-            public void onMonthTitleClick(@NonNull Date selectedDate) {
-            }
-        });
+        calendarView.setOnMonthTitleClickListener(monthDate -> {});
 
         final DayView dayView = calendarView.findViewByDate(new Date(System.currentTimeMillis()));
 
         if (null != dayView) {
-            Toast.makeText(getApplicationContext(), "Today is: " + dayView.getText().toString() + "/" + calendarView.getCurrentMonth() + "/" + calendarView.getCurrentYear(), Toast.LENGTH_SHORT).show();
+            final SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            final Date date = dayView.getDay().toDate();
+
+            Toast.makeText(getApplicationContext(), "Today is: " + df.format(date), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -117,9 +104,12 @@ public final class MainActivity extends AppCompatActivity implements NavigationV
         }
     }
 
-    @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void onClick(View view) {
+        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
     }
 }

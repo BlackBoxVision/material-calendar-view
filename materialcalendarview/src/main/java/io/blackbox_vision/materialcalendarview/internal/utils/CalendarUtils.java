@@ -52,8 +52,8 @@ public final class CalendarUtils {
     }
 
     public static boolean isWeekend(Calendar calendar) {
-        int position = calendar.get(Calendar.DAY_OF_WEEK);
-        return position == Calendar.SATURDAY || position == Calendar.SUNDAY;
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        return dayOfWeek == Calendar.SATURDAY || dayOfWeek == Calendar.SUNDAY;
     }
 
     public static boolean isSameYear(@NonNull Calendar c1, @NonNull Calendar c2) {

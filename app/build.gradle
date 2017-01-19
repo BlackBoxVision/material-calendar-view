@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'pmd'
 apply plugin: 'findbugs'
 apply plugin: 'checkstyle'
@@ -21,8 +22,20 @@ android {
         }
     }
     lintOptions {
-        abortOnError false
+        disable "InvalidPackage"
+        abortOnError true
     }
+    packagingOptions {
+        exclude "META-INF/services/javax.annotation.processing.Processor"
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+retrolambda {
+    jvmArgs "-noverify"
 }
 
 dependencies {

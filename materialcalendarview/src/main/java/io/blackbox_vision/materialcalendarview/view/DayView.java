@@ -1,11 +1,14 @@
 package io.blackbox_vision.materialcalendarview.view;
 
 import android.content.Context;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
-public class DayView extends TextView {
+import io.blackbox_vision.materialcalendarview.internal.data.Day;
+
+
+public final class DayView extends TextView {
+    private Day day;
 
     public DayView(Context context) {
         this(context, null, 0);
@@ -17,11 +20,15 @@ public class DayView extends TextView {
 
     public DayView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+    }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.CUPCAKE) {
-            if (isInEditMode()) {
-                return;
-            }
-        }
+    public void setDay(Day day) {
+        setText(String.valueOf(day.getDay()));
+        this.day = day;
+        invalidate();
+    }
+
+    public Day getDay() {
+        return day;
     }
 }
