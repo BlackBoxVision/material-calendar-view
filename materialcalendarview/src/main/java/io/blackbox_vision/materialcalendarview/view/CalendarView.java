@@ -16,6 +16,7 @@ import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewConfigurationCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -111,15 +112,10 @@ public final class CalendarView extends LinearLayout {
 
     private int scrollState = SCROLL_STATE_IDLE;
 
-    private final Runnable endScrollRunnable = new Runnable() {
-        public void run() {
-            setScrollState(SCROLL_STATE_IDLE);
-        }
-    };
+    private final Runnable endScrollRunnable = () -> setScrollState(SCROLL_STATE_IDLE);
 
     // Gesture Detector used to handle Swipe gestures.
     private GestureDetectorCompat gestureDetector;
-    private View view;
 
     //Listeners used by the Calendar...
     private OnMonthTitleClickListener onMonthTitleClickListener;
@@ -156,6 +152,7 @@ public final class CalendarView extends LinearLayout {
     // true for ordinary day, false for a weekend.
     private boolean isCommonDay;
 
+    private View view;
     private HeaderView headerView;
 
     /**
@@ -481,14 +478,14 @@ public final class CalendarView extends LinearLayout {
                 }
 
                 if (totalDayOfWeekend().length != 0) {
+                    Calendar calendar = Calendar.getInstance(Locale.getDefault());
+
+                    calendar.set(Calendar.DAY_OF_MONTH, day.getDay());
+                    calendar.set(Calendar.MONTH, day.getMonth());
+                    calendar.set(Calendar.YEAR, day.getYear());
+
                     for (int weekend : totalDayOfWeekend()) {
-                        Calendar calendar = Calendar.getInstance(Locale.getDefault());
-
-                        calendar.set(Calendar.DAY_OF_MONTH, day.getDay());
-                        calendar.set(Calendar.MONTH, day.getMonth());
-                        calendar.set(Calendar.YEAR, day.getYear());
-
-                        if (day.isWeekend() && calendar.get(Calendar.DAY_OF_WEEK) == weekend) {
+                        if (calendar.get(Calendar.DAY_OF_WEEK) == weekend) {
                             textView.setTextColor(weekendColor);
                             isCommonDay = false;
                         }
@@ -500,8 +497,15 @@ public final class CalendarView extends LinearLayout {
                 }
 
             } else {
-                textView.setBackgroundColor(disabledDayBackgroundColor);
-                textView.setTextColor(disabledDayTextColor);
+                if (!isOverflowDateVisible) {
+                    textView.setVisibility(View.INVISIBLE);
+                } else {
+                    textView.setVisibility(View.VISIBLE);
+                    textView.setEnabled(false);
+
+                    textView.setBackgroundColor(disabledDayBackgroundColor);
+                    textView.setTextColor(disabledDayTextColor);
+                }
 
                 //TODO review
                 //if (!isOverflowDateVisible()) {
@@ -666,17 +670,21 @@ public final class CalendarView extends LinearLayout {
             ViewGroup dayOfMonthContainer = (ViewGroup) view;
             String tagId = (String) dayOfMonthContainer.getTag();
             tagId = tagId.substring(getContext().getString(R.string.day_of_month_container).length(), tagId.length());
+
+            Log.i(CalendarView.class.getSimpleName(), "This is the tagID -> " + tagId);
+
             final TextView dayOfMonthText = (TextView) view.findViewWithTag(getContext().getString(R.string.day_of_month_text) + tagId);
 
             // Fire event
-            Calendar calendar = Calendar.getInstance();
-            calendar.setFirstDayOfWeek(firstDayOfWeek);
-            calendar.setTime(calendar.getTime());
-            calendar.set(Calendar.DAY_OF_MONTH, Integer.valueOf(dayOfMonthText.getText().toString()));
-            setDateAsSelected(calendar.getTime());
+            Calendar c = Calendar.getInstance();
+            c.setFirstDayOfWeek(firstDayOfWeek);
+            c.setTime(calendar.getTime());
+            c.set(Calendar.DAY_OF_MONTH, Integer.valueOf(dayOfMonthText.getText().toString()));
+
+            setDateAsSelected(c.getTime());
 
             //Set the current day color
-            setCurrentDay(calendar.getTime());
+            setCurrentDay(c.getTime());
 
             if (onDateClickListener != null) {
                 onDateClickListener.onDateClick(calendar.getTime());
@@ -936,7 +944,7 @@ public final class CalendarView extends LinearLayout {
      *
      * @author jonatan.salas
      */
-    public class CalendarGestureDetector extends GestureDetector.SimpleOnGestureListener {
+    public final class CalendarGestureDetector extends GestureDetector.SimpleOnGestureListener {
 
         @Override
         public boolean onDown(MotionEvent e) {
