@@ -54,7 +54,7 @@ public final class CalendarView extends LinearLayout {
     private static final int FRIDAY = 32;
     private static final int SATURDAY = 64;
 
-    private static int[] FLAGS = new int[] {
+    private static final int[] FLAGS = new int[] {
             SUNDAY,
             MONDAY,
             TUESDAY,
@@ -64,7 +64,7 @@ public final class CalendarView extends LinearLayout {
             SATURDAY
     };
 
-    private static int[] WEEK_DAYS = new int[] {
+    private static final int[] WEEK_DAYS = new int[] {
             Calendar.SUNDAY,
             Calendar.MONDAY,
             Calendar.TUESDAY,
