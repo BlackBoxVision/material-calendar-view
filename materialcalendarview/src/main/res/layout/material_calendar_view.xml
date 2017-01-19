@@ -9,8 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <include android:id="@+id/week_layout"
-        layout="@layout/week_view" />
+    <include android:id="@+id/week_layout" layout="@layout/week_view" />
 
     <LinearLayout android:id="@+id/days_container"
         android:layout_width="match_parent"
@@ -24,6 +23,6 @@
         <include layout="@layout/week_view4" />
         <include layout="@layout/week_view5" />
         <include layout="@layout/week_view6" />
-
     </LinearLayout>
+
 </LinearLayout>

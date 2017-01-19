@@ -240,9 +240,6 @@ public final class CalendarView extends LinearLayout {
         refreshCalendar(Calendar.getInstance(Locale.getDefault()));
     }
 
-    /**
-     * Display calendar title with next previous month button
-     */
     private void drawHeaderView() {
         headerView = (HeaderView) view.findViewById(R.id.header_view);
 
@@ -289,46 +286,47 @@ public final class CalendarView extends LinearLayout {
         });
     }
 
-    /**
-     * Initialize the calendar week layout, considers start day
-     */
     private void drawWeekView() {
-        TextView dayOfWeek;
-        String dayOfTheWeekString;
+        final List<String> shortWeekDays = CalendarUtils.getShortWeekDays(Locale.getDefault());
+        final View v = view.findViewById(R.id.week_layout);
 
-        //Setting background color white
-        View weekLayout = view.findViewById(R.id.week_layout);
-        weekLayout.setBackgroundColor(weekLayoutBackgroundColor);
+        v.setBackgroundColor(weekLayoutBackgroundColor);
 
-        final List<String> weekDaysArray = CalendarUtils.getShortWeekDays(Locale.getDefault());
+        TextView textView;
+        String day;
 
-        for (int i = 1; i < weekDaysArray.size(); i++) {
-            dayOfTheWeekString = weekDaysArray.get(i);
-            int length = dayOfTheWeekString.length() < 3 ? dayOfTheWeekString.length() : 3;
-            dayOfTheWeekString = dayOfTheWeekString.substring(0, length).toUpperCase();
-            dayOfWeek = (TextView) view.findViewWithTag(getContext().getString(R.string.day_of_week) + CalendarUtils.calculateWeekIndex(calendar, i));
-            dayOfWeek.setText(dayOfTheWeekString);
+        for (int i = 1; i < shortWeekDays.size(); i++) {
+            day = shortWeekDays.get(i);
+            day = day.substring(0, day.length() < 3 ? day.length() : 3).toUpperCase();
+
+            textView = (TextView) v.findViewWithTag(getContext().getString(R.string.day_of_week) + CalendarUtils.calculateWeekIndex(calendar, i));
+            textView.setText(day);
 
             isCommonDay = true;
 
             if (totalDayOfWeekend().length != 0) {
                 for (int weekend : totalDayOfWeekend()) {
                     if (i == weekend) {
-                        dayOfWeek.setTextColor(weekendColor);
+                        textView.setTextColor(weekendColor);
                         isCommonDay = false;
                     }
                 }
             }
 
             if (isCommonDay) {
-                dayOfWeek.setTextColor(dayOfWeekTextColor);
+                textView.setTextColor(dayOfWeekTextColor);
             }
 
             if (null != typeface) {
-                dayOfWeek.setTypeface(typeface);
+                textView.setTypeface(typeface);
             }
         }
     }
+
+    private void drawAdapterView() {
+        //TODO
+    }
+
 
     /**
      * Date Picker (Month & Year only)
