@@ -16,7 +16,6 @@ import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewConfigurationCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -670,8 +669,6 @@ public final class CalendarView extends LinearLayout {
             ViewGroup dayOfMonthContainer = (ViewGroup) view;
             String tagId = (String) dayOfMonthContainer.getTag();
             tagId = tagId.substring(getContext().getString(R.string.day_of_month_container).length(), tagId.length());
-
-            Log.i(CalendarView.class.getSimpleName(), "This is the tagID -> " + tagId);
 
             final TextView dayOfMonthText = (TextView) view.findViewWithTag(getContext().getString(R.string.day_of_month_text) + tagId);
 
