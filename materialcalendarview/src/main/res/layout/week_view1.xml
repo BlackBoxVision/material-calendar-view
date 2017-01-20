@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:baselineAligned="false"
     android:orientation="horizontal"
     android:tag="weekRow1"
@@ -128,12 +129,10 @@
             style="@style/CalendarView.DayOfTheMonth"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_centerInParent="true"
             android:gravity="center"
             android:tag="dayOfMonthText7"
-            tools:text="7"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            tools:text="7"/>
 
     </RelativeLayout>
 </LinearLayout>
