@@ -7,7 +7,10 @@
 
 ##Screenshots
 
-<img src="https://raw.githubusercontent.com/BlackBoxVision/material-calendar-view/master/art/calendars.png" height="475" width="100%">
+<div style="align:center; display:inline-block; width:100%;">
+	<img src="https://raw.githubusercontent.com/BlackBoxVision/material-calendar-view/master/art/newer.png" height="675" width="45%">
+	<img src="https://raw.githubusercontent.com/BlackBoxVision/material-calendar-view/master/art/other.png" height="675" width="45%">
+</div>
 
 <img src="https://i.imgur.com/ViolZD2.gif" height="550" width="100%" style="align: center;">
 
@@ -18,18 +21,18 @@
 - Add it in your root build.gradle at the end of repositories:
 
 ```java
-  repositories {
-    maven { 
+repositories {
+	maven { 
 	    url "https://jitpack.io"
 	}
-  }
+}
 ```
 
 - Add the dependency:
 
 ```java
 dependencies {
-    compile 'com.github.BlackBoxVision:material-calendar-view:v1.3.0'
+    compile 'com.github.BlackBoxVision:material-calendar-view:v1.4.0'
 }
 ```
 **Maven**
@@ -48,7 +51,7 @@ dependencies {
 <dependency>
     <groupId>com.github.BlackBoxVision</groupId>
     <artifactId>material-calendar-view</artifactId>
-    <version>v1.3.0</version>
+    <version>v1.4.0</version>
 </dependency>
 ```
 **SBT**
@@ -62,7 +65,7 @@ resolvers += "jitpack" at "https://jitpack.io"
 - Add the dependency in the form:
 
 ```java
-libraryDependencies += "com.github.BlackBoxVision" % "material-calendar-view" % "v1.3.0"	
+libraryDependencies += "com.github.BlackBoxVision" % "material-calendar-view" % "v1.4.0"	
 ```
 
 ##Usage example
@@ -110,32 +113,24 @@ Then, in your Activity.java or Fragment.java initialize the calendar:
 ```java
 calendarView = (CalendarView) findViewById(R.id.calendar_view);
 
+calendarView.shouldAnimateOnEnter(true);
 calendarView.setFirstDayOfWeek(Calendar.MONDAY);
 calendarView.setIsOverflowDateVisible(true);
 calendarView.setCurrentDay(new Date(System.currentTimeMillis()));
 calendarView.setBackButtonColor(R.color.colorAccent);
 calendarView.setNextButtonColor(R.color.colorAccent);
-calendarView.refreshCalendar(Calendar.getInstance(Locale.getDefault()));
-calendarView.setOnDateSelectedListener(new CalendarView.OnDateSelectedListener() {
-    @Override
-    public void onDateClick(@NonNull Date selectedDate) {
-        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-        textView.setText(df.format(selectedDate));
-    }
-});
+calendarView.update(Calendar.getInstance(Locale.getDefault()));
+calendarView.setOnDateLongClickListener(selectedDate -> textView.setText(formatter.format(selectedDate)));
+calendarView.setOnMonthChangeListener(monthDate -> {
+	final SimpleDateFormat df = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
 
-calendarView.setOnMonthChangedListener(new CalendarView.OnMonthChangedListener() {
-    @Override
-    public void onMonthChanged(@NonNull Date monthDate) {
-        SimpleDateFormat df = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
-        if (null != actionBar)
-            actionBar.setTitle(df.format(monthDate));
-    }
-});
+	if (null != actionBar) {
+		String dateStr = df.format(monthDate);
+		dateStr = dateStr.substring(0, 1).toUpperCase() + dateStr.substring(1, dateStr.length());
 
-final DayView dayView = calendarView.findViewByDate(new Date(System.currentTimeMillis()));
-if(null != dayView)
-    Toast.makeText(getApplicationContext(), "Today is: " + dayView.getText().toString() + "/" + calendarView.getCurrentMonth() + "/" +  calendarView.getCurrentYear(), Toast.LENGTH_SHORT).show();
+		actionBar.setTitle(dateStr);
+	}
+});
 ```
 
 ##Issues
