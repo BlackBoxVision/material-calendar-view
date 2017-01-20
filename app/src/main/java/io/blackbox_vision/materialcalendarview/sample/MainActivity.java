@@ -65,6 +65,7 @@ public final class MainActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
 
         calendarView.setFirstDayOfWeek(Calendar.MONDAY);
+        calendarView.shouldAnimateOnEnter(true);
         calendarView.setIsOverflowDateVisible(true);
         calendarView.setCurrentDay(new Date(System.currentTimeMillis()));
         calendarView.setBackButtonColor(R.color.colorAccent);

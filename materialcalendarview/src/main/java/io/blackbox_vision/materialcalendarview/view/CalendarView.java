@@ -26,6 +26,8 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.Scroller;
@@ -41,6 +43,8 @@ import io.blackbox_vision.materialcalendarview.R;
 import io.blackbox_vision.materialcalendarview.internal.data.Day;
 import io.blackbox_vision.materialcalendarview.internal.utils.CalendarUtils;
 
+import static io.blackbox_vision.materialcalendarview.internal.utils.ScreenUtils.getScreenHeight;
+
 
 /**
  * CalendarView class
@@ -48,6 +52,9 @@ import io.blackbox_vision.materialcalendarview.internal.utils.CalendarUtils;
  * @author jonatan.salas
  */
 public final class CalendarView extends LinearLayout {
+    private static final Interpolator DEFAULT_ANIM_INTERPOLATOR = new DecelerateInterpolator(3.0f);
+    private static final long DEFAULT_ANIM_DURATION = 1500;
+
     private static final int SUNDAY = 1;
     private static final int MONDAY = 2;
     private static final int TUESDAY = 4;
@@ -690,6 +697,7 @@ public final class CalendarView extends LinearLayout {
 
         // Fire event
         Calendar c = Calendar.getInstance();
+
         c.setFirstDayOfWeek(firstDayOfWeek);
         c.setTime(calendar.getTime());
         c.set(Calendar.DAY_OF_MONTH, Integer.valueOf(dayOfMonthText.getText().toString()));
@@ -1075,9 +1083,33 @@ public final class CalendarView extends LinearLayout {
         void onMonthTitleClick(@NonNull Date monthDate);
     }
 
-    /**
-     *  Attributes setters and getters.
-     */
+
+    public void shouldAnimateOnEnter(boolean shouldAnimate) {
+        shouldAnimateOnEnter(shouldAnimate, DEFAULT_ANIM_DURATION, DEFAULT_ANIM_INTERPOLATOR);
+    }
+
+    public void shouldAnimateOnEnter(boolean shouldAnimate, long duration) {
+        shouldAnimateOnEnter(shouldAnimate, duration, DEFAULT_ANIM_INTERPOLATOR);
+    }
+
+    public void shouldAnimateOnEnter(boolean shouldAnimate, @NonNull Interpolator interpolator) {
+        shouldAnimateOnEnter(shouldAnimate, DEFAULT_ANIM_DURATION, interpolator);
+    }
+
+    public void shouldAnimateOnEnter(boolean shouldAnimate, long duration, @NonNull Interpolator interpolator) {
+        if (shouldAnimate) {
+            ViewCompat.setTranslationY(this, getScreenHeight(getContext()));
+            ViewCompat.setAlpha(this, 0f);
+            ViewCompat.animate(this)
+                    .translationY(0f)
+                    .setDuration(duration)
+                    .alpha(1f)
+                    .setInterpolator(interpolator)
+                    .start();
+
+            invalidate();
+        }
+    }
 
     public void setOnMonthTitleClickListener(OnMonthTitleClickListener onMonthTitleClickListener) {
         this.onMonthTitleClickListener = onMonthTitleClickListener;
