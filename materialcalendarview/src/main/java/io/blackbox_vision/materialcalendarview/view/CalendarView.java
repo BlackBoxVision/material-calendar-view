@@ -638,7 +638,7 @@ public final class CalendarView extends LinearLayout {
             Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.circular_background);
             d.setColorFilter(selectedDayBackground, PorterDuff.Mode.SRC_ATOP);
 
-            dayOfMonth.setBackgroundDrawable(d);
+            ViewCompat.setBackground(dayOfMonth, d);
         }
     }
 
@@ -659,7 +659,7 @@ public final class CalendarView extends LinearLayout {
         Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.circular_background);
         d.setColorFilter(selectedDayBackground, PorterDuff.Mode.SRC_ATOP);
 
-        view.setBackgroundDrawable(d);
+        ViewCompat.setBackground(view, d);
         view.setTextColor(selectedDayTextColor);
     }
 
@@ -719,6 +719,7 @@ public final class CalendarView extends LinearLayout {
     private void setScrollingCacheEnabled(boolean enabled) {
         if (scrollingCacheEnabled != enabled) {
             scrollingCacheEnabled = enabled;
+
             if (USE_CACHE) {
                 final int size = getChildCount();
                 for (int i = 0; i < size; ++i) {
