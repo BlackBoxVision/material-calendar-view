@@ -98,7 +98,7 @@ public final class MainActivity extends AppCompatActivity implements MainView {
         calendarView.setCurrentDay(new Date(System.currentTimeMillis()));
         calendarView.setBackButtonColor(R.color.colorAccent);
         calendarView.setNextButtonColor(R.color.colorAccent);
-        calendarView.refreshCalendar(Calendar.getInstance(Locale.getDefault()));
+        calendarView.update(Calendar.getInstance(Locale.getDefault()));
         calendarView.setOnDateLongClickListener(selectedDate -> textView.setText(formatter.format(selectedDate)));
         calendarView.setOnMonthChangeListener(monthDate -> {
             final SimpleDateFormat df = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());

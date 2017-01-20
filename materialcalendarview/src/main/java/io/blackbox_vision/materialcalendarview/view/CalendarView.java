@@ -273,7 +273,7 @@ public final class CalendarView extends LinearLayout {
         isOverflowDateVisible = true;
         currentMonthIndex = 0;
 
-        refreshCalendar(Calendar.getInstance(Locale.getDefault()));
+        update(Calendar.getInstance(Locale.getDefault()));
     }
 
     private void drawHeaderView() {
@@ -300,7 +300,7 @@ public final class CalendarView extends LinearLayout {
             Calendar calendar = Calendar.getInstance(Locale.getDefault());
             calendar.add(Calendar.MONTH, currentMonthIndex);
 
-            refreshCalendar(calendar);
+            update(calendar);
 
             if (onMonthChangeListener != null) {
                 onMonthChangeListener.onMonthChange(calendar.getTime());
@@ -314,7 +314,7 @@ public final class CalendarView extends LinearLayout {
             Calendar calendar = Calendar.getInstance(Locale.getDefault());
             calendar.add(Calendar.MONTH, currentMonthIndex);
 
-            refreshCalendar(calendar);
+            update(calendar);
 
             if (onMonthChangeListener != null) {
                 onMonthChangeListener.onMonthChange(calendar.getTime());
@@ -387,7 +387,7 @@ public final class CalendarView extends LinearLayout {
 
                 calendar.add(Calendar.MONTH, currentMonthIndex);
 
-                refreshCalendar(calendar);
+                update(calendar);
 
                 if (onMonthChangeListener != null) {
                     onMonthChangeListener.onMonthChange(calendar.getTime());
@@ -595,7 +595,7 @@ public final class CalendarView extends LinearLayout {
         return view.findViewWithTag(key + index);
     }
 
-    public void refreshCalendar(Calendar c) {
+    public void update(Calendar c) {
         calendar = c;
         calendar.setFirstDayOfWeek(firstDayOfWeek);
 
@@ -989,7 +989,7 @@ public final class CalendarView extends LinearLayout {
                             Calendar calendar = Calendar.getInstance(Locale.getDefault());
                             calendar.add(Calendar.MONTH, currentMonthIndex);
 
-                            refreshCalendar(calendar);
+                            update(calendar);
 
                             if (onMonthChangeListener != null) {
                                 onMonthChangeListener.onMonthChange(calendar.getTime());
@@ -1003,7 +1003,7 @@ public final class CalendarView extends LinearLayout {
                             Calendar calendar = Calendar.getInstance(Locale.getDefault());
                             calendar.add(Calendar.MONTH, currentMonthIndex);
 
-                            refreshCalendar(calendar);
+                            update(calendar);
 
                             if (onMonthChangeListener != null) {
                                 onMonthChangeListener.onMonthChange(calendar.getTime());
