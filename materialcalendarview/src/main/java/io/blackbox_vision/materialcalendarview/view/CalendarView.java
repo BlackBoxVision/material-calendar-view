@@ -5,7 +5,9 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
@@ -205,6 +207,21 @@ public final class CalendarView extends LinearLayout {
         drawCalendar();
     }
 
+    private void initTouchVariables() {
+        final ViewConfiguration configuration = ViewConfiguration.get(getContext());
+        final float density = getContext().getResources().getDisplayMetrics().density;
+
+        gestureDetector = new GestureDetectorCompat(getContext(), new CalendarGestureDetector());
+        scroller = new Scroller(getContext(), null);
+
+        touchSlop = ViewConfigurationCompat.getScaledPagingTouchSlop(configuration);
+        minimumVelocity = (int) (MIN_FLING_VELOCITY * density);
+        maximumVelocity = configuration.getScaledMaximumFlingVelocity();
+        flingDistance = (int) (MIN_DISTANCE_FOR_FLING * density);
+        closeEnough = (int) (CLOSE_ENOUGH * density);
+        defaultGutterSize = (int) (DEFAULT_GUTTER_SIZE * density);
+    }
+
     /***
      * Method that gets and set the attributes of the CalendarView class.
      *
@@ -240,21 +257,6 @@ public final class CalendarView extends LinearLayout {
                 a.recycle();
             }
         }
-    }
-
-    private void initTouchVariables() {
-        final ViewConfiguration configuration = ViewConfiguration.get(getContext());
-        final float density = getContext().getResources().getDisplayMetrics().density;
-
-        gestureDetector = new GestureDetectorCompat(getContext(), new CalendarGestureDetector());
-        scroller = new Scroller(getContext(), null);
-
-        touchSlop = ViewConfigurationCompat.getScaledPagingTouchSlop(configuration);
-        minimumVelocity = (int) (MIN_FLING_VELOCITY * density);
-        maximumVelocity = configuration.getScaledMaximumFlingVelocity();
-        flingDistance = (int) (MIN_DISTANCE_FOR_FLING * density);
-        closeEnough = (int) (CLOSE_ENOUGH * density);
-        defaultGutterSize = (int) (DEFAULT_GUTTER_SIZE * density);
     }
 
     private void drawCalendar() {
@@ -625,7 +627,11 @@ public final class CalendarView extends LinearLayout {
             final DayView dayOfMonth = findViewByCalendar(calendar);
 
             dayOfMonth.setTextColor(currentDayOfMonth);
-            dayOfMonth.setBackgroundColor(selectedDayBackground);
+
+            Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.circular_background);
+            d.setColorFilter(selectedDayBackground, PorterDuff.Mode.SRC_ATOP);
+
+            dayOfMonth.setBackgroundDrawable(d);
         }
     }
 
@@ -642,7 +648,11 @@ public final class CalendarView extends LinearLayout {
 
         // Mark current day as selected
         DayView view = findViewByCalendar(currentCalendar);
-        view.setBackgroundColor(selectedDayBackground);
+
+        Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.circular_background);
+        d.setColorFilter(selectedDayBackground, PorterDuff.Mode.SRC_ATOP);
+
+        view.setBackgroundDrawable(d);
         view.setTextColor(selectedDayTextColor);
     }
 

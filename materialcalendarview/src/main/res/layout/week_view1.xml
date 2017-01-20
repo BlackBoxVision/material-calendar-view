@@ -8,7 +8,8 @@
     android:tag="weekRow1"
     android:weightSum="7">
 
-    <RelativeLayout android:layout_width="match_parent"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
@@ -16,12 +17,12 @@
 
         <io.blackbox_vision.materialcalendarview.view.DayView
             style="@style/CalendarView.DayOfTheMonth"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:gravity="center"
             android:tag="dayOfMonthText1"
-            tools:text="1" />
+            tools:text="1"
+            android:layout_centerInParent="true"/>
 
     </RelativeLayout>
 
@@ -34,12 +35,12 @@
 
         <io.blackbox_vision.materialcalendarview.view.DayView
             style="@style/CalendarView.DayOfTheMonth"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:gravity="center"
             android:tag="dayOfMonthText2"
-            tools:text="2" />
+            tools:text="2"
+            android:layout_centerInParent="true"/>
 
     </RelativeLayout>
 
@@ -52,12 +53,13 @@
 
         <io.blackbox_vision.materialcalendarview.view.DayView
             style="@style/CalendarView.DayOfTheMonth"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:gravity="center"
             android:tag="dayOfMonthText3"
-            tools:text="3" />
+            tools:text="3"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
 
     </RelativeLayout>
 
@@ -70,12 +72,12 @@
 
         <io.blackbox_vision.materialcalendarview.view.DayView
             style="@style/CalendarView.DayOfTheMonth"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_centerInParent="true"
             android:gravity="center"
             android:tag="dayOfMonthText4"
-            tools:text="4" />
+            tools:text="4"/>
 
     </RelativeLayout>
 
@@ -88,8 +90,8 @@
 
         <io.blackbox_vision.materialcalendarview.view.DayView
             style="@style/CalendarView.DayOfTheMonth"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_centerInParent="true"
             android:gravity="center"
             android:tag="dayOfMonthText5"
@@ -106,12 +108,12 @@
 
         <io.blackbox_vision.materialcalendarview.view.DayView
             style="@style/CalendarView.DayOfTheMonth"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_centerInParent="true"
             android:gravity="center"
             android:tag="dayOfMonthText6"
-            tools:text="6" />
+            tools:text="6"/>
 
     </RelativeLayout>
 
@@ -124,12 +126,14 @@
 
         <io.blackbox_vision.materialcalendarview.view.DayView
             style="@style/CalendarView.DayOfTheMonth"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:gravity="center"
             android:tag="dayOfMonthText7"
-            tools:text="7" />
+            tools:text="7"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
     </RelativeLayout>
 </LinearLayout>
