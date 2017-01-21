@@ -27,10 +27,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                app:titleEnabled="false"
-                app:contentScrim="?attr/colorPrimary">
+                app:contentScrim="?attr/colorPrimary"
+                app:titleEnabled="false">
 
-                <FrameLayout android:id="@+id/content"
+                <FrameLayout
+                    android:id="@+id/content"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -65,8 +66,8 @@
                     android:id="@+id/toolbar"
                     android:layout_height="?attr/actionBarSize"
                     android:layout_width="match_parent"
-                    app:layout_collapseMode="pin"
                     app:popupTheme="@style/AppTheme.PopupOverlay"
+                    app:layout_collapseMode="pin"
                     app:title="@string/app_name"/>
 
             </android.support.design.widget.CollapsingToolbarLayout>
@@ -80,8 +81,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/fab_margin"
             android:src="@drawable/ic_add_white_24dp"
-            app:layout_anchor="@id/app_bar"
             app:layout_anchorGravity="bottom|end"
+            app:layout_anchor="@id/app_bar"
             app:fabSize="normal"/>
 
     </android.support.design.widget.CoordinatorLayout>
