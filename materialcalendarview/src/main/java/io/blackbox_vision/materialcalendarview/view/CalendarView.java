@@ -1,6 +1,5 @@
 package io.blackbox_vision.materialcalendarview.view;
 
-
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.res.Resources;
@@ -189,6 +188,7 @@ public final class CalendarView extends LinearLayout {
 
     private View view;
     private HeaderView headerView;
+    private DatePickerDialog pickerDialog;
 
     /**
      * Constructor with arguments. It receives a
@@ -287,9 +287,10 @@ public final class CalendarView extends LinearLayout {
         headerView.setTypeface(typeface);
 
         headerView.setOnTitleClickListener(() -> {
+            showDatePickerDialog();
+
             if (onMonthTitleClickListener != null) {
                 onMonthTitleClickListener.onMonthTitleClick(calendar.getTime());
-                createDialogWithoutDateField(getContext());
             }
         });
 
@@ -362,111 +363,81 @@ public final class CalendarView extends LinearLayout {
     /**
      * Date Picker (Month & Year only)
      *
-     * @param context
      * @author chris.chen
      */
-    private void createDialogWithoutDateField(Context context) {
+    private void showDatePickerDialog() {
         calendar = Calendar.getInstance(Locale.getDefault());
 
-        final int iYear = calendar.get(Calendar.YEAR);
-        final int iMonth = calendar.get(Calendar.MONTH);
-        final int iDay = calendar.get(Calendar.DAY_OF_MONTH);
+        final int year = calendar.get(Calendar.YEAR);
+        final int month = calendar.get(Calendar.MONTH);
+        final int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        DatePickerDialog dpd = new DatePickerDialog(context, R.style.CalendarViewTitle, new DatePickerDialog.OnDateSetListener() {
-            public void onDateSet(
-                    DatePicker datePicker,
-                    int year,
-                    int monthOfYear,
-                    int dayOfMonth
-            ) {
-
-                int diffMonth = (year - iYear) * 12 + (monthOfYear - iMonth);
-
-                currentMonthIndex = diffMonth;
-                Calendar calendar = Calendar.getInstance(Locale.getDefault());
-
-                calendar.add(Calendar.MONTH, currentMonthIndex);
-
-                update(calendar);
-
-                if (onMonthChangeListener != null) {
-                    onMonthChangeListener.onMonthChange(calendar.getTime());
-                }
-
-            }
-        }, iYear, iMonth, iDay);
+        pickerDialog = new DatePickerDialog(getContext(), this::onDateSet, year, month, day);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            int daySpinnerId = Resources.getSystem().getIdentifier("day", "id", "android");
-            if (daySpinnerId != 0) {
-                View daySpinner = dpd.getDatePicker().findViewById(daySpinnerId);
-                if (daySpinner != null) {
-                    daySpinner.setVisibility(View.GONE);
-                }
-            }
-
-            int monthSpinnerId = Resources.getSystem().getIdentifier("month", "id", "android");
-            if (monthSpinnerId != 0) {
-                View monthSpinner = dpd.getDatePicker().findViewById(monthSpinnerId);
-                if (monthSpinner != null) {
-                    monthSpinner.setVisibility(View.VISIBLE);
-                }
-            }
-
-            int yearSpinnerId = Resources.getSystem().getIdentifier("year", "id", "android");
-            if (yearSpinnerId != 0) {
-                View yearSpinner = dpd.getDatePicker().findViewById(yearSpinnerId);
-                if (yearSpinner != null) {
-                    yearSpinner.setVisibility(View.VISIBLE);
-                }
-            }
-
-        } else { //Older SDK versions
-            Field f[] = dpd.getDatePicker().getClass().getDeclaredFields();
+            setSpinnerVisibility("day", View.GONE);
+            setSpinnerVisibility("month", View.VISIBLE);
+            setSpinnerVisibility("year", View.VISIBLE);
+        } else {
+            //Older SDK versions
+            final Field f[] = pickerDialog.getDatePicker().getClass().getDeclaredFields();
 
             for (Field field : f) {
-                if (field.getName().equals("mDayPicker") || field.getName().equals("mDaySpinner")) {
-                    field.setAccessible(true);
-                    Object dayPicker = null;
-
-                    try {
-                        dayPicker = field.get(dpd.getDatePicker());
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
-
-                    ((View) dayPicker).setVisibility(View.GONE);
-                }
-
-                if (field.getName().equals("mMonthPicker") || field.getName().equals("mMonthSpinner")) {
-                    field.setAccessible(true);
-                    Object monthPicker = null;
-
-                    try {
-                        monthPicker = field.get(dpd.getDatePicker());
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
-
-                    ((View) monthPicker).setVisibility(View.VISIBLE);
-                }
-
-                if (field.getName().equals("mYearPicker") || field.getName().equals("mYearSpinner")) {
-                    field.setAccessible(true);
-                    Object yearPicker = null;
-
-                    try {
-                        yearPicker = field.get(dpd.getDatePicker());
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
-
-                    ((View) yearPicker).setVisibility(View.VISIBLE);
-                }
+                setSpinnerVisibility(field, "mDayPicker|mDaySpinner", View.GONE);
+                setSpinnerVisibility(field, "mMonthPicker|mMonthSpinner", View.VISIBLE);
+                setSpinnerVisibility(field, "mYearPicker|mYearSpinner", View.VISIBLE);
             }
         }
 
-        dpd.show();
+        pickerDialog.show();
+    }
+
+    private void setSpinnerVisibility(String key, int visibility) {
+        final int spinnerId = Resources.getSystem().getIdentifier(key, "id", "android");
+
+        if (spinnerId != 0) {
+            final View spinner = pickerDialog.getDatePicker().findViewById(spinnerId);
+
+            if (null != spinner) {
+                spinner.setVisibility(visibility);
+            }
+        }
+
+    }
+
+    private void setSpinnerVisibility(Field field, String attr, int visibility) {
+        final String[] attrs = attr.split("|");
+
+        if (field.getName().equals(attrs[0]) || field.getName().equals(attrs[1])) {
+            field.setAccessible(true);
+            View pickerView = null;
+
+            try {
+                pickerView = (View) field.get(pickerDialog.getDatePicker());
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+
+            if (null != pickerView) {
+                pickerView.setVisibility(visibility);
+            }
+        }
+    }
+
+    public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
+        final int y = calendar.get(Calendar.YEAR);
+        final int m = calendar.get(Calendar.MONTH);
+
+        currentMonthIndex = (year - y) * 12 + (monthOfYear - m);
+
+        Calendar calendar = Calendar.getInstance(Locale.getDefault());
+        calendar.add(Calendar.MONTH, currentMonthIndex);
+
+        update(calendar);
+
+        if (onMonthChangeListener != null) {
+            onMonthChangeListener.onMonthChange(calendar.getTime());
+        }
     }
 
     private void drawAdapterView() {
