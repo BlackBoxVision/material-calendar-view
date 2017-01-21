@@ -95,7 +95,6 @@ public final class MainActivity extends AppCompatActivity implements MainView {
 
         calendarView.setFirstDayOfWeek(Calendar.MONDAY);
         calendarView.setIsOverflowDateVisible(true);
-        calendarView.setCurrentDay(new Date(System.currentTimeMillis()));
         calendarView.setBackButtonColor(R.color.colorAccent);
         calendarView.setNextButtonColor(R.color.colorAccent);
         calendarView.update(Calendar.getInstance(Locale.getDefault()));

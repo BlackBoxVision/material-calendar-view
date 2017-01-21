@@ -523,7 +523,7 @@ public final class CalendarView extends LinearLayout {
                 calendar.set(Calendar.MONTH, day.getMonth());
                 calendar.set(Calendar.YEAR, day.getYear());
 
-                setCurrentDay(calendar.getTime());
+                drawCurrentDay(calendar.getTime());
             }
         }
     }
@@ -584,6 +584,8 @@ public final class CalendarView extends LinearLayout {
         drawHeaderView();
         drawWeekView();
         drawAdapterView();
+
+        drawCurrentDay(new Date(System.currentTimeMillis()));
     }
 
     private void calculateWeekEnds() {
@@ -606,7 +608,7 @@ public final class CalendarView extends LinearLayout {
         return (flagSet|flag) == flagSet;
     }
 
-    public void setCurrentDay(@NonNull Date todayDate) {
+    private void drawCurrentDay(@NonNull Date todayDate) {
         Calendar calendar = Calendar.getInstance(Locale.getDefault());
         calendar.setTime(todayDate);
 
@@ -658,7 +660,7 @@ public final class CalendarView extends LinearLayout {
         setDateAsSelected(calendar.getTime());
 
         //Set the current day color
-        setCurrentDay(calendar.getTime());
+        drawCurrentDay(calendar.getTime());
 
         if (onDateLongClickListener != null) {
             onDateLongClickListener.onDateLongClick(calendar.getTime());
@@ -685,7 +687,7 @@ public final class CalendarView extends LinearLayout {
         setDateAsSelected(c.getTime());
 
         //Set the current day color
-        setCurrentDay(c.getTime());
+        drawCurrentDay(c.getTime());
 
         if (onDateClickListener != null) {
             onDateClickListener.onDateClick(calendar.getTime());
