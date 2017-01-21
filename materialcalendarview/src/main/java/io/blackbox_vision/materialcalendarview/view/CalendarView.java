@@ -506,6 +506,10 @@ public final class CalendarView extends LinearLayout {
                     textView.setTextColor(dayOfWeekTextColor);
                 }
 
+                if (day.isCurrentDay()) {
+                    drawCurrentDay(new Date(System.currentTimeMillis()));
+                }
+
             } else {
                 if (!isOverflowDateVisible) {
                     textView.setVisibility(View.INVISIBLE);
@@ -516,10 +520,6 @@ public final class CalendarView extends LinearLayout {
                     textView.setBackgroundColor(disabledDayBackgroundColor);
                     textView.setTextColor(disabledDayTextColor);
                 }
-            }
-
-            if (day.isCurrentDay()) {
-                drawCurrentDay(day.toDate(Locale.getDefault()));
             }
         }
     }
@@ -580,8 +580,6 @@ public final class CalendarView extends LinearLayout {
         drawHeaderView();
         drawWeekView();
         drawAdapterView();
-
-        drawCurrentDay(new Date(System.currentTimeMillis()));
     }
 
     private void calculateWeekEnds() {
@@ -623,9 +621,10 @@ public final class CalendarView extends LinearLayout {
         currentCalendar.setFirstDayOfWeek(firstDayOfWeek);
         currentCalendar.setTime(currentDate);
 
+        clearDayViewSelection(new Date(System.currentTimeMillis()));
+
         // Clear previous marks
         if (!isMultiSelectDayEnabled) {
-            clearDayViewSelection(new Date(System.currentTimeMillis()));
             clearDayViewSelection(lastSelectedDay);
         } else {
             int month = currentCalendar.get(Calendar.MONTH);

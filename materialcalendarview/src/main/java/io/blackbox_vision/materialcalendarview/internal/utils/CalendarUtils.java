@@ -70,6 +70,7 @@ public final class CalendarUtils {
     public static boolean isSameDay(@NonNull Calendar cal1, @NonNull Calendar cal2) {
         return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA)
                 && (cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR))
+                && (cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH))
                 && (cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)));
     }
 
