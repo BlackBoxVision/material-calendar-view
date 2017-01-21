@@ -470,9 +470,10 @@ public final class CalendarView extends LinearLayout {
             }
 
             textView.setDay(day);
-            textView.setVisibility(View.VISIBLE);
 
             if (day.isCurrentMonth()) {
+                textView.setVisibility(View.VISIBLE);
+
                 container.setOnClickListener(this::onClick);
                 container.setOnLongClickListener(this::onLongClick);
 
@@ -480,17 +481,8 @@ public final class CalendarView extends LinearLayout {
 
                 isCommonDay = true;
 
-                if (day.isWeekend()) {
-                    textView.setTextColor(weekendTextColor);
-                    isCommonDay = false;
-                }
-
                 if (totalDayOfWeekend.length != 0) {
-                    Calendar calendar = Calendar.getInstance(Locale.getDefault());
-
-                    calendar.set(Calendar.DAY_OF_MONTH, day.getDay());
-                    calendar.set(Calendar.MONTH, day.getMonth());
-                    calendar.set(Calendar.YEAR, day.getYear());
+                    final Calendar calendar = day.toCalendar(Locale.getDefault());
 
                     for (int weekend : totalDayOfWeekend) {
                         if (weekend == calendar.get(Calendar.DAY_OF_WEEK)) {
@@ -517,13 +509,7 @@ public final class CalendarView extends LinearLayout {
             }
 
             if (day.isCurrentDay()) {
-                Calendar calendar = Calendar.getInstance(Locale.getDefault());
-
-                calendar.set(Calendar.DAY_OF_MONTH, day.getDay());
-                calendar.set(Calendar.MONTH, day.getMonth());
-                calendar.set(Calendar.YEAR, day.getYear());
-
-                drawCurrentDay(calendar.getTime());
+                drawCurrentDay(day.toDate(Locale.getDefault()));
             }
         }
     }
@@ -589,19 +575,17 @@ public final class CalendarView extends LinearLayout {
     }
 
     private void calculateWeekEnds() {
-        int[] weekendDays = new int[2];
+        totalDayOfWeekend = new int[2];
         int weekendIndex = 0;
 
         for (int i = 0; i < FLAGS.length; i++) {
             boolean isContained = containsFlag(this.weekendDays, FLAGS[i]);
 
             if (isContained) {
-                weekendDays[weekendIndex] = WEEK_DAYS[i];
+                totalDayOfWeekend[weekendIndex] = WEEK_DAYS[i];
                 weekendIndex++;
             }
         }
-
-        totalDayOfWeekend = weekendDays;
     }
 
     private boolean containsFlag(int flagSet, int flag) {
