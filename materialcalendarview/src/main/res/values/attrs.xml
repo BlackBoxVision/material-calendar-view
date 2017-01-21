@@ -18,6 +18,7 @@
         <attr name="calendarWeekendTextColor" format="color"/>
         <attr name="calendarCurrentDayTextColor" format="color" />
         <attr name="calendarIsOverflowDatesVisible" format="boolean"/>
+        <attr name="calendarIsMultiSelectDayEnabled" format="boolean"/>
         <attr name="calendarWeekendDays">
             <flag name="sunday" value="1"/>
             <flag name="monday" value="2"/>

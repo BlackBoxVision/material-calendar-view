@@ -34,10 +34,13 @@ import android.widget.Scroller;
 import android.widget.TextView;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import io.blackbox_vision.materialcalendarview.R;
 import io.blackbox_vision.materialcalendarview.internal.data.Day;
@@ -163,6 +166,9 @@ public final class CalendarView extends LinearLayout {
     @Nullable
     private OnMonthChangeListener onMonthChangeListener;
 
+    @Nullable
+    private OnMultipleDaySelectedListener onMultipleDaySelectedListener;
+
     private Calendar calendar;
     private Date lastSelectedDay;
 
@@ -185,8 +191,11 @@ public final class CalendarView extends LinearLayout {
     private int nextButtonDrawable;
     private boolean isOverflowDateVisible;
 
+    private boolean isMultiSelectDayEnabled;
+
     private int firstDayOfWeek;
     private int currentMonthIndex;
+    private Map<Integer, List<Date>> selectedDatesForMonth = new HashMap<>();
 
     // Day of weekendDays
     private int[] totalDayOfWeekend;
@@ -269,6 +278,7 @@ public final class CalendarView extends LinearLayout {
             weekendTextColor = a.getColor(R.styleable.MaterialCalendarView_calendarWeekendTextColor, endColor);
             weekendDays = a.getInteger(R.styleable.MaterialCalendarView_calendarWeekendDays, 0);
             isOverflowDateVisible = a.getBoolean(R.styleable.MaterialCalendarView_calendarIsOverflowDatesVisible, true);
+            isMultiSelectDayEnabled = a.getBoolean(R.styleable.MaterialCalendarView_calendarIsMultiSelectDayEnabled, false);
             backButtonDrawable = a.getResourceId(R.styleable.MaterialCalendarView_calendarBackButtonDrawable, R.drawable.ic_keyboard_arrow_left_black_24dp);
             nextButtonDrawable = a.getResourceId(R.styleable.MaterialCalendarView_calendarBackButtonDrawable, R.drawable.ic_keyboard_arrow_right_black_24dp);
         } finally {
@@ -614,8 +624,26 @@ public final class CalendarView extends LinearLayout {
         currentCalendar.setTime(currentDate);
 
         // Clear previous marks
-        clearDayViewSelection(new Date(System.currentTimeMillis()));
-        clearDayViewSelection(lastSelectedDay);
+        if (!isMultiSelectDayEnabled) {
+            clearDayViewSelection(new Date(System.currentTimeMillis()));
+            clearDayViewSelection(lastSelectedDay);
+        } else {
+            int month = currentCalendar.get(Calendar.MONTH);
+            List<Date> dates = selectedDatesForMonth.get(month);
+
+            if (null != dates) {
+                dates.add(lastSelectedDay);
+            } else {
+                dates = new ArrayList<>();
+                dates.add(lastSelectedDay);
+            }
+
+            selectedDatesForMonth.put(month, dates);
+
+            if (null != onMultipleDaySelectedListener) {
+                onMultipleDaySelectedListener.onMultipleDaySelected(month, dates);
+            }
+        }
 
         // Store current values as last values
         setLastSelectedDay(currentDate);
@@ -1032,6 +1060,10 @@ public final class CalendarView extends LinearLayout {
         void onMonthTitleClick(@NonNull Date monthDate);
     }
 
+    public interface OnMultipleDaySelectedListener {
+
+        void onMultipleDaySelected(int month, @NonNull List<Date> dates);
+    }
 
     public void shouldAnimateOnEnter(boolean shouldAnimate) {
         shouldAnimateOnEnter(shouldAnimate, DEFAULT_ANIM_DURATION, DEFAULT_ANIM_INTERPOLATOR);
@@ -1077,6 +1109,11 @@ public final class CalendarView extends LinearLayout {
 
     public void setOnMonthChangeListener(@Nullable OnMonthChangeListener onMonthChangeListener) {
         this.onMonthChangeListener = onMonthChangeListener;
+        invalidate();
+    }
+
+    public void setOnMultipleDaySelectedListener(@Nullable OnMultipleDaySelectedListener onMultipleDaySelectedListener) {
+        this.onMultipleDaySelectedListener = onMultipleDaySelectedListener;
         invalidate();
     }
 
@@ -1189,6 +1226,11 @@ public final class CalendarView extends LinearLayout {
 
     public void setNextButtonDrawable(@DrawableRes int drawableId) {
         this.headerView.setNextButtonDrawable(drawableId);
+        invalidate();
+    }
+
+    public void setMultiSelectDayEnabled(boolean multiSelectDayEnabled) {
+        isMultiSelectDayEnabled = multiSelectDayEnabled;
         invalidate();
     }
 }
