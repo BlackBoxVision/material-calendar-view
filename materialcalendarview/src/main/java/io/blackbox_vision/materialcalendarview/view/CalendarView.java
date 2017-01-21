@@ -381,7 +381,7 @@ public final class CalendarView extends LinearLayout {
         final int month = calendar.get(Calendar.MONTH);
         final int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        pickerDialog = new DatePickerDialog(getContext(), this::onDateSet, year, month, day);
+        pickerDialog = new DatePickerDialog(getContext(), R.style.CalendarViewTitle, this::onDateSet, year, month, day);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             setSpinnerVisibility("day", View.GONE);
@@ -514,7 +514,7 @@ public final class CalendarView extends LinearLayout {
         }
     }
 
-    private void clearDayOfTheMonthStyle(Date currentDate) {
+    private void clearDayViewSelection(Date currentDate) {
         if (currentDate != null) {
             Calendar calendar = Calendar.getInstance(Locale.getDefault());
             calendar.setFirstDayOfWeek(firstDayOfWeek);
@@ -608,13 +608,14 @@ public final class CalendarView extends LinearLayout {
         }
     }
 
-    public void setDateAsSelected(Date currentDate) {
+    public void markDateAsSelected(Date currentDate) {
         Calendar currentCalendar = Calendar.getInstance(Locale.getDefault());
         currentCalendar.setFirstDayOfWeek(firstDayOfWeek);
         currentCalendar.setTime(currentDate);
 
         // Clear previous marks
-        clearDayOfTheMonthStyle(lastSelectedDay);
+        clearDayViewSelection(new Date(System.currentTimeMillis()));
+        clearDayViewSelection(lastSelectedDay);
 
         // Store current values as last values
         setLastSelectedDay(currentDate);
@@ -641,7 +642,8 @@ public final class CalendarView extends LinearLayout {
         calendar.setFirstDayOfWeek(firstDayOfWeek);
         calendar.setTime(calendar.getTime());
         calendar.set(Calendar.DAY_OF_MONTH, Integer.valueOf(dayOfMonthText.getText().toString()));
-        setDateAsSelected(calendar.getTime());
+
+        markDateAsSelected(calendar.getTime());
 
         //Set the current day color
         drawCurrentDay(calendar.getTime());
@@ -668,7 +670,7 @@ public final class CalendarView extends LinearLayout {
         c.setTime(calendar.getTime());
         c.set(Calendar.DAY_OF_MONTH, Integer.valueOf(dayOfMonthText.getText().toString()));
 
-        setDateAsSelected(c.getTime());
+        markDateAsSelected(c.getTime());
 
         //Set the current day color
         drawCurrentDay(c.getTime());
