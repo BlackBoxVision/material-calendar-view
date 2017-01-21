@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <!-- TODO review next and back button drawable attr -->
     <declare-styleable name="MaterialCalendarView">
-        <attr name="drawableColor" format="color"/>
+        <attr name="calendarBackgroundColor" format="color"/>
+        <attr name="calendarButtonBackgroundColor" format="color"/>
+        <attr name="calendarBackButtonDrawable" format="reference"/>
+        <attr name="calendarNextButtonDrawable" format="reference"/>
+        <attr name="calendarSelectedDayBackgroundColor" format="color"/>
+        <attr name="calendarCurrentDayBackgroundColor" format="color"/>
+        <attr name="calendarDisabledDayBackgroundColor" format="color"/>
+        <attr name="calendarWeekBackgroundColor" format="color" />
+        <attr name="calendarTitleBackgroundColor" format="color" />
         <attr name="calendarTitleTextColor" format="color" />
-        <attr name="dayOfWeekTextColor" format="color" />
-        <attr name="calendarBackgroundColor" format="color" />
-        <attr name="disabledDayBackgroundColor" format="color" />
-        <attr name="disabledDayTextColor" format="color" />
-        <attr name="selectedDayBackgroundColor" format="color" />
-        <attr name="selectedDayTextColor" format="color" />
-        <attr name="weekLayoutBackgroundColor" format="color" />
-        <attr name="titleLayoutBackgroundColor" format="color" />
-        <attr name="currentDayOfMonthColor" format="color" />
-        <attr name="weekendColor" format="color"/>
-        <attr name="weekend">
+        <attr name="calendarDayOfWeekTextColor" format="color" />
+        <attr name="calendarDisabledDayTextColor" format="color" />
+        <attr name="calendarSelectedDayTextColor" format="color" />
+        <attr name="calendarWeekendTextColor" format="color"/>
+        <attr name="calendarCurrentDayTextColor" format="color" />
+        <attr name="calendarIsOverflowDatesVisible" format="boolean"/>
+        <attr name="calendarWeekendDays">
             <flag name="sunday" value="1"/>
             <flag name="monday" value="2"/>
             <flag name="tuesday" value="4"/>

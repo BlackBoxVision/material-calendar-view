@@ -4,8 +4,10 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +21,6 @@ import io.blackbox_vision.materialcalendarview.R;
 public final class HeaderView extends RelativeLayout {
     private ImageView nextButton;
     private ImageView backButton;
-
     private TextView titleTextView;
 
     @Nullable
@@ -52,30 +53,21 @@ public final class HeaderView extends RelativeLayout {
 
         titleTextView = (TextView) view.findViewById(R.id.date_title);
 
-        nextButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != onNextButtonClickListener) {
-                    onNextButtonClickListener.onNextButtonClick(v);
-                }
+        nextButton.setOnClickListener(v -> {
+            if (null != onNextButtonClickListener) {
+                onNextButtonClickListener.onNextButtonClick(v);
             }
         });
 
-        backButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != onBackButtonClickListener) {
-                    onBackButtonClickListener.onBackButtonClick(v);
-                }
+        backButton.setOnClickListener(v -> {
+            if (null != onBackButtonClickListener) {
+                onBackButtonClickListener.onBackButtonClick(v);
             }
         });
 
-        titleTextView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != onTitleClickListener) {
-                    onTitleClickListener.onTitleClick();
-                }
+        titleTextView.setOnClickListener(v -> {
+            if (null != onTitleClickListener) {
+                onTitleClickListener.onTitleClick();
             }
         });
     }
@@ -106,6 +98,14 @@ public final class HeaderView extends RelativeLayout {
     public void setBackButtonColor(int color) {
         backButton.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
         invalidate();
+    }
+
+    public void setNextButtonDrawable(@DrawableRes int drawable) {
+        nextButton.setImageDrawable(ContextCompat.getDrawable(getContext(), drawable));
+    }
+
+    public void setBackButtonDrawable(@DrawableRes int drawable) {
+        backButton.setImageDrawable(ContextCompat.getDrawable(getContext(), drawable));
     }
 
     public void setNextButtonDrawable(@NonNull Drawable drawable) {

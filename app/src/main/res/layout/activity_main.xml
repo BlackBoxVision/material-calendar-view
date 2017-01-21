@@ -43,19 +43,20 @@
                         android:layout_marginStart="2dp"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@color/colorPrimary"
+                        app:calendarIsOverflowDatesVisible="true"
                         app:calendarBackgroundColor="@color/colorPrimary"
                         app:calendarTitleTextColor="@color/colorAccent"
-                        app:currentDayOfMonthColor="@color/white"
-                        app:dayOfWeekTextColor="@android:color/white"
-                        app:disabledDayBackgroundColor="@color/colorPrimary"
-                        app:disabledDayTextColor="@android:color/darker_gray"
-                        app:selectedDayBackgroundColor="@color/colorAccent"
-                        app:titleLayoutBackgroundColor="@color/colorPrimary"
-                        app:weekLayoutBackgroundColor="@color/colorPrimary"
-                        app:weekendColor="@color/colorAccent"
-                        app:drawableColor="@color/colorAccent"
-                        app:weekend="saturday|sunday">
+                        app:calendarCurrentDayTextColor="@color/white"
+                        app:calendarDayOfWeekTextColor="@android:color/white"
+                        app:calendarDisabledDayBackgroundColor="@color/colorPrimary"
+                        app:calendarDisabledDayTextColor="@android:color/darker_gray"
+                        app:calendarSelectedDayBackgroundColor="@color/colorAccent"
+                        app:calendarTitleBackgroundColor="@color/colorPrimary"
+                        app:calendarWeekBackgroundColor="@color/colorPrimary"
+                        app:calendarCurrentDayBackgroundColor="@color/teal500"
+                        app:calendarWeekendTextColor="@color/colorAccent"
+                        app:calendarButtonBackgroundColor="@color/colorAccent"
+                        app:calendarWeekendDays="saturday|sunday">
                     </io.blackbox_vision.materialcalendarview.view.CalendarView>
 
                 </FrameLayout>
