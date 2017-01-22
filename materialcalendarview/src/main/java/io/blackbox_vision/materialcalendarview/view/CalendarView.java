@@ -621,10 +621,9 @@ public final class CalendarView extends LinearLayout {
         currentCalendar.setFirstDayOfWeek(firstDayOfWeek);
         currentCalendar.setTime(currentDate);
 
-        clearDayViewSelection(new Date(System.currentTimeMillis()));
-
         // Clear previous marks
         if (!isMultiSelectDayEnabled) {
+            clearDayViewSelection(new Date(System.currentTimeMillis()));
             clearDayViewSelection(lastSelectedDay);
         } else {
             int month = currentCalendar.get(Calendar.MONTH);
