@@ -300,32 +300,36 @@ public final class CalendarView extends LinearLayout {
     private void drawHeaderView() {
         headerView = (HeaderView) view.findViewById(R.id.header_view);
 
-        headerView.setTitle(CalendarUtils.getDateTitle(Locale.getDefault(), currentMonthIndex));
         headerView.setBackgroundColor(titleBackgroundColor);
-        headerView.setNextButtonDrawable(nextButtonDrawable);
-        headerView.setBackButtonDrawable(backButtonDrawable);
-        headerView.setNextButtonColor(buttonBackgroundColor);
-        headerView.setBackButtonColor(buttonBackgroundColor);
-        headerView.setTitleColor(titleTextColor);
-        headerView.setTypeface(typeface);
 
-        headerView.setOnTitleClickListener(() -> {
-            showDatePickerDialog();
+        headerView.setTitle(CalendarUtils.getDateTitle(Locale.getDefault(), currentMonthIndex))
+                .setNextButtonDrawable(nextButtonDrawable)
+                .setBackButtonDrawable(backButtonDrawable)
+                .setNextButtonColor(buttonBackgroundColor)
+                .setBackButtonColor(buttonBackgroundColor)
+                .setTitleColor(titleTextColor)
+                .setTypeface(typeface)
+                .setOnTitleClickListener(this::onTitleClick)
+                .setOnNextButtonClickListener(this::onNextButtonClick)
+                .setOnBackButtonClickListener(this::onBackButtonClick);
+    }
 
-            if (onMonthTitleClickListener != null) {
-                onMonthTitleClickListener.onMonthTitleClick(calendar.getTime());
-            }
-        });
+    public void onTitleClick() {
+        showDatePickerDialog();
 
-        headerView.setOnNextButtonClickListener(v -> {
-            currentMonthIndex++;
-            updateCalendarOnTouch();
-        });
+        if (onMonthTitleClickListener != null) {
+            onMonthTitleClickListener.onMonthTitleClick(calendar.getTime());
+        }
+    }
 
-        headerView.setOnBackButtonClickListener(v -> {
-            currentMonthIndex--;
-            updateCalendarOnTouch();
-        });
+    public void onNextButtonClick(@NonNull View v) {
+        currentMonthIndex++;
+        updateCalendarOnTouch();
+    }
+
+    public void onBackButtonClick(@NonNull View v) {
+        currentMonthIndex--;
+        updateCalendarOnTouch();
     }
 
     private void updateCalendarOnTouch() {
@@ -1063,19 +1067,22 @@ public final class CalendarView extends LinearLayout {
         void onMultipleDaySelected(int month, @NonNull List<Date> dates);
     }
 
-    public void shouldAnimateOnEnter(boolean shouldAnimate) {
+    public CalendarView shouldAnimateOnEnter(boolean shouldAnimate) {
         shouldAnimateOnEnter(shouldAnimate, DEFAULT_ANIM_DURATION, DEFAULT_ANIM_INTERPOLATOR);
+        return this;
     }
 
-    public void shouldAnimateOnEnter(boolean shouldAnimate, long duration) {
+    public CalendarView shouldAnimateOnEnter(boolean shouldAnimate, long duration) {
         shouldAnimateOnEnter(shouldAnimate, duration, DEFAULT_ANIM_INTERPOLATOR);
+        return this;
     }
 
-    public void shouldAnimateOnEnter(boolean shouldAnimate, @NonNull Interpolator interpolator) {
+    public CalendarView shouldAnimateOnEnter(boolean shouldAnimate, @NonNull Interpolator interpolator) {
         shouldAnimateOnEnter(shouldAnimate, DEFAULT_ANIM_DURATION, interpolator);
+        return this;
     }
 
-    public void shouldAnimateOnEnter(boolean shouldAnimate, long duration, @NonNull Interpolator interpolator) {
+    public CalendarView shouldAnimateOnEnter(boolean shouldAnimate, long duration, @NonNull Interpolator interpolator) {
         if (shouldAnimate) {
             ViewCompat.setTranslationY(this, getScreenHeight(getContext()));
             ViewCompat.setAlpha(this, 0f);
@@ -1088,147 +1095,177 @@ public final class CalendarView extends LinearLayout {
 
             invalidate();
         }
+
+        return this;
     }
 
-    public void setOnMonthTitleClickListener(@Nullable OnMonthTitleClickListener onMonthTitleClickListener) {
+    public CalendarView setOnMonthTitleClickListener(@Nullable OnMonthTitleClickListener onMonthTitleClickListener) {
         this.onMonthTitleClickListener = onMonthTitleClickListener;
         invalidate();
+        return this;
     }
 
-    public void setOnDateClickListener(@Nullable OnDateClickListener onDateClickListener) {
+    public CalendarView setOnDateClickListener(@Nullable OnDateClickListener onDateClickListener) {
         this.onDateClickListener = onDateClickListener;
         invalidate();
+        return this;
     }
 
-    public void setOnDateLongClickListener(@Nullable OnDateLongClickListener onDateLongClickListener) {
+    public CalendarView setOnDateLongClickListener(@Nullable OnDateLongClickListener onDateLongClickListener) {
         this.onDateLongClickListener = onDateLongClickListener;
         invalidate();
+        return this;
     }
 
-    public void setOnMonthChangeListener(@Nullable OnMonthChangeListener onMonthChangeListener) {
+    public CalendarView setOnMonthChangeListener(@Nullable OnMonthChangeListener onMonthChangeListener) {
         this.onMonthChangeListener = onMonthChangeListener;
         invalidate();
+        return this;
     }
 
-    public void setOnMultipleDaySelectedListener(@Nullable OnMultipleDaySelectedListener onMultipleDaySelectedListener) {
+    public CalendarView setOnMultipleDaySelectedListener(@Nullable OnMultipleDaySelectedListener onMultipleDaySelectedListener) {
         this.onMultipleDaySelectedListener = onMultipleDaySelectedListener;
         invalidate();
+        return this;
     }
 
-    private void setLastSelectedDay(Date lastSelectedDay) {
+    private CalendarView setLastSelectedDay(Date lastSelectedDay) {
         this.lastSelectedDay = lastSelectedDay;
         invalidate();
+        return this;
     }
 
-    public void setTypeface(Typeface typeface) {
+    public CalendarView setTypeface(Typeface typeface) {
         this.typeface = typeface;
         invalidate();
+        return this;
     }
 
-    public void setIsOverflowDateVisible(boolean isOverflowDateVisible) {
+    public CalendarView setIsOverflowDateVisible(boolean isOverflowDateVisible) {
         this.isOverflowDateVisible = isOverflowDateVisible;
         invalidate();
+        return this;
     }
 
-    public void setFirstDayOfWeek(int firstDayOfWeek) {
+    public CalendarView setFirstDayOfWeek(int firstDayOfWeek) {
         this.firstDayOfWeek = firstDayOfWeek;
         invalidate();
+        return this;
     }
 
-    public void setDisabledDayBackgroundColor(int disabledDayBackgroundColor) {
+    public CalendarView setDisabledDayBackgroundColor(int disabledDayBackgroundColor) {
         this.disabledDayBackgroundColor = disabledDayBackgroundColor;
         invalidate();
+        return this;
     }
 
-    public void setDisabledDayTextColor(int disabledDayTextColor) {
+    public CalendarView setDisabledDayTextColor(int disabledDayTextColor) {
         this.disabledDayTextColor = disabledDayTextColor;
         invalidate();
+        return this;
     }
 
-    public void setCalendarBackgroundColor(int calendarBackgroundColor) {
+    public CalendarView setCalendarBackgroundColor(int calendarBackgroundColor) {
         this.calendarBackgroundColor = calendarBackgroundColor;
         invalidate();
+        return this;
     }
 
-    public void setSelectedDayBackgroundColor(int selectedDayBackgroundColor) {
+    public CalendarView setSelectedDayBackgroundColor(int selectedDayBackgroundColor) {
         this.selectedDayBackgroundColor = selectedDayBackgroundColor;
         invalidate();
+        return this;
     }
 
-    public void setWeekBackgroundColor(int weekBackgroundColor) {
+    public CalendarView setWeekBackgroundColor(int weekBackgroundColor) {
         this.weekBackgroundColor = weekBackgroundColor;
         invalidate();
+        return this;
     }
 
-    public void setTitleBackgroundColor(int titleBackgroundColor) {
+    public CalendarView setTitleBackgroundColor(int titleBackgroundColor) {
         this.titleBackgroundColor = titleBackgroundColor;
         invalidate();
+        return this;
     }
 
-    public void setSelectedDayTextColor(int selectedDayTextColor) {
+    public CalendarView setSelectedDayTextColor(int selectedDayTextColor) {
         this.selectedDayTextColor = selectedDayTextColor;
         invalidate();
+        return this;
     }
 
-    public void setTitleTextColor(int titleTextColor) {
+    public CalendarView setTitleTextColor(int titleTextColor) {
         this.titleTextColor = titleTextColor;
         invalidate();
+        return this;
     }
 
-    public void setDayOfWeekTextColor(int dayOfWeekTextColor) {
+    public CalendarView setDayOfWeekTextColor(int dayOfWeekTextColor) {
         this.dayOfWeekTextColor = dayOfWeekTextColor;
         invalidate();
+        return this;
     }
 
-    public void setCurrentDayTextColor(int currentDayTextColor) {
+    public CalendarView setCurrentDayTextColor(int currentDayTextColor) {
         this.currentDayTextColor = currentDayTextColor;
         invalidate();
+        return this;
     }
 
-    public void setWeekendTextColor(int weekendTextColor) {
+    public CalendarView setWeekendTextColor(int weekendTextColor) {
         this.weekendTextColor = weekendTextColor;
         invalidate();
+        return this;
     }
 
-    public void setWeekendDays(int weekendDays) {
+    public CalendarView setWeekendDays(int weekendDays) {
         this.weekendDays = weekendDays;
         invalidate();
+        return this;
     }
 
-    public void setButtonBackgroundColor(int buttonBackgroundColor) {
+    public CalendarView setButtonBackgroundColor(int buttonBackgroundColor) {
         this.buttonBackgroundColor = buttonBackgroundColor;
         setNextButtonColor(buttonBackgroundColor);
         setBackButtonColor(buttonBackgroundColor);
         invalidate();
+        return this;
     }
 
-    public void setBackButtonColor(@ColorRes int colorId) {
+    public CalendarView setBackButtonColor(@ColorRes int colorId) {
         this.headerView.setBackButtonColor(ContextCompat.getColor(getContext(), colorId));
         invalidate();
+        return this;
     }
 
-    public void setNextButtonColor(@ColorRes int colorId) {
+    public CalendarView setNextButtonColor(@ColorRes int colorId) {
         this.headerView.setNextButtonColor(ContextCompat.getColor(getContext(), colorId));
         invalidate();
+        return this;
     }
 
-    public void setCurrentDayBackgroundColor(int currentDayBackgroundColor) {
+    public CalendarView setCurrentDayBackgroundColor(int currentDayBackgroundColor) {
         this.currentDayBackgroundColor = currentDayBackgroundColor;
         invalidate();
+        return this;
     }
 
-    public void setBackButtonDrawable(@DrawableRes int drawableId) {
+    public CalendarView setBackButtonDrawable(@DrawableRes int drawableId) {
         this.headerView.setBackButtonDrawable(drawableId);
         invalidate();
+        return this;
     }
 
-    public void setNextButtonDrawable(@DrawableRes int drawableId) {
+    public CalendarView setNextButtonDrawable(@DrawableRes int drawableId) {
         this.headerView.setNextButtonDrawable(drawableId);
         invalidate();
+        return this;
     }
 
-    public void setMultiSelectDayEnabled(boolean multiSelectDayEnabled) {
+    public CalendarView setMultiSelectDayEnabled(boolean multiSelectDayEnabled) {
         isMultiSelectDayEnabled = multiSelectDayEnabled;
         invalidate();
+        return this;
     }
 }

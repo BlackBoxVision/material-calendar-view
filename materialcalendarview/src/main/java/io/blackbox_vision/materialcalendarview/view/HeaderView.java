@@ -72,63 +72,75 @@ public final class HeaderView extends RelativeLayout {
         });
     }
 
-    public void setTitle(@Nullable String text) {
+    public HeaderView setTitle(@Nullable String text) {
         titleTextView.setText(text);
         invalidate();
+        return this;
     }
 
-    public void setTitleColor(int color) {
+    public HeaderView setTitleColor(int color) {
         titleTextView.setTextColor(color);
         invalidate();
+        return this;
     }
 
-    public void setTypeface(@Nullable Typeface typeface) {
+    public HeaderView setTypeface(@Nullable Typeface typeface) {
         if (null != typeface) {
             titleTextView.setTypeface(typeface);
         }
 
         invalidate();
+        return this;
     }
 
-    public void setNextButtonColor(int color) {
+    public HeaderView setNextButtonColor(int color) {
         nextButton.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
         invalidate();
+        return this;
     }
 
-    public void setBackButtonColor(int color) {
+    public HeaderView setBackButtonColor(int color) {
         backButton.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
         invalidate();
+        return this;
     }
 
-    public void setNextButtonDrawable(@DrawableRes int drawable) {
+    public HeaderView setNextButtonDrawable(@DrawableRes int drawable) {
         nextButton.setImageDrawable(ContextCompat.getDrawable(getContext(), drawable));
+        return this;
     }
 
-    public void setBackButtonDrawable(@DrawableRes int drawable) {
+    public HeaderView setBackButtonDrawable(@DrawableRes int drawable) {
         backButton.setImageDrawable(ContextCompat.getDrawable(getContext(), drawable));
+        return this;
     }
 
-    public void setNextButtonDrawable(@NonNull Drawable drawable) {
+    public HeaderView setNextButtonDrawable(@NonNull Drawable drawable) {
         nextButton.setImageDrawable(drawable);
+        return this;
     }
 
-    public void setBackButtonDrawable(@NonNull Drawable drawable) {
+    public HeaderView setBackButtonDrawable(@NonNull Drawable drawable) {
         backButton.setImageDrawable(drawable);
+        return this;
     }
 
-    public void setOnTitleClickListener(@Nullable OnTitleClickListener onTitleClickListener) {
+    public HeaderView setOnTitleClickListener(@Nullable OnTitleClickListener onTitleClickListener) {
         this.onTitleClickListener = onTitleClickListener;
         invalidate();
+        return this;
     }
 
-    public void setOnNextButtonClickListener(@Nullable OnNextButtonClickListener onNextButtonClickListener) {
+    public HeaderView setOnNextButtonClickListener(@Nullable OnNextButtonClickListener onNextButtonClickListener) {
         this.onNextButtonClickListener = onNextButtonClickListener;
         invalidate();
+        return this;
     }
 
-    public void setOnBackButtonClickListener(@Nullable OnBackButtonClickListener onBackButtonClickListener) {
+    public HeaderView setOnBackButtonClickListener(@Nullable OnBackButtonClickListener onBackButtonClickListener) {
         this.onBackButtonClickListener = onBackButtonClickListener;
         invalidate();
+        return this;
     }
 
     public interface OnTitleClickListener {
