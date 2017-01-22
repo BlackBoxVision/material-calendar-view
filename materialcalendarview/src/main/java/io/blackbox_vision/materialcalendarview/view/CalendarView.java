@@ -8,6 +8,7 @@ import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
@@ -58,6 +59,9 @@ import static io.blackbox_vision.materialcalendarview.internal.utils.ScreenUtils
 public final class CalendarView extends LinearLayout {
     private static final Interpolator DEFAULT_ANIM_INTERPOLATOR = new DecelerateInterpolator(3.0f);
     private static final long DEFAULT_ANIM_DURATION = 1500;
+
+    private static final String KEY_STATE = "superState";
+    private static final String KEY_MONTH_INDEX = "currentMonthIndex";
 
     private static final int SUNDAY = 1;
     private static final int MONDAY = 2;
@@ -233,11 +237,26 @@ public final class CalendarView extends LinearLayout {
 
     @Override
     protected Parcelable onSaveInstanceState() {
-        return super.onSaveInstanceState();
+        final Parcelable superState = super.onSaveInstanceState();
+        final Bundle stateToSave = new Bundle();
+
+        stateToSave.putParcelable(KEY_STATE, superState);
+        stateToSave.putInt(KEY_MONTH_INDEX, currentMonthIndex);
+
+        return stateToSave;
     }
 
     @Override
     protected void onRestoreInstanceState(Parcelable state) {
+        if (state instanceof Bundle) {
+            final Bundle savedInstanceState = (Bundle) state;
+
+            state = savedInstanceState.getParcelable(KEY_STATE);
+            currentMonthIndex = savedInstanceState.getInt(KEY_MONTH_INDEX);
+
+            update(Calendar.getInstance(Locale.getDefault()));
+        }
+
         super.onRestoreInstanceState(state);
     }
 
