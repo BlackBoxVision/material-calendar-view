@@ -8,6 +8,7 @@ import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Parcelable;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
@@ -190,7 +191,6 @@ public final class CalendarView extends LinearLayout {
     private int backButtonDrawable;
     private int nextButtonDrawable;
     private boolean isOverflowDateVisible;
-
     private boolean isMultiSelectDayEnabled;
 
     private int firstDayOfWeek;
@@ -229,6 +229,16 @@ public final class CalendarView extends LinearLayout {
         initTouchVariables();
         takeStyles(attrs);
         drawCalendar();
+    }
+
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        return super.onSaveInstanceState();
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        super.onRestoreInstanceState(state);
     }
 
     private void initTouchVariables() {
@@ -1267,5 +1277,13 @@ public final class CalendarView extends LinearLayout {
         isMultiSelectDayEnabled = multiSelectDayEnabled;
         invalidate();
         return this;
+    }
+
+    public boolean isOverflowDateVisible() {
+        return isOverflowDateVisible;
+    }
+
+    public boolean isMultiSelectDayEnabled() {
+        return isMultiSelectDayEnabled;
     }
 }

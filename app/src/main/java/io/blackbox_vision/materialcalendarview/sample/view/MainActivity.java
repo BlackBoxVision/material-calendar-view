@@ -32,6 +32,7 @@ import static io.blackbox_vision.materialcalendarview.sample.utils.AnimationUtil
 
 public final class MainActivity extends AppCompatActivity implements MainView {
     private static final String DATE_TEMPLATE = "dd/MM/yyyy";
+    private static final String MONTH_TEMPLATE = "MMMM yyyy";
 
     private final MainPresenter presenter = new MainPresenter(this);
 
@@ -52,9 +53,6 @@ public final class MainActivity extends AppCompatActivity implements MainView {
 
     @BindView(R.id.calendar_view)
     CalendarView calendarView;
-
-    @NonNull
-    private final SimpleDateFormat formatter = new SimpleDateFormat(DATE_TEMPLATE, Locale.getDefault());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,27 +84,24 @@ public final class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     public void prepareTextView() {
-        textView.setText(String.format("Today is %s", formatter.format(new Date(System.currentTimeMillis()))));
+        textView.setText(String.format("Today is %s", formatDate(DATE_TEMPLATE, new Date(System.currentTimeMillis()))));
     }
 
     @Override
     public void prepareCalendarView() {
-        final ActionBar actionBar = getSupportActionBar();
+        calendarView.setFirstDayOfWeek(Calendar.MONDAY)
+                .setOnDateClickListener(this::onDateClick)
+                .setOnMonthChangeListener(this::onMonthChange)
+                .setOnDateLongClickListener(this::onDateLongClick)
+                .setOnMonthTitleClickListener(this::onMonthTitleClick);
 
-        calendarView.setFirstDayOfWeek(Calendar.MONDAY);
-        calendarView.setIsOverflowDateVisible(true);
+        if (calendarView.isMultiSelectDayEnabled()) {
+            calendarView.setOnMultipleDaySelectedListener((month, dates) -> {
+               //Do something with your current selection
+            });
+        }
+
         calendarView.update(Calendar.getInstance(Locale.getDefault()));
-        calendarView.setOnDateLongClickListener(selectedDate -> textView.setText(formatter.format(selectedDate)));
-        calendarView.setOnMonthChangeListener(monthDate -> {
-            final SimpleDateFormat df = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
-
-            if (null != actionBar) {
-                String dateStr = df.format(monthDate);
-                dateStr = dateStr.substring(0, 1).toUpperCase() + dateStr.substring(1, dateStr.length());
-
-                actionBar.setTitle(dateStr);
-            }
-        });
     }
 
     @Override
@@ -130,5 +125,32 @@ public final class MainActivity extends AppCompatActivity implements MainView {
         calendarView.shouldAnimateOnEnter(true);
         animate(fab, getApplicationContext());
         animate(textView, getApplicationContext());
+    }
+
+    private void onDateLongClick(@NonNull final Date date) {
+        textView.setText(formatDate(DATE_TEMPLATE, date));
+    }
+
+    private void onDateClick(@NonNull final Date date) {
+        textView.setText(formatDate(DATE_TEMPLATE, date));
+    }
+
+    private void onMonthTitleClick(@NonNull final Date date) {
+        //Do something after month selection
+    }
+
+    private void onMonthChange(@NonNull final Date date) {
+        final ActionBar actionBar = getSupportActionBar();
+
+        if (null != actionBar) {
+            String dateStr = formatDate(MONTH_TEMPLATE, date);
+            dateStr = dateStr.substring(0, 1).toUpperCase() + dateStr.substring(1, dateStr.length());
+
+            actionBar.setTitle(dateStr);
+        }
+    }
+
+    private String formatDate(@NonNull String dateTemplate, @NonNull Date date) {
+        return new SimpleDateFormat(dateTemplate, Locale.getDefault()).format(date);
     }
 }
