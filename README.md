@@ -8,8 +8,8 @@
 ##Screenshots
 
 <div style="align:center; display:inline-block; width:100%;">
-	<img src="https://raw.githubusercontent.com/BlackBoxVision/material-calendar-view/master/art/newer.png" height="800" width="50%">
-	<img src="https://raw.githubusercontent.com/BlackBoxVision/material-calendar-view/master/art/other.png" height="800" width="50%">
+	<img src="https://raw.githubusercontent.com/BlackBoxVision/material-calendar-view/master/art/newer.png" height="775" width="49%">
+	<img src="https://raw.githubusercontent.com/BlackBoxVision/material-calendar-view/master/art/other.png" height="775" width="49%">
 </div>
 
 <img src="https://i.imgur.com/ViolZD2.gif" height="550" width="100%" style="align: center;">
