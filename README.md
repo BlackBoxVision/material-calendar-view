@@ -32,7 +32,7 @@ repositories {
 
 ```java
 dependencies {
-    compile 'com.github.BlackBoxVision:material-calendar-view:v1.4.0'
+    compile 'com.github.BlackBoxVision:material-calendar-view:v1.5.1'
 }
 ```
 **Maven**
@@ -51,7 +51,7 @@ dependencies {
 <dependency>
     <groupId>com.github.BlackBoxVision</groupId>
     <artifactId>material-calendar-view</artifactId>
-    <version>v1.4.0</version>
+    <version>v1.5.1</version>
 </dependency>
 ```
 **SBT**
@@ -65,7 +65,7 @@ resolvers += "jitpack" at "https://jitpack.io"
 - Add the dependency in the form:
 
 ```java
-libraryDependencies += "com.github.BlackBoxVision" % "material-calendar-view" % "v1.4.0"	
+libraryDependencies += "com.github.BlackBoxVision" % "material-calendar-view" % "v1.5.1"	
 ```
 
 ##Usage example
@@ -85,27 +85,24 @@ This example shows all the possible customization around Material Calendar View:
 
 ```xml
 <io.blackbox_vision.materialcalendarview.view.CalendarView
-    android:id="@+id/calendar_view"
-    android:layout_marginTop="56dp"
-    android:layout_marginEnd="2dp"
-    android:layout_marginLeft="2dp"
-    android:layout_marginRight="2dp"
-    android:layout_marginStart="2dp"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    app:calendarBackgroundColor="@color/colorPrimary"
-    app:calendarTitleTextColor="@color/colorAccent"
-    app:currentDayOfMonthColor="@color/white"
-    app:dayOfMonthTextColor="@color/white"
-    app:dayOfWeekTextColor="@android:color/white"
-    app:disabledDayBackgroundColor="@color/colorPrimary"
-    app:disabledDayTextColor="@color/colorAccent"
-    app:selectedDayBackgroundColor="@color/colorAccent"
-    app:titleLayoutBackgroundColor="@color/colorPrimary"
-    app:weekLayoutBackgroundColor="@color/colorPrimary"
-    app:weekendColor="@color/red"
-    app:weekend="saturday|sunday">
+	android:id="@+id/calendar_view"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	app:calendarIsMultiSelectDayEnabled="false"
+	app:calendarIsOverflowDatesVisible="true"
+	app:calendarBackgroundColor="@color/colorPrimary"
+	app:calendarTitleTextColor="@color/colorAccent"
+	app:calendarCurrentDayTextColor="@color/white"
+	app:calendarDayOfWeekTextColor="@android:color/white"
+	app:calendarDisabledDayBackgroundColor="@color/colorPrimary"
+	app:calendarDisabledDayTextColor="@android:color/darker_gray"
+	app:calendarSelectedDayBackgroundColor="@color/colorAccent"
+	app:calendarTitleBackgroundColor="@color/colorPrimary"
+	app:calendarWeekBackgroundColor="@color/colorPrimary"
+	app:calendarCurrentDayBackgroundColor="@color/teal500"
+	app:calendarWeekendTextColor="@color/colorAccent"
+	app:calendarButtonBackgroundColor="@color/colorAccent"
+	app:calendarWeekendDays="saturday|sunday">
 </io.blackbox_vision.materialcalendarview.view.CalendarView>
 ```
 Then, in your Activity.java or Fragment.java initialize the calendar: 
@@ -113,24 +110,18 @@ Then, in your Activity.java or Fragment.java initialize the calendar:
 ```java
 calendarView = (CalendarView) findViewById(R.id.calendar_view);
 
-calendarView.shouldAnimateOnEnter(true);
-calendarView.setFirstDayOfWeek(Calendar.MONDAY);
-calendarView.setIsOverflowDateVisible(true);
-calendarView.setCurrentDay(new Date(System.currentTimeMillis()));
-calendarView.setBackButtonColor(R.color.colorAccent);
-calendarView.setNextButtonColor(R.color.colorAccent);
+calendarView.shouldAnimateOnEnter(true)
+	.setFirstDayOfWeek(Calendar.MONDAY)	
+	.setOnDateClickListener(this::onDateClick)
+	.setOnMonthChangeListener(this::onMonthChange)
+	.setOnDateLongClickListener(this::onDateLongClick)
+	.setOnMonthTitleClickListener(this::onMonthTitleClick);
+
+if (calendarView.isMultiSelectDayEnabled()) {
+	calendarView.setOnMultipleDaySelectedListener(this::onMultipleDaySelected);
+}
+
 calendarView.update(Calendar.getInstance(Locale.getDefault()));
-calendarView.setOnDateLongClickListener(selectedDate -> textView.setText(formatter.format(selectedDate)));
-calendarView.setOnMonthChangeListener(monthDate -> {
-	final SimpleDateFormat df = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
-
-	if (null != actionBar) {
-		String dateStr = df.format(monthDate);
-		dateStr = dateStr.substring(0, 1).toUpperCase() + dateStr.substring(1, dateStr.length());
-
-		actionBar.setTitle(dateStr);
-	}
-});
 ```
 
 ##Issues
