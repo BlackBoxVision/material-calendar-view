@@ -735,7 +735,7 @@ public final class CalendarView extends LinearLayout {
         drawCurrentDay(c.getTime());
 
         if (onDateClickListener != null) {
-            onDateClickListener.onDateClick(calendar.getTime());
+            onDateClickListener.onDateClick(c.getTime());
         }
     }
 
