@@ -32,7 +32,7 @@ repositories {
 
 ```java
 dependencies {
-    compile 'com.github.BlackBoxVision:material-calendar-view:v1.5.1'
+    compile 'com.github.BlackBoxVision:material-calendar-view:v1.5.2'
 }
 ```
 **Maven**
@@ -51,7 +51,7 @@ dependencies {
 <dependency>
     <groupId>com.github.BlackBoxVision</groupId>
     <artifactId>material-calendar-view</artifactId>
-    <version>v1.5.1</version>
+    <version>v1.5.2</version>
 </dependency>
 ```
 **SBT**
@@ -65,7 +65,7 @@ resolvers += "jitpack" at "https://jitpack.io"
 - Add the dependency in the form:
 
 ```java
-libraryDependencies += "com.github.BlackBoxVision" % "material-calendar-view" % "v1.5.1"	
+libraryDependencies += "com.github.BlackBoxVision" % "material-calendar-view" % "v1.5.2"	
 ```
 
 ##Usage example
