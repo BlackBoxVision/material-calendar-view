@@ -71,7 +71,7 @@ public final class CalendarView extends LinearLayout {
     private static final int FRIDAY = 32;
     private static final int SATURDAY = 64;
 
-    private static final int[] FLAGS = new int[] {
+    private static final int[] FLAGS = new int[]{
             SUNDAY,
             MONDAY,
             TUESDAY,
@@ -81,7 +81,7 @@ public final class CalendarView extends LinearLayout {
             SATURDAY
     };
 
-    private static final int[] WEEK_DAYS = new int[] {
+    private static final int[] WEEK_DAYS = new int[]{
             Calendar.SUNDAY,
             Calendar.MONDAY,
             Calendar.TUESDAY,
@@ -210,6 +210,8 @@ public final class CalendarView extends LinearLayout {
     private View view;
     private HeaderView headerView;
     private DatePickerDialog pickerDialog;
+    @Nullable
+    private Date mDisabledDate;
 
     /**
      * Constructor with arguments. It receives a
@@ -226,7 +228,7 @@ public final class CalendarView extends LinearLayout {
      * Context used to get the resources.
      *
      * @param context - the context used to get the resources.
-     * @param attrs - attribute set with custom styles.
+     * @param attrs   - attribute set with custom styles.
      */
     public CalendarView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -498,6 +500,18 @@ public final class CalendarView extends LinearLayout {
         DayView textView;
         ViewGroup container;
 
+        Day disabledDay = new Day();
+
+        if (mDisabledDate != null) {
+            Calendar disabledCalendar = Calendar.getInstance();
+            disabledCalendar.setTime(mDisabledDate);
+
+            disabledDay.setDay(disabledCalendar.get(Calendar.DAY_OF_MONTH))
+                    .setMonth(disabledCalendar.get(Calendar.MONTH))
+                    .setYear(disabledCalendar.get(Calendar.YEAR));
+        } else
+            disabledDay.setDay(-121); //random number for check
+
         for (int i = 0; i < days.size(); i++) {
             Day day = days.get(i);
 
@@ -541,6 +555,13 @@ public final class CalendarView extends LinearLayout {
 
                 if (day.isCurrentDay()) {
                     drawCurrentDay(new Date(System.currentTimeMillis()));
+                }
+
+                if (disabledDay.getDay() != -121) {
+                    if (day.compareTo(disabledDay) < 1) {
+                        textView.setTextColor(disabledDayTextColor);
+                        textView.setBackgroundColor(calendarBackgroundColor);
+                    }
                 }
 
             } else {
@@ -630,7 +651,7 @@ public final class CalendarView extends LinearLayout {
     }
 
     private boolean containsFlag(int flagSet, int flag) {
-        return (flagSet|flag) == flagSet;
+        return (flagSet | flag) == flagSet;
     }
 
     private void drawCurrentDay(@NonNull Date todayDate) {
@@ -729,13 +750,19 @@ public final class CalendarView extends LinearLayout {
         c.setTime(calendar.getTime());
         c.set(Calendar.DAY_OF_MONTH, Integer.valueOf(dayOfMonthText.getText().toString()));
 
-        markDateAsSelected(c.getTime());
-
         //Set the current day color
         drawCurrentDay(c.getTime());
 
         if (onDateClickListener != null) {
-            onDateClickListener.onDateClick(c.getTime());
+            if (mDisabledDate != null) {
+                if (c.getTime().compareTo(mDisabledDate) > 0) {
+                    markDateAsSelected(c.getTime());
+                    onDateClickListener.onDateClick(c.getTime());
+                }
+            } else {
+                markDateAsSelected(c.getTime());
+                onDateClickListener.onDateClick(c.getTime());
+            }
         }
     }
 
@@ -794,12 +821,12 @@ public final class CalendarView extends LinearLayout {
     /**
      * Tests scroll ability within child views of v given a delta of dx.
      *
-     * @param v View to test for horizontal scroll ability
+     * @param v      View to test for horizontal scroll ability
      * @param checkV Whether the view v passed should itself be checked for scrollability (true),
      *               or just its children (false).
-     * @param dx Delta scrolled in pixels
-     * @param x X coordinate of the active touch point
-     * @param y Y coordinate of the active touch point
+     * @param dx     Delta scrolled in pixels
+     * @param x      X coordinate of the active touch point
+     * @param y      Y coordinate of the active touch point
      * @return true if child views of v can be scrolled by delta of dx.
      */
     protected boolean canScroll(View v, boolean checkV, int dx, int x, int y) {
@@ -1012,7 +1039,7 @@ public final class CalendarView extends LinearLayout {
                             currentMonthIndex--;
                             updateCalendarOnTouch();
 
-                        } else if(e1.getX() - e2.getX() > flingDistance) {
+                        } else if (e1.getX() - e2.getX() > flingDistance) {
                             currentMonthIndex++;
                             updateCalendarOnTouch();
                         }
@@ -1180,6 +1207,10 @@ public final class CalendarView extends LinearLayout {
         this.firstDayOfWeek = firstDayOfWeek;
         invalidate();
         return this;
+    }
+
+    public void setDisabledDate(Date disabledDate) {
+        mDisabledDate = disabledDate;
     }
 
     public CalendarView setDisabledDayBackgroundColor(int disabledDayBackgroundColor) {
