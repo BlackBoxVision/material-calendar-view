@@ -5,6 +5,10 @@
 
 **MaterialCalendarView** is a **prettier** and **simpler**, **material design calendar** that allows full customization and it's backwards compatible with API 11+.
 
+##Open Collective
+
+This project is now in [Open Collective](https://opencollective.com/material-calendar-view/). We are looking for project **bakers** or **sponsors**! We want to keep this project going amazing and move faster. With your help this could be possible. 
+
 ##Screenshots
 
 <div style="align:center; display:inline-block; width:100%;">
