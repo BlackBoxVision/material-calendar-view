@@ -106,8 +106,9 @@ public final class CalendarUtils {
 
                 if (helper.isWithinCurrentMonth(i, j)) {
                     Calendar c = Calendar.getInstance(Locale.getDefault());
-                    c.set(Calendar.DAY_OF_MONTH, n[j]);
+
                     c.add(Calendar.MONTH, index);
+                    c.set(Calendar.DAY_OF_MONTH, n[j]);
 
                     int m = getMonth(c);
                     int y = getYear(c);
@@ -152,8 +153,8 @@ public final class CalendarUtils {
                 } else {
                     Calendar c = Calendar.getInstance(Locale.getDefault());
 
-                    c.set(Calendar.DAY_OF_MONTH, n[j]);
                     c.add(Calendar.MONTH, index);
+                    c.set(Calendar.DAY_OF_MONTH, n[j]);
 
                     d.setDay(n[j])
                      .setMonth(getMonth(c))

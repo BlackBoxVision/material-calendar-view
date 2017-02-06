@@ -89,15 +89,19 @@ public final class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     public void prepareCalendarView() {
+        Calendar disabledCal = Calendar.getInstance();
+        disabledCal.set(Calendar.DATE, disabledCal.get(Calendar.DATE) - 1);
+
         calendarView.setFirstDayOfWeek(Calendar.MONDAY)
                 .setOnDateClickListener(this::onDateClick)
                 .setOnMonthChangeListener(this::onMonthChange)
                 .setOnDateLongClickListener(this::onDateLongClick)
-                .setOnMonthTitleClickListener(this::onMonthTitleClick);
+                .setOnMonthTitleClickListener(this::onMonthTitleClick)
+                .setDisabledDate(disabledCal.getTime());
 
         if (calendarView.isMultiSelectDayEnabled()) {
             calendarView.setOnMultipleDaySelectedListener((month, dates) -> {
-               //Do something with your current selection
+                //Do something with your current selection
             });
         }
 

@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.Locale;
 
 
-public final class Day {
+public final class Day implements Comparable<Day> {
     private int day;
     private int month;
     private int year;
@@ -104,5 +104,23 @@ public final class Day {
 
     public Date toDate(Locale locale) {
         return toCalendar(locale).getTime();
+    }
+
+    @Override
+    public int compareTo(Day otherDay) {
+        if (year == otherDay.year) {
+            if (month == otherDay.month) {
+                return this.day - otherDay.day;
+            } else {
+                return this.month - otherDay.month;
+            }
+        } else {
+            return this.year - otherDay.year;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return day + "-" + month + "-" + year;
     }
 }
