@@ -210,8 +210,9 @@ public final class CalendarView extends LinearLayout {
     private View view;
     private HeaderView headerView;
     private DatePickerDialog pickerDialog;
+
     @Nullable
-    private Date mDisabledDate;
+    private Date disabledDate;
 
     /**
      * Constructor with arguments. It receives a
@@ -502,9 +503,9 @@ public final class CalendarView extends LinearLayout {
 
         Day disabledDay = new Day();
 
-        if (mDisabledDate != null) {
+        if (disabledDate != null) {
             Calendar disabledCalendar = Calendar.getInstance();
-            disabledCalendar.setTime(mDisabledDate);
+            disabledCalendar.setTime(disabledDate);
 
             disabledDay.setDay(disabledCalendar.get(Calendar.DAY_OF_MONTH))
                     .setMonth(disabledCalendar.get(Calendar.MONTH))
@@ -754,8 +755,8 @@ public final class CalendarView extends LinearLayout {
         drawCurrentDay(c.getTime());
 
         if (onDateClickListener != null) {
-            if (mDisabledDate != null) {
-                if (c.getTime().compareTo(mDisabledDate) > 0) {
+            if (disabledDate != null) {
+                if (c.getTime().compareTo(disabledDate) > 0) {
                     markDateAsSelected(c.getTime());
                     onDateClickListener.onDateClick(c.getTime());
                 }
@@ -1210,7 +1211,7 @@ public final class CalendarView extends LinearLayout {
     }
 
     public void setDisabledDate(Date disabledDate) {
-        mDisabledDate = disabledDate;
+        this.disabledDate = disabledDate;
     }
 
     public CalendarView setDisabledDayBackgroundColor(int disabledDayBackgroundColor) {
