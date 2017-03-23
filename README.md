@@ -16,7 +16,7 @@
 
 <img src="https://i.imgur.com/ViolZD2.gif" height="550" width="100%" style="align: center;">
 
-##Installation
+## Installation
 
 **Gradle**
 
@@ -70,7 +70,7 @@ resolvers += "jitpack" at "https://jitpack.io"
 libraryDependencies += "com.github.BlackBoxVision" % "material-calendar-view" % "v1.5.2"	
 ```
 
-##Usage example
+## Usage example
 
 In your layout.xml file:
 
@@ -126,16 +126,16 @@ if (calendarView.isMultiSelectDayEnabled()) {
 calendarView.update(Calendar.getInstance(Locale.getDefault()));
 ```
 
-##Issues
+## Issues
 
 If you found a bug, or you have an answer, or whatever. Please, open an [issue](https://github.com/BlackBoxVision/material-calendar-view/issues). I will do the best to fix it, or help you.
 
-##Contributing
+## Contributing
 
 Of course, if you see something that you want to upgrade from this library, or a bug that needs to be solved, **PRs are welcome!**
 
 
-##Backers
+## Backers
 Support us with a monthly donation and help us continue our activities. [[Become a backer](https://opencollective.com/material-calendar-view#backer)]
 
 <a href="https://opencollective.com/material-calendar-view/backer/0/website" target="_blank"><img src="https://opencollective.com/material-calendar-view/backer/0/avatar.svg"></a>
@@ -203,7 +203,7 @@ Become a sponsor and get your logo on our README on Github with a link to your s
 <a href="https://opencollective.com/material-calendar-view/sponsor/28/website" target="_blank"><img src="https://opencollective.com/material-calendar-view/sponsor/28/avatar.svg"></a>
 <a href="https://opencollective.com/material-calendar-view/sponsor/29/website" target="_blank"><img src="https://opencollective.com/material-calendar-view/sponsor/29/avatar.svg"></a>
 
-##License
+## License
 
 Distributed under the **MIT license**. See [LICENSE](https://github.com/BlackBoxVision/material-calendar-view/blob/master/LICENSE) for more information.
 
