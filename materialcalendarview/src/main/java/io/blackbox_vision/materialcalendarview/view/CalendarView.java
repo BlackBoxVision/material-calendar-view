@@ -513,7 +513,9 @@ public final class CalendarView extends LinearLayout {
         } else
             disabledDay.setDay(-121); //random number for check
 
-        for (int i = 0; i < days.size(); i++) {
+        int size = days.size();
+
+        for (int i = 0; i < size; i++) {
             Day day = days.get(i);
 
             int fixedIndex = i + 1;
@@ -604,30 +606,31 @@ public final class CalendarView extends LinearLayout {
         }
     }
 
-    public DayView findViewByDate(@NonNull Date dateToFind) {
-        Calendar calendar = Calendar.getInstance(Locale.getDefault());
-        calendar.setTime(dateToFind);
-        return (DayView) getView(getContext().getString(R.string.day_of_month_text), calendar);
+    public DayView findViewByDate(@NonNull Date date) {
+        final Calendar calendar = Calendar.getInstance(Locale.getDefault());
+        calendar.setTime(date);
+
+        return getView(getContext().getString(R.string.day_of_month_text), calendar);
     }
 
-    private DayView findViewByCalendar(@NonNull Calendar calendarToFind) {
-        return (DayView) getView(getContext().getString(R.string.day_of_month_text), calendarToFind);
+    private DayView findViewByCalendar(@NonNull Calendar calendar) {
+        return getView(getContext().getString(R.string.day_of_month_text), calendar);
     }
 
-    private int getDayIndexByDate(Calendar calendar) {
+    private int getDayIndexByDate(@NonNull Calendar calendar) {
         int monthOffset = CalendarUtils.getMonthOffset(calendar, firstDayOfWeek);
         int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
 
         return currentDay + monthOffset;
     }
 
-    private View getView(String key, Calendar currentCalendar) {
+    private DayView getView(String key, Calendar currentCalendar) {
         final int index = getDayIndexByDate(currentCalendar);
-        return view.findViewWithTag(key + index);
+        return (DayView) view.findViewWithTag(key + index);
     }
 
-    public void update(Calendar c) {
-        calendar = c;
+    public void update(@NonNull Calendar calender) {
+        calendar = calender;
         calendar.setFirstDayOfWeek(firstDayOfWeek);
 
         calculateWeekEnds();
@@ -655,9 +658,9 @@ public final class CalendarView extends LinearLayout {
         return (flagSet | flag) == flagSet;
     }
 
-    private void drawCurrentDay(@NonNull Date todayDate) {
+    private void drawCurrentDay(@NonNull Date date) {
         Calendar calendar = Calendar.getInstance(Locale.getDefault());
-        calendar.setTime(todayDate);
+        calendar.setTime(date);
 
         if (CalendarUtils.isToday(calendar)) {
             final DayView dayOfMonth = findViewByCalendar(calendar);
@@ -671,10 +674,10 @@ public final class CalendarView extends LinearLayout {
         }
     }
 
-    public void markDateAsSelected(Date currentDate) {
+    public void markDateAsSelected(@NonNull Date date) {
         Calendar currentCalendar = Calendar.getInstance(Locale.getDefault());
         currentCalendar.setFirstDayOfWeek(firstDayOfWeek);
-        currentCalendar.setTime(currentDate);
+        currentCalendar.setTime(date);
 
         // Clear previous marks
         if (!isMultiSelectDayEnabled) {
@@ -699,7 +702,7 @@ public final class CalendarView extends LinearLayout {
         }
 
         // Store current values as last values
-        setLastSelectedDay(currentDate);
+        setLastSelectedDay(date);
 
         // Mark current day as selected
         DayView view = findViewByCalendar(currentCalendar);

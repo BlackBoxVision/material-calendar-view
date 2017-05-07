@@ -86,18 +86,16 @@ public final class MainActivity extends AppCompatActivity implements MainView {
     public void prepareTextView() {
         textView.setText(String.format("Today is %s", formatDate(DATE_TEMPLATE, new Date(System.currentTimeMillis()))));
     }
-
     @Override
     public void prepareCalendarView() {
         Calendar disabledCal = Calendar.getInstance();
         disabledCal.set(Calendar.DATE, disabledCal.get(Calendar.DATE) - 1);
 
-        calendarView.setFirstDayOfWeek(Calendar.MONDAY)
+        calendarView.setFirstDayOfWeek(Calendar.SUNDAY)
                 .setOnDateClickListener(this::onDateClick)
                 .setOnMonthChangeListener(this::onMonthChange)
                 .setOnDateLongClickListener(this::onDateLongClick)
-                .setOnMonthTitleClickListener(this::onMonthTitleClick)
-                .setDisabledDate(disabledCal.getTime());
+                .setOnMonthTitleClickListener(this::onMonthTitleClick);
 
         if (calendarView.isMultiSelectDayEnabled()) {
             calendarView.setOnMultipleDaySelectedListener((month, dates) -> {
