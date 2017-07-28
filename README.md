@@ -7,7 +7,7 @@
 
 **MaterialCalendarView** is a **prettier** and **simpler**, **material design calendar** that allows full customization and it's backwards compatible with API 11+.
 
-##Screenshots
+## Screenshots
 
 <div style="align:center; display:inline-block; width:100%;">
 	<img src="https://raw.githubusercontent.com/BlackBoxVision/material-calendar-view/master/art/newer.png" height="775" width="49%">
@@ -34,7 +34,7 @@ repositories {
 
 ```java
 dependencies {
-    compile 'com.github.BlackBoxVision:material-calendar-view:v1.5.2'
+    compile 'com.github.BlackBoxVision:material-calendar-view:v1.5.3'
 }
 ```
 **Maven**
@@ -53,7 +53,7 @@ dependencies {
 <dependency>
     <groupId>com.github.BlackBoxVision</groupId>
     <artifactId>material-calendar-view</artifactId>
-    <version>v1.5.2</version>
+    <version>v1.5.3</version>
 </dependency>
 ```
 **SBT**
@@ -67,7 +67,7 @@ resolvers += "jitpack" at "https://jitpack.io"
 - Add the dependency in the form:
 
 ```java
-libraryDependencies += "com.github.BlackBoxVision" % "material-calendar-view" % "v1.5.2"	
+libraryDependencies += "com.github.BlackBoxVision" % "material-calendar-view" % "v1.5.3"	
 ```
 
 ## Usage example
