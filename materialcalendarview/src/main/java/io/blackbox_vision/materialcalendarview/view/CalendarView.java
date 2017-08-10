@@ -354,6 +354,11 @@ public final class CalendarView extends LinearLayout {
         }
     }
 
+    public void onGotoTodayClick(@NonNull View v) {
+        currentMonthIndex = 0;
+        updateCalendarOnTouch();
+    }
+
     public void onNextButtonClick(@NonNull View v) {
         currentMonthIndex++;
         updateCalendarOnTouch();
