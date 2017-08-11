@@ -62,6 +62,8 @@ public final class CalendarView extends LinearLayout {
 
     private static final String KEY_STATE = "superState";
     private static final String KEY_MONTH_INDEX = "currentMonthIndex";
+    private static final String KEY_SELECTED_DATE = "selectedDate";
+
 
     private static final int SUNDAY = 1;
     private static final int MONDAY = 2;
@@ -245,6 +247,7 @@ public final class CalendarView extends LinearLayout {
 
         stateToSave.putParcelable(KEY_STATE, superState);
         stateToSave.putInt(KEY_MONTH_INDEX, currentMonthIndex);
+        stateToSave.putSerializable(KEY_SELECTED_DATE, lastSelectedDay);
 
         return stateToSave;
     }
@@ -254,13 +257,29 @@ public final class CalendarView extends LinearLayout {
         if (state instanceof Bundle) {
             final Bundle savedInstanceState = (Bundle) state;
 
-            state = savedInstanceState.getParcelable(KEY_STATE);
-            currentMonthIndex = savedInstanceState.getInt(KEY_MONTH_INDEX);
+            if (savedInstanceState != null) {
+                state = savedInstanceState.getParcelable(KEY_STATE);
+                currentMonthIndex = savedInstanceState.getInt(KEY_MONTH_INDEX);
+                if (savedInstanceState.getSerializable(KEY_SELECTED_DATE) != null) {
+                    lastSelectedDay = (Date) savedInstanceState.getSerializable(KEY_SELECTED_DATE);
+                }
+            }
+            Calendar calendar = (lastSelectedDay != null) ? getCalDate(lastSelectedDay) : Calendar.getInstance(Locale.getDefault());
+            update(calendar);
 
-            update(Calendar.getInstance(Locale.getDefault()));
+            if (lastSelectedDay != null) {
+                markDateAsSelected(lastSelectedDay);
+                onDateClickListener.onDateClick(lastSelectedDay);
+            }
         }
 
         super.onRestoreInstanceState(state);
+    }
+
+    private Calendar getCalDate(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return cal;
     }
 
     private void initTouchVariables() {
