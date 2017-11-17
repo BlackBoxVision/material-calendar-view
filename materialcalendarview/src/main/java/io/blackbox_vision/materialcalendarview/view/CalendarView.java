@@ -262,15 +262,14 @@ public final class CalendarView extends LinearLayout {
                 currentMonthIndex = savedInstanceState.getInt(KEY_MONTH_INDEX);
                 if (savedInstanceState.getSerializable(KEY_SELECTED_DATE) != null) {
                     lastSelectedDay = (Date) savedInstanceState.getSerializable(KEY_SELECTED_DATE);
+                } else {
+                    lastSelectedDay = new Date();
                 }
             }
-            Calendar calendar = (lastSelectedDay != null) ? getCalDate(lastSelectedDay) : Calendar.getInstance(Locale.getDefault());
+            Calendar calendar = getCalDate(lastSelectedDay);
             update(calendar);
-
-            if (lastSelectedDay != null) {
-                markDateAsSelected(lastSelectedDay);
-                onDateClickListener.onDateClick(lastSelectedDay);
-            }
+            markDateAsSelected(lastSelectedDay);
+            onDateClickListener.onDateClick(lastSelectedDay);
         }
 
         super.onRestoreInstanceState(state);
