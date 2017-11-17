@@ -269,7 +269,9 @@ public final class CalendarView extends LinearLayout {
             Calendar calendar = getCalDate(lastSelectedDay);
             update(calendar);
             markDateAsSelected(lastSelectedDay);
-            onDateClickListener.onDateClick(lastSelectedDay);
+            if (onDateClickListener != null) {
+                onDateClickListener.onDateClick(lastSelectedDay);
+            }
         }
 
         super.onRestoreInstanceState(state);
