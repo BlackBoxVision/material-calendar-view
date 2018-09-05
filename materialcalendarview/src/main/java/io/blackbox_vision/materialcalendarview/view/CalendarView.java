@@ -189,6 +189,7 @@ public final class CalendarView extends LinearLayout {
     private int selectedDayTextColor;
     private int titleTextColor;
     private int dayOfWeekTextColor;
+    private int dayOfMonthTextColor;
     private int currentDayTextColor;
     private int weekendTextColor;
     private int weekendDays;
@@ -320,7 +321,8 @@ public final class CalendarView extends LinearLayout {
             titleBackgroundColor = a.getColor(R.styleable.MaterialCalendarView_calendarTitleBackgroundColor, white);
             titleTextColor = a.getColor(R.styleable.MaterialCalendarView_calendarTitleTextColor, white);
             weekBackgroundColor = a.getColor(R.styleable.MaterialCalendarView_calendarWeekBackgroundColor, white);
-            dayOfWeekTextColor = a.getColor(R.styleable.MaterialCalendarView_calendarDayOfWeekTextColor, black);
+            dayOfWeekTextColor = a.getColor(R.styleable.MaterialCalendarView_calendarDayOfWeekTextColor, dayDisableTextColor);
+            dayOfMonthTextColor = a.getColor(R.styleable.MaterialCalendarView_calendarDayOfMonthTextColor, black);
             disabledDayBackgroundColor = a.getColor(R.styleable.MaterialCalendarView_calendarDisabledDayBackgroundColor, dayDisableBackground);
             disabledDayTextColor = a.getColor(R.styleable.MaterialCalendarView_calendarDisabledDayTextColor, dayDisableTextColor);
             selectedDayBackgroundColor = a.getColor(R.styleable.MaterialCalendarView_calendarSelectedDayBackgroundColor, daySelectedBackground);
@@ -423,7 +425,7 @@ public final class CalendarView extends LinearLayout {
             if (totalDayOfWeekend.length != 0) {
                 for (int weekend : totalDayOfWeekend) {
                     if (i == weekend) {
-                        textView.setTextColor(weekendTextColor);
+                        textView.setTextColor(dayOfWeekTextColor);
                         isCommonDay = false;
                     }
                 }
@@ -578,7 +580,7 @@ public final class CalendarView extends LinearLayout {
                 }
 
                 if (isCommonDay) {
-                    textView.setTextColor(dayOfWeekTextColor);
+                    textView.setTextColor(dayOfMonthTextColor);
                 }
 
                 if (day.isCurrentDay()) {
@@ -626,7 +628,7 @@ public final class CalendarView extends LinearLayout {
             }
 
             if (isCommonDay) {
-                dayView.setTextColor(dayOfWeekTextColor);
+                dayView.setTextColor(dayOfMonthTextColor);
             }
         }
     }
@@ -1286,6 +1288,12 @@ public final class CalendarView extends LinearLayout {
 
     public CalendarView setTitleTextColor(int titleTextColor) {
         this.titleTextColor = titleTextColor;
+        invalidate();
+        return this;
+    }
+
+    public CalendarView setDayOfMonthTextColor(int dayOfMonthTextColor) {
+        this.dayOfMonthTextColor = dayOfMonthTextColor;
         invalidate();
         return this;
     }
