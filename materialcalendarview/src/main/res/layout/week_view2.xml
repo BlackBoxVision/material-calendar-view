@@ -18,10 +18,7 @@
 
         <io.blackbox_vision.materialcalendarview.view.DayView
             style="@style/CalendarView.DayOfTheMonth"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
             android:layout_centerInParent="true"
-            android:gravity="center"
             android:tag="dayOfMonthText8"
             tools:text="8" />
 
@@ -36,10 +33,7 @@
 
         <io.blackbox_vision.materialcalendarview.view.DayView
             style="@style/CalendarView.DayOfTheMonth"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
             android:layout_centerInParent="true"
-            android:gravity="center"
             android:tag="dayOfMonthText9"
             tools:text="9" />
 
@@ -54,10 +48,7 @@
 
         <io.blackbox_vision.materialcalendarview.view.DayView
             style="@style/CalendarView.DayOfTheMonth"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
             android:layout_centerInParent="true"
-            android:gravity="center"
             android:tag="dayOfMonthText10"
             tools:text="10" />
 
@@ -72,10 +63,7 @@
 
         <io.blackbox_vision.materialcalendarview.view.DayView
             style="@style/CalendarView.DayOfTheMonth"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
             android:layout_centerInParent="true"
-            android:gravity="center"
             android:tag="dayOfMonthText11"
             tools:text="11" />
 
@@ -90,10 +78,7 @@
 
         <io.blackbox_vision.materialcalendarview.view.DayView
             style="@style/CalendarView.DayOfTheMonth"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
             android:layout_centerInParent="true"
-            android:gravity="center"
             android:tag="dayOfMonthText12"
             tools:text="12" />
 
@@ -108,10 +93,7 @@
 
         <io.blackbox_vision.materialcalendarview.view.DayView
             style="@style/CalendarView.DayOfTheMonth"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
             android:layout_centerInParent="true"
-            android:gravity="center"
             android:tag="dayOfMonthText13"
             tools:text="13" />
 
@@ -126,10 +108,7 @@
 
         <io.blackbox_vision.materialcalendarview.view.DayView
             style="@style/CalendarView.DayOfTheMonth"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
             android:layout_centerInParent="true"
-            android:gravity="center"
             android:tag="dayOfMonthText14"
             tools:text="14" />
 
