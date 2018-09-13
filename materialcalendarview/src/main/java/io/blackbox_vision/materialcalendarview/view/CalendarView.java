@@ -616,7 +616,7 @@ public final class CalendarView extends LinearLayout {
 
             DayView dayView = findViewByCalendar(calendar);
             dayView.setBackgroundColor(calendarBackgroundColor);
-            isCommonDay = true;
+            isCommonDay = !CalendarUtils.isToday(calendar);
 
             if (totalDayOfWeekend.length != 0) {
                 for (int weekend : totalDayOfWeekend) {
@@ -629,6 +629,8 @@ public final class CalendarView extends LinearLayout {
 
             if (isCommonDay) {
                 dayView.setTextColor(dayOfMonthTextColor);
+            } else {
+                dayView.setTextColor(currentDayTextColor);
             }
         }
     }
@@ -692,7 +694,7 @@ public final class CalendarView extends LinearLayout {
         if (CalendarUtils.isToday(calendar)) {
             final DayView dayOfMonth = findViewByCalendar(calendar);
 
-            dayOfMonth.setTextColor(currentDayTextColor);
+            dayOfMonth.setTextColor(dayOfMonthTextColor);
 
             Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.circular_background);
             d.setColorFilter(currentDayBackgroundColor, PorterDuff.Mode.SRC_ATOP);

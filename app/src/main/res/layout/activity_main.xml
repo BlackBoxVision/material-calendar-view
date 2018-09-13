@@ -48,7 +48,8 @@
                         app:calendarIsOverflowDatesVisible="true"
                         app:calendarBackgroundColor="@color/colorPrimary"
                         app:calendarTitleTextColor="@color/colorAccent"
-                        app:calendarCurrentDayTextColor="@color/white"
+                        app:calendarCurrentDayTextColor="@color/colorAccent"
+                        app:calendarSelectedDayTextColor="@color/white"
                         app:calendarDayOfWeekTextColor="@color/grey"
                         app:calendarDayOfMonthTextColor="@android:color/white"
                         app:calendarDisabledDayBackgroundColor="@color/colorPrimary"
@@ -57,7 +58,7 @@
                         app:calendarTitleBackgroundColor="@color/colorPrimary"
                         app:calendarWeekBackgroundColor="@color/colorPrimary"
                         app:calendarCurrentDayBackgroundColor="@color/teal500"
-                        app:calendarWeekendTextColor="@color/colorAccent"
+                        app:calendarWeekendTextColor="@color/red"
                         app:calendarButtonBackgroundColor="@color/colorAccent"
                         app:calendarWeekendDays="saturday|sunday">
                     </io.blackbox_vision.materialcalendarview.view.CalendarView>
