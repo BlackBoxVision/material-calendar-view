@@ -13,6 +13,7 @@
         <attr name="calendarTitleBackgroundColor" format="color" />
         <attr name="calendarTitleTextColor" format="color" />
         <attr name="calendarDayOfWeekTextColor" format="color" />
+        <attr name="calendarDayOfMonthTextColor" format="color" />
         <attr name="calendarDisabledDayTextColor" format="color" />
         <attr name="calendarSelectedDayTextColor" format="color" />
         <attr name="calendarWeekendTextColor" format="color"/>
